@@ -1,0 +1,194 @@
+
+.all {
+		margin: 0;
+		padding: 0;
+		box-sizing: border-box;
+}
+body {
+		background-color: #ffffff;
+}
+.page {
+		width: auto;
+		margin: 0 auto;
+		padding-bottom: 10px;
+}
+.top-image {
+		width: 100%;
+		display: block;
+		height: auto;
+}
+.tags {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		padding: 7px;
+		gap: 25px;
+		border-bottom: 1px solid #f6f6f6;
+}
+.tag_orange {
+		border: none;
+		border-radius: 20px;
+		background-color: #ffdfbc;
+		padding: 6px 12px;
+		font-size: 14px;
+		width: 20%;
+		text-align: center;
+		color: #ff7700;
+		font-weight: bolder;
+}
+.tag_pink {
+		border: none;
+		border-radius: 50px;
+		background-color: #ffcad8;
+		padding: 6px 12px;
+		font-size: 14px;
+		width: 20%;
+		text-align: center;
+		color: #ff004d;
+		font-weight: bolder;
+}
+.tag_yellow {
+		border: none;
+		border-radius: 50px;
+		background-color: #fff4ce;
+		padding: 6px 12px;
+		font-size: 14px;
+		width: 20%;
+		text-align: center;
+		color: #ffbd00;
+		font-weight: bolder;
+}
+.tag_purple {
+		border: none;
+		border-radius: 50px;
+		background-color: #e7cbff;
+		padding: 6px 12px;
+		font-size: 14px;
+		width: 20%;
+		text-align: center;
+		color: #ae4fff;
+		font-weight: bolder;
+}
+.tag_blue {
+		border: none;
+		border-radius: 50px;
+		background-color: #ceedf7;
+		padding: 6px 12px;
+		font-size: 14px;
+		width: 20%;
+		text-align: center;
+		color: #00a0e9;
+		font-weight: bolder;
+}
+.tag_green {
+		border: none;
+		border-radius: 50px;
+		background-color: #ddfed7;
+		padding: 6px 12px;
+		font-size: 14px;
+		width: 20%;
+		text-align: center;
+		color: #7df625;
+		font-weight: bolder;
+}
+.card {
+		background-color: white;
+		margin: 10px;
+		padding: 20px;
+		border-radius: 20px;
+		box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+.user_logo {
+		border-radius: 50px;
+		width: 50px;
+		height: 50px;
+		border: 3px solid #4a9364;
+		object-fit: cover;
+		/* 确保照片不变形 */
+}
+.user {
+		display: flex;
+		align-items: center;
+}
+.user_info {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		margin-left: 12px;
+}
+.userName {
+		font-weight: bold;
+		font-size: 14px;
+		font-family: "AlimamaFangYuanTiVF Medium", sans-serif;
+		color: #333;
+		margin-bottom: 4px;
+}
+.dateTime {
+		font-size: 9px;
+		color: #888;
+}
+.info {
+		margin-top: 6px;
+		display: flex;
+		align-items: center;
+		/* 让两个元素在同一行垂直居中 */
+		gap: 10px;
+		/* 控制间距 */
+		margin-bottom: 10px;
+}
+.choiceTag {
+		display: inline-block;
+		background-color: #f57fa0;
+		color: white;
+		padding: 4px 10px;
+		border-radius: 20px;
+		font-size: 8px;
+}
+.title {
+		font-weight: bold;
+		font-size: 8px;
+		color: #333;
+}
+.content {
+		font-size: 10px;
+}
+.contentPhoto {
+		margin-top: 5px;
+		width: 100%;
+		display: block;
+		height: auto;
+}
+.emogi {
+		display: flex;
+		justify-content: flex-end;
+		margin: 10px;
+}
+.talking {
+		background-color: #f2f2f2;
+		border-radius: 8px;
+}
+.userTalkingInfo {
+		display: flex;
+		padding: 10px;
+}
+.userTalkLogo {
+		border-radius: 50px;
+		width: 20px;
+		height: 20px;
+		border: 2px solid #4a9364;
+		object-fit: cover;
+		/* 确保照片不变形 */
+}
+.talkingUserName {
+		font-weight: bold;
+		font-size: 14px;
+		font-family: "AlimamaFangYuanTiVF Medium", sans-serif;
+		color: #333;
+		margin-bottom: 4px;
+}
+.talkAbout {
+		margin-left: 10px;
+}
+.dateTime {
+		margin-left: 10px;
+}

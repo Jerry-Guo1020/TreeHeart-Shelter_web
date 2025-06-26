@@ -1,0 +1,1 @@
+{"version":3,"file":"welcome.js","sources":["F:/HBuilderX/plugins/uniapp-cli-vite/uniPage:/cGFnZXMvd2VsY29tZS93ZWxjb21lLnZ1ZQ"],"sourcesContent":["import MiniProgramPage from 'D:/一些完整的项目/树洞小程序/Tree_web/pages/welcome/welcome.vue'\nwx.createPage(MiniProgramPage)"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;AACA,GAAG,WAAW,eAAe;"}

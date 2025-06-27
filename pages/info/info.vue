@@ -1,16 +1,22 @@
 <template>
   <view class="container">
-    <view class="header">
-      <image class="logo" src="/static/tree-logo.png" alt="树洞logo"></image>
-      <view class="hello">Hello!</view>
-      <view class="desc">欢迎来到大学生心灵树洞</view>
+    <view class="title">
+      <view class="section1">
+        <view class="logo">
+          <image src="http://localhost:3000/static/logo.png" mode="aspectFill" class="logoPhoto" />
+        </view>
+        <view class="hello">Hello!</view>
+      </view>
+      <view class="section2">
+        <text class="s2Content">欢迎来到心理树洞！</text>
+      </view>
     </view>
     <view class="card">
       <view class="title">请输入你的信息</view>
       <view class="form">
         <view class="form-item">
           <view class="label">教育阶段</view>
-          <input class="input" v-model="stage" placeholder="如：大三"/>
+          <input class="input" v-model="stage" placeholder="如：大二"/>
         </view>
         <view class="form-item">
           <view class="label">所在学校</view>
@@ -18,11 +24,11 @@
         </view>
         <view class="form-item">
           <view class="label">所在学院</view>
-          <input class="input" v-model="college" placeholder="如：数字媒体与设计学院"/>
+          <input class="input" v-model="college" placeholder="如：计算机学院"/>
         </view>
         <view class="form-item">
           <view class="label">所学专业</view>
-          <input class="input" v-model="major" placeholder="如：视觉传达设计"/>
+          <input class="input" v-model="major" placeholder="如：软件工程"/>
         </view>
       </view>
       <button class="next-btn" @click="goNext">→</button>
@@ -58,42 +64,62 @@ export default {
   background: linear-gradient(180deg, #FFD9A0 0%, #FFF6ED 100%);
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   
 }
-.header {
+
+.title {
+  margin: 60rpx;
   display: flex;
+  padding-top: 100rpx;
+  flex-direction: column;
+  font-size: 40rpx;
+}
+
+.section1 {
+  display: flex;
+  flex-direction: row;
   align-items: center;
-  margin-top: 40rpx;
-  margin-left: 40rpx;
 }
-.logo {
-  width: 60rpx;
-  height: 60rpx;
+
+.section2 {
+  font-size: 30rpx;
+  display: flex;
+  justify-content: center;
+  margin-top: 10rpx;
 }
+
+.logoPhoto {
+  width: 80rpx;
+  height: 80rpx;
+}
+
 .hello {
-  font-size: 36rpx;
-  font-weight: bold;
-  margin-left: 16rpx;
+  font-size: 70rpx;
+  font-weight: bolder;
+  margin-left: 20rpx;
 }
-.desc {
-  font-size: 22rpx;
-  color: #888;
-  margin-left: 16rpx;
-}
+
 .card {
+  width: 90%;
+  max-width: 750rpx;
+  margin: 0 auto;
   background: #fff;
-  border-radius: 24rpx;
-  margin: 80rpx 32rpx 0 32rpx;
-  padding: 48rpx 0 80rpx 0;
-  box-shadow: 0 8rpx 32rpx #f6e7d6;
+  border-radius: 30rpx 30rpx 0 0;
+  padding: 40rpx;
+  margin-top: 20rpx;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  box-sizing: border-box;
   align-items: center;
 }
 .title {
-  font-size: 32rpx;
-  font-weight: bold;
-  margin-bottom: 48rpx;
+  margin: 60rpx;
+  display: flex;
+  padding-top: 120rpx;
+  flex-direction: column;
 }
 .form {
   width: 80%;

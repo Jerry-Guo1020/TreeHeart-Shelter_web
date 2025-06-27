@@ -1,7 +1,7 @@
 <template>
   <view class="container" ref="containerRef">
     <view class="avatar-box">
-      <image class="avatar" src="/static/image/头像.png" alt="树洞吉祥物图片"></image>
+      <image class="avatar" src="http://43.142.21.211:3000/static/头像.png" alt="树洞吉祥物图片"></image>
     </view>
     <view class="title">大学生心灵树洞</view>
     <view class="subtitle">不必强撑坚强<br>「心灵树洞」做你无声的倾听者</view>

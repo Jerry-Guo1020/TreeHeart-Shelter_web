@@ -1,6 +1,5 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const common_assets = require("../../common/assets.js");
 const _sfc_main = {
   __name: "gender",
   setup(__props) {
@@ -22,16 +21,13 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return {
-        a: common_assets._imports_0,
-        b: common_assets._imports_1$1,
-        c: gender.value === "male" ? 1 : "",
-        d: gender.value === "male" ? 1 : "",
-        e: common_vendor.o(($event) => selectGender("male")),
-        f: common_assets._imports_2,
-        g: gender.value === "female" ? 1 : "",
-        h: gender.value === "female" ? 1 : "",
-        i: common_vendor.o(($event) => selectGender("female")),
-        j: common_vendor.o(goNext)
+        a: gender.value === "male" ? 1 : "",
+        b: gender.value === "male" ? 1 : "",
+        c: common_vendor.o(($event) => selectGender("male")),
+        d: gender.value === "female" ? 1 : "",
+        e: gender.value === "female" ? 1 : "",
+        f: common_vendor.o(($event) => selectGender("female")),
+        g: common_vendor.o(goNext)
       };
     };
   }

@@ -4,7 +4,7 @@
 		<view class="header">
 			<view class="logoBox">
 				<view class="logo-box">
-					<image class="logo" src="/static/image/logo.png" mode="aspectFit" />
+					<image class="logo" src="http://43.142.21.211:3000/static/logo.png" mode="aspectFit" />
 				</view>
 			</view>
 			<view class="main-title">心语树洞心理平台</view>
@@ -31,7 +31,7 @@
 			<!-- 底部固定按钮与提示 -->
 			<view class="card-footer">
 				<button class="login-button" @click="handleWeChatLogin">
-					<image src="/static/image/wechat-icon.png" class="wechat-icon" />
+					<image src="http://43.142.21.211:3000/static/login.png" class="wechat-icon" />
 					微信一键登录
 				</button>
 
@@ -52,25 +52,25 @@
 	const features = [{
 			title: '心情树洞',
 			desc: '分享情绪点滴，找到倾诉的角落，书写内心故事',
-			icon: '/static/image/mood.png',
+			icon: 'http://43.142.21.211:3000/static/fun_1.png',
 			color: '#6CA8F1'
 		},
 		{
 			title: '心理测评',
 			desc: '涵盖多种心理测试，帮助你更了解自己',
-			icon: '<Star />',
+			icon: 'http://43.142.21.211:3000/static/fun_2.png',
 			color: '#A078F5'
 		},
 		{
 			title: '情感互动',
 			desc: '点赞评论他人树洞，共鸣共情，彼此温暖',
-			icon: '/static/image/like-comment.png',
+			icon: 'http://43.142.21.211:3000/static/fun_3.png',
 			color: '#FF6B6B'
 		},
 		{
 			title: '活动空间',
 			desc: '获取心理活动通知，参与互动收获成长',
-			icon: '/static/image/activity.png',
+			icon: 'http://43.142.21.211:3000/static/fun_4.png',
 			color: '#41D3A3'
 		}
 	]
@@ -80,7 +80,7 @@
 			title: '模拟微信登录成功',
 			icon: 'success'
 		})
-		 uni.navigateTo({ url: '/pages/info/info' });
+		 uni.navigateTo({ url: '/pages/home/home' });
 	}
 </script>
 

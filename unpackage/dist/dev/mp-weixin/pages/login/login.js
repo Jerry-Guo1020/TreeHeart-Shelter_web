@@ -1,6 +1,5 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
-const common_assets = require("../../common/assets.js");
 const _sfc_main = {
   __name: "login",
   setup(__props) {
@@ -8,25 +7,25 @@ const _sfc_main = {
       {
         title: "心情树洞",
         desc: "分享情绪点滴，找到倾诉的角落，书写内心故事",
-        icon: "/static/image/mood.png",
+        icon: "http://8.148.230.157:3000/static/fun_1.png",
         color: "#6CA8F1"
       },
       {
         title: "心理测评",
         desc: "涵盖多种心理测试，帮助你更了解自己",
-        icon: "/static/image/test.png",
+        icon: "http://8.148.230.157:3000/static/fun_2.png",
         color: "#A078F5"
       },
       {
         title: "情感互动",
         desc: "点赞评论他人树洞，共鸣共情，彼此温暖",
-        icon: "/static/image/like-comment.png",
+        icon: "http://8.148.230.157:3000/static/fun_3.png",
         color: "#FF6B6B"
       },
       {
         title: "活动空间",
         desc: "获取心理活动通知，参与互动收获成长",
-        icon: "/static/image/activity.png",
+        icon: "http://8.148.230.157:3000/static/fun_4.png",
         color: "#41D3A3"
       }
     ];
@@ -35,12 +34,11 @@ const _sfc_main = {
         title: "模拟微信登录成功",
         icon: "success"
       });
-      common_vendor.index.navigateTo({ url: "/pages/info/info" });
+      common_vendor.index.navigateTo({ url: "/pages/home/home" });
     };
     return (_ctx, _cache) => {
       return {
-        a: common_assets._imports_0,
-        b: common_vendor.f(features, (item, index, i0) => {
+        a: common_vendor.f(features, (item, index, i0) => {
           return {
             a: item.icon,
             b: item.color,
@@ -49,8 +47,7 @@ const _sfc_main = {
             e: index
           };
         }),
-        c: common_assets._imports_1,
-        d: common_vendor.o(handleWeChatLogin)
+        b: common_vendor.o(handleWeChatLogin)
       };
     };
   }

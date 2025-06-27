@@ -73,11 +73,12 @@
 				</view>
 			</view>
 		</view>
+		<BottomNavbar :current="0" />
 	</view>
 </template>
 
 <script setup>
-	// uni-app 无需改动 script，如果你需要数据或逻辑可按需要添加
+import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
 </script>
 
 <style>

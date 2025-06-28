@@ -3,13 +3,18 @@
     "pages/welcome/welcome",
     "pages/login/login",
     "pages/gender/gender",
-    "pages/info/info",
+    "pages/info/school",
+    "pages/info/grade",
+    "pages/info/institute",
+    "pages/info/major",
     "pages/name/name",
     "pages/help/help",
     "pages/home/home",
     "pages/loading/loading",
     "pages/nickname/nickname",
-    "pages/category/category"
+    "component/BottomNavbar/BottomNavbar",
+    "pages/personal/personal",
+    "pages/personInformation/personInformation"
   ],
   "window": {
     "navigationBarTextStyle": "black",

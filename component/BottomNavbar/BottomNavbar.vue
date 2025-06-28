@@ -6,7 +6,7 @@
     </view>
     <view class="nav-btn" @click="switchTab(1)">
       <image :src="iconOrder" class="nav-icon" />
-      <text>订单</text>
+      <text>动态</text>
     </view>
     <!-- 中间 logo 仅作展示，无点击事件 -->
     <view class="nav-center-btn">
@@ -25,10 +25,10 @@
 
 <script setup>
 // 图标资源
-const iconHome = 'http://43.142.21.211:3000/static/fun_1.png'
-const iconOrder = 'http://43.142.21.211:3000/static/fun_2.png'
-const iconTest = 'http://43.142.21.211:3000/static/fun_3.png'
-const iconUser = 'http://43.142.21.211:3000/static/fun_4.png'
+const iconHome = 'http://43.142.21.211:3000/static/home_1.png'
+const iconOrder = 'http://43.142.21.211:3000/static/home_2.png'
+const iconTest = 'http://43.142.21.211:3000/static/home_3.png'
+const iconUser = 'http://43.142.21.211:3000/static/home_4.png'
 
 // 跳转方法
 function switchTab(idx) {
@@ -39,7 +39,7 @@ function switchTab(idx) {
   } else if (idx === 2) {
     uni.navigateTo({ url: '/pages/test/test' })
   } else if (idx === 3) {
-    uni.navigateTo({ url: '/pages/profile/profile' })
+    uni.navigateTo({ url: '/pages/personal/personal' })
   }
 }
 </script>

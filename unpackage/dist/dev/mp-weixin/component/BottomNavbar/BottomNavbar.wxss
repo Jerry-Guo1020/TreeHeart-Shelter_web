@@ -1,0 +1,52 @@
+
+.bottom-nav.data-v-d9abd7fd {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  height: 72px;
+  background: #F2D3C6; /* 主体淡粉色 */
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  z-index: 999;
+  box-shadow: 0 -2px 24px rgba(252,94,101,0.07), 0 -1px 6px #CDE97D;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+}
+.nav-btn.data-v-d9abd7fd {
+  flex: 1;
+  text-align: center;
+  color: #815C41;
+  padding-bottom: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0.92;
+}
+.nav-icon.data-v-d9abd7fd {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 2px;
+  filter: drop-shadow(0 1px 2px #F2D3C6);
+}
+.nav-center-btn.data-v-d9abd7fd {
+  position: relative;
+  top: -28px;
+  background: #815C41;
+  box-shadow: 0 4px 12px rgba(252,94,101,0.16);
+  border-radius: 50%;
+  width: 66px;
+  height: 66px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  border: 6px solid #F2D3C6;
+}
+.center-icon.data-v-d9abd7fd {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  justify-content: center;
+}

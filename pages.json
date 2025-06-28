@@ -13,9 +13,21 @@
       "style": { "navigationBarTitleText": "gender页面" }
     },
     {
-      "path": "pages/info/info",
-      "style": { "navigationBarTitleText": "info页面" }
+      "path": "pages/info/school",
+      "style": { "navigationBarTitleText": "学校修改页面" }
     },
+	{
+	  "path": "pages/info/grade",
+	  "style": { "navigationBarTitleText": "年级修改页面" }
+	},
+	{
+	  "path": "pages/info/institute",
+	  "style": { "navigationBarTitleText": "学校学院修改页面" }
+	},
+	{
+	  "path": "pages/info/major",
+	  "style": { "navigationBarTitleText": "专业填写页面" }
+	},
     {
       "path": "pages/name/name",
       "style": { "navigationBarTitleText": "name页面" }
@@ -37,14 +49,24 @@
       "style": { "navigationBarTitleText": "nicking页面" }
     },
     {
-      "path": "pages/category/category",
-      "style": { "navigationBarTitleText": "category页面" }
-    },
-    {
     	"path" : "component/BottomNavbar/BottomNavbar",
     	"style" : 
     	{
     		"navigationBarTitleText" : ""
+    	}
+    },
+    {
+    	"path" : "pages/personal/personal",
+    	"style" : 
+    	{
+    		"navigationBarTitleText" : "个人中心"
+    	}
+    },
+    {
+    	"path" : "pages/personInformation/personInformation",
+    	"style" : 
+    	{
+    		"navigationBarTitleText" : "个人信息"
     	}
     }
   ],

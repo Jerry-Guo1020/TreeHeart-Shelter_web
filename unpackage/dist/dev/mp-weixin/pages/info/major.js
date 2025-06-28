@@ -32,6 +32,6 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     i: common_vendor.o((...args) => $options.goNext && $options.goNext(...args))
   };
 }
-const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-f52d2d81"]]);
+const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-e69130f1"]]);
 wx.createPage(MiniProgramPage);
-//# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/info/info.js.map
+//# sourceMappingURL=../../../.sourcemap/mp-weixin/pages/info/major.js.map

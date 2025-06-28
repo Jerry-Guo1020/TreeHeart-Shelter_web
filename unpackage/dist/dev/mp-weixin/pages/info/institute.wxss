@@ -1,0 +1,90 @@
+
+.container.data-v-172882c7 {
+  height: 100vh;
+  background: linear-gradient(180deg, #FFD9A0 0%, #FFF6ED 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.title.data-v-172882c7 {
+  margin: 60rpx;
+  display: flex;
+  padding-top: 100rpx;
+  flex-direction: column;
+  font-size: 40rpx;
+}
+.section1.data-v-172882c7 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.section2.data-v-172882c7 {
+  font-size: 30rpx;
+  display: flex;
+  justify-content: center;
+  margin-top: 10rpx;
+}
+.logoPhoto.data-v-172882c7 {
+  width: 80rpx;
+  height: 80rpx;
+}
+.hello.data-v-172882c7 {
+  font-size: 70rpx;
+  font-weight: bolder;
+  margin-left: 20rpx;
+}
+.card.data-v-172882c7 {
+  width: 90%;
+  max-width: 750rpx;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 30rpx 30rpx 0 0;
+  padding: 40rpx;
+  margin-top: 20rpx;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  box-sizing: border-box;
+  align-items: center;
+}
+.title.data-v-172882c7 {
+  margin: 60rpx;
+  display: flex;
+  padding-top: 120rpx;
+  flex-direction: column;
+}
+.form.data-v-172882c7 {
+  width: 80%;
+}
+.form-item.data-v-172882c7 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32rpx;
+  background: #FFF7E6;
+  border-radius: 32rpx;
+  padding: 0 24rpx;
+  height: 72rpx;
+}
+.label.data-v-172882c7 {
+  width: 160rpx;
+  font-size: 28rpx;
+  color: #888;
+}
+.input.data-v-172882c7 {
+  flex: 1;
+  font-size: 28rpx;
+  border: none;
+  background: transparent;
+  outline: none;
+}
+.next-btn.data-v-172882c7 {
+  width: 120rpx;
+  height: 60rpx;
+  background: #FF9900;
+  color: #fff;
+  border-radius: 32rpx;
+  font-size: 36rpx;
+  border: none;
+  margin-top: 40rpx;
+}

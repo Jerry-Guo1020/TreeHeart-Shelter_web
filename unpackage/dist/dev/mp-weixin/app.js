@@ -5,13 +5,18 @@ if (!Math) {
   "./pages/welcome/welcome.js";
   "./pages/login/login.js";
   "./pages/gender/gender.js";
-  "./pages/info/info.js";
+  "./pages/info/school.js";
+  "./pages/info/grade.js";
+  "./pages/info/institute.js";
+  "./pages/info/major.js";
   "./pages/name/name.js";
   "./pages/help/help.js";
   "./pages/home/home.js";
   "./pages/loading/loading.js";
   "./pages/nickname/nickname.js";
-  "./pages/category/category.js";
+  "./component/BottomNavbar/BottomNavbar.js";
+  "./pages/personal/personal.js";
+  "./pages/personInformation/personInformation.js";
 }
 const _sfc_main = {
   onLaunch: function() {

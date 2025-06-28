@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <view class="header">
-      <image class="logo" src="/static/tree-logo.png" alt="树洞logo"></image>
+      <image class="logo" src="http://43.142.21.211:3000/static/logo.png" alt="树洞logo"></image>
       <view class="hello">Hello!</view>
       <view class="desc">欢迎来到大学生心灵树洞</view>
     </view>

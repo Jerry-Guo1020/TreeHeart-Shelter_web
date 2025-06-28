@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "心理测试",
+  "usingComponents": {
+    "bottom-navbar": "../../component/BottomNavbar/BottomNavbar"
+  }
+}

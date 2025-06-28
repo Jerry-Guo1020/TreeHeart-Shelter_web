@@ -37,7 +37,7 @@ const infoGroups = [
     groupName: '基本信息',
     items: [
       { label: '用户名', value: '阿郭', to: '/pages/nickname/nickname' },
-      { label: '真实姓名', value: '郭嘉荣', to: '/pages/name/name' },
+      { label: '真实姓名', value: '郭笑荣', to: '/pages/name/name' },
       { label: '性别', value: '男', to: '/pages/gender/gender' }
     ]
   },
@@ -45,8 +45,9 @@ const infoGroups = [
     groupName: '学校基本信息',
     items: [
       { label: '学校', value: '大连东软信息学院', to: '/pages/info/school' },
-      { label: '学院', value: '数字媒体与设计学院', to: '/pages/info/institute' },
-      { label: '年级', value: '大三', to: '/pages/info/grade' }
+      { label: '学院', value: '计算机学院', to: '/pages/info/institute' },
+      { label: '年级', value: '大三', to: '/pages/info/grade' },
+      { label: '专业名称', value: '软件工程', to: '/pages/info/major' },
     ]
   }
 ]

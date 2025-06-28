@@ -9,67 +9,69 @@
 		<view class="tags">
 			<view class="tag_orange">#学业压力</view>
 			<view class="tag_pink">#情绪情感</view>
-			<view class="tag_yellow">#人机交往</view>
+			<view class="tag_yellow">#人际交往</view>
 			<view class="tag_purple">#职业规划</view>
 			<view class="tag_blue">#生活适应</view>
 			<view class="tag_green">#其他类型</view>
 		</view>
 
-		<!-- 动态卡片内容 -->
-		<view class="card">
-			<!-- 用户头像 -->
-			<view class="user">
-				<image src="/static/image/头像.png" class="user_logo" mode="aspectFill" />
-				<view class="user_info">
-					<view class="userName">大学生心理树洞</view>
-					<view class="dateTime">2025年6月24日16:05:34</view>
-				</view>
-			</view>
-
-			<!-- 基础信息 -->
-			<view class="info">
-				<view class="choiceTag">#情绪情感</view>
-				<view class="title">六月心事，等你诉说~</view>
-			</view>
-
-			<!-- 内容 -->
-			<view class="content">
-				六月的风，吹来了蝉鸣与栀子花香，也吹进了每个人的心房。在这个充满活力与希望的月份，大学生心灵树洞向大家发起征稿啦!
-				<br />
-				无论是你在六月里邂逅的小美好--比如一场浪漫的雨后彩虹，一次和朋友的欢乐野餐还是那些藏在心底的小烦恼-一像是考试的压力，对未来方向的迷茫;
-				亦或是你对六月独有的期许与展望……都欢迎分享给我们……
-			</view>
-
-			<view class="photo">
-				<image src="@/static/image/1.jpg" class="contentPhoto" mode="widthFix" />
-			</view>
-
-			<!-- 点赞评论收藏 -->
-			<view class="emogi">
-				<text>🤍</text>
-				<text>⭐</text>
-			</view>
-
-			<!-- 评论区 -->
-			<view class="talking">
-				<!-- 用户一 -->
-				<view class="userTalking">
-					<view class="userTalkingInfo">
-						<image src="@/static/image/头像.png" class="userTalkLogo" mode="aspectFill" />
-						<view class="talkingUserName">陈树洞</view>
+		<view class="container">
+			<!-- 动态卡片内容 -->
+			<view class="card">
+				<!-- 用户头像 -->
+				<view class="user">
+					<image src="/static/image/头像.png" class="user_logo" mode="aspectFill" />
+					<view class="user_info">
+						<view class="userName">大学生心理树洞</view>
+						<view class="dateTime">2025年6月24日16:05:34</view>
 					</view>
-					<view class="talkAbout">考完试我一定要去海边！！！</view>
-					<view class="dateTime">2分钟前</view>
 				</view>
 
-				<!-- 用户二 -->
-				<view class="userTalking">
-					<view class="userTalkingInfo">
-						<image src="@/static/image/头像.png" class="userTalkLogo" mode="aspectFill" />
-						<view class="talkingUserName">树小洞2025</view>
+				<!-- 基础信息 -->
+				<view class="info">
+					<view class="choiceTag">#情绪情感</view>
+					<view class="title">六月心事，等你诉说~</view>
+				</view>
+
+				<!-- 内容 -->
+				<view class="content">
+					六月的风，吹来了蝉鸣与栀子花香，也吹进了每个人的心房。在这个充满活力与希望的月份，大学生心灵树洞向大家发起征稿啦!
+					<br />
+					无论是你在六月里邂逅的小美好--比如一场浪漫的雨后彩虹，一次和朋友的欢乐野餐还是那些藏在心底的小烦恼-一像是考试的压力，对未来方向的迷茫;
+					亦或是你对六月独有的期许与展望……都欢迎分享给我们……
+				</view>
+
+				<view class="photo">
+					<image src="@/static/image/1.jpg" class="contentPhoto" mode="widthFix" />
+				</view>
+
+				<!-- 点赞评论收藏 -->
+				<view class="emogi">
+					<text>🤍</text>
+					<text>⭐</text>
+				</view>
+
+				<!-- 评论区 -->
+				<view class="talking">
+					<!-- 用户一 -->
+					<view class="userTalking">
+						<view class="userTalkingInfo">
+							<image src="@/static/image/头像.png" class="userTalkLogo" mode="aspectFill" />
+							<view class="talkingUserName">陈树洞</view>
+						</view>
+						<view class="talkAbout">考完试我一定要去海边！！！</view>
+						<view class="dateTime">2分钟前</view>
 					</view>
-					<view class="talkAbout">考完试我一定要去海边！！！</view>
-					<view class="dateTime">2分钟前</view>
+
+					<!-- 用户二 -->
+					<view class="userTalking">
+						<view class="userTalkingInfo">
+							<image src="@/static/image/头像.png" class="userTalkLogo" mode="aspectFill" />
+							<view class="talkingUserName">树小洞2025</view>
+						</view>
+						<view class="talkAbout">考完试我一定要去海边！！！</view>
+						<view class="dateTime">2分钟前</view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -78,7 +80,7 @@
 </template>
 
 <script setup>
-import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
+	import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
 </script>
 
 <style>
@@ -86,12 +88,14 @@ import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
 		margin: 0;
 		padding: 0;
 		box-sizing: border-box;
+		padding-bottom: calc(72px + env(safe-area-inset-bottom, 24px));
+		
 	}
-
-	body {
-		background-color: #ffffff;
+	
+	.container {
+		
+		
 	}
-
 	.page {
 		width: auto;
 		margin: 0 auto;

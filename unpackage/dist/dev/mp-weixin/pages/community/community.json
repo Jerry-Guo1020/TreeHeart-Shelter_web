@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "社区功能",
+  "usingComponents": {
+    "bottom-navbar": "../../component/BottomNavbar/BottomNavbar"
+  }
+}

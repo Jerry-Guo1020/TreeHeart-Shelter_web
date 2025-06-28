@@ -11,7 +11,7 @@ const _sfc_main = {
       if (idx === 0) {
         common_vendor.index.reLaunch({ url: "/pages/home/home" });
       } else if (idx === 1) {
-        common_vendor.index.navigateTo({ url: "/pages/order/order" });
+        common_vendor.index.navigateTo({ url: "/pages/community/community" });
       } else if (idx === 2) {
         common_vendor.index.navigateTo({ url: "/pages/test/test" });
       } else if (idx === 3) {

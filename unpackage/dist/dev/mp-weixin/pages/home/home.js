@@ -10,11 +10,11 @@ const _sfc_main = {
   setup(__props) {
     return (_ctx, _cache) => {
       return {
-        a: common_assets._imports_0$1,
-        b: common_assets._imports_3$1,
-        c: common_assets._imports_2$1,
-        d: common_assets._imports_3$1,
-        e: common_assets._imports_3$1,
+        a: common_assets._imports_0,
+        b: common_assets._imports_3,
+        c: common_assets._imports_2,
+        d: common_assets._imports_3,
+        e: common_assets._imports_3,
         f: common_vendor.p({
           current: 0
         })

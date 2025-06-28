@@ -21,15 +21,9 @@ const _sfc_main = {
 };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
-    a: $data.stage,
-    b: common_vendor.o(($event) => $data.stage = $event.detail.value),
-    c: $data.school,
-    d: common_vendor.o(($event) => $data.school = $event.detail.value),
-    e: $data.college,
-    f: common_vendor.o(($event) => $data.college = $event.detail.value),
-    g: $data.major,
-    h: common_vendor.o(($event) => $data.major = $event.detail.value),
-    i: common_vendor.o((...args) => $options.goNext && $options.goNext(...args))
+    a: $data.major,
+    b: common_vendor.o(($event) => $data.major = $event.detail.value),
+    c: common_vendor.o((...args) => $options.goNext && $options.goNext(...args))
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-e69130f1"]]);

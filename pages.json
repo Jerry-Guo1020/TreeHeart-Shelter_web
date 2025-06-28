@@ -1,93 +1,119 @@
 {
-  "pages": [
-    {
-      "path": "pages/welcome/welcome",
-      "style": { "navigationBarTitleText": "welcome页面" }
-    },
-    {
-      "path": "pages/login/login",
-      "style": { "navigationBarTitleText": "login页面" }
-    },
-    {
-      "path": "pages/gender/gender",
-      "style": { "navigationBarTitleText": "gender页面" }
-    },
-    {
-      "path": "pages/info/school",
-      "style": { "navigationBarTitleText": "学校修改页面" }
-    },
-	{
-	  "path": "pages/info/grade",
-	  "style": { "navigationBarTitleText": "年级修改页面" }
-	},
-	{
-	  "path": "pages/info/institute",
-	  "style": { "navigationBarTitleText": "学校学院修改页面" }
-	},
-	{
-	  "path": "pages/info/major",
-	  "style": { "navigationBarTitleText": "专业填写页面" }
-	},
-    {
-      "path": "pages/name/name",
-      "style": { "navigationBarTitleText": "name页面" }
-    },
-    {
-      "path": "pages/help/help",
-      "style": { "navigationBarTitleText": "help页面" }
-    },
-    {
-      "path": "pages/home/home",
-      "style": { "navigationBarTitleText": "home页面" }
-    },
-    {
-      "path": "pages/loading/loading",
-      "style": { "navigationBarTitleText": "loading页面" }
-    },
-    {
-      "path": "pages/nickname/nickname",
-      "style": { "navigationBarTitleText": "nicking页面" }
-    },
-    {
-    	"path" : "component/BottomNavbar/BottomNavbar",
-    	"style" : 
-    	{
-    		"navigationBarTitleText" : ""
-    	}
-    },
-    {
-    	"path" : "pages/personal/personal",
-    	"style" : 
-    	{
-    		"navigationBarTitleText" : "个人中心"
-    	}
-    },
-    {
-    	"path" : "pages/personInformation/personInformation",
-    	"style" : 
-    	{
-    		"navigationBarTitleText" : "个人信息"
-    	}
-    }
-  ],
-  "globalStyle": {
-    "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "uni-app",
-    "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
-  }
-  // "tabBar": {
-  //   "color": "#999",
-  //   "selectedColor": "#4a9364",
-  //   "backgroundColor": "#fff",
-  //   "borderStyle": "black",
-  //   "list": [
-  //     {
-  //       "pagePath": "pages/home/home",
-  //       "iconPath": "static/tab-home.png",
-  //       "selectedIconPath": "static/tab-home-selected.png",
-  //       "text": "首页"
-  //     }
-  //   ]
-  // }
+	"pages": [{
+			"path": "pages/welcome/welcome",
+			"style": {
+				"navigationBarTitleText": "welcome页面"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "login页面"
+			}
+		},
+		{
+			"path": "pages/gender/gender",
+			"style": {
+				"navigationBarTitleText": "性别修改页面"
+			}
+		},
+		{
+			"path": "pages/info/school",
+			"style": {
+				"navigationBarTitleText": "学校修改页面"
+			}
+		},
+		{
+			"path": "pages/info/grade",
+			"style": {
+				"navigationBarTitleText": "年级修改页面"
+			}
+		},
+		{
+			"path": "pages/info/institute",
+			"style": {
+				"navigationBarTitleText": "学校学院修改页面"
+			}
+		},
+		{
+			"path": "pages/info/major",
+			"style": {
+				"navigationBarTitleText": "专业填写页面"
+			}
+		},
+		{
+			"path": "pages/name/name",
+			"style": {
+				"navigationBarTitleText": "name页面"
+			}
+		},
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": "home页面"
+			}
+		},
+		{
+			"path": "pages/loading/loading",
+			"style": {
+				"navigationBarTitleText": "loading页面"
+			}
+		},
+		{
+			"path": "pages/nickname/nickname",
+			"style": {
+				"navigationBarTitleText": "nicking页面"
+			}
+		},
+		{
+			"path": "component/BottomNavbar/BottomNavbar",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/personal/personal",
+			"style": {
+				"navigationBarTitleText": "个人中心"
+			}
+		},
+		{
+			"path": "pages/personInformation/personInformation",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		},
+		{
+			"path": "pages/community/community",
+			"style": {
+				"navigationBarTitleText": "社区功能"
+			}
+		},
+		{
+			"path": "pages/test/test",
+			"style": {
+				"navigationBarTitleText": "心理测试"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	}
+	// "tabBar": {
+	//   "color": "#999",
+	//   "selectedColor": "#4a9364",
+	//   "backgroundColor": "#fff",
+	//   "borderStyle": "black",
+	//   "list": [
+	//     {
+	//       "pagePath": "pages/home/home",
+	//       "iconPath": "static/tab-home.png",
+	//       "selectedIconPath": "static/tab-home-selected.png",
+	//       "text": "首页"
+	//     }
+	//   ]
+	// }
 }

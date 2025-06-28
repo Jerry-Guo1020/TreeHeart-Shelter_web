@@ -8,13 +8,14 @@
     "pages/info/institute",
     "pages/info/major",
     "pages/name/name",
-    "pages/help/help",
     "pages/home/home",
     "pages/loading/loading",
     "pages/nickname/nickname",
     "component/BottomNavbar/BottomNavbar",
     "pages/personal/personal",
-    "pages/personInformation/personInformation"
+    "pages/personInformation/personInformation",
+    "pages/community/community",
+    "pages/test/test"
   ],
   "window": {
     "navigationBarTextStyle": "black",

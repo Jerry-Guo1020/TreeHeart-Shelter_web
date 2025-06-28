@@ -10,13 +10,14 @@ if (!Math) {
   "./pages/info/institute.js";
   "./pages/info/major.js";
   "./pages/name/name.js";
-  "./pages/help/help.js";
   "./pages/home/home.js";
   "./pages/loading/loading.js";
   "./pages/nickname/nickname.js";
   "./component/BottomNavbar/BottomNavbar.js";
   "./pages/personal/personal.js";
   "./pages/personInformation/personInformation.js";
+  "./pages/community/community.js";
+  "./pages/test/test.js";
 }
 const _sfc_main = {
   onLaunch: function() {

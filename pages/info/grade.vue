@@ -18,18 +18,6 @@
           <view class="label">教育阶段</view>
           <input class="input" v-model="stage" placeholder="如：大二"/>
         </view>
-        <view class="form-item">
-          <view class="label">所在学校</view>
-          <input class="input" v-model="school" placeholder="如：广东东软学院"/>
-        </view>
-        <view class="form-item">
-          <view class="label">所在学院</view>
-          <input class="input" v-model="college" placeholder="如：计算机学院"/>
-        </view>
-        <view class="form-item">
-          <view class="label">所学专业</view>
-          <input class="input" v-model="major" placeholder="如：软件工程"/>
-        </view>
       </view>
       <button class="next-btn" @click="goNext">→</button>
     </view>
@@ -52,7 +40,7 @@ export default {
         uni.showToast({ title: '请填写完整信息', icon: 'none' });
         return;
       }
-      uni.navigateTo({ url: '/pages/name/name' });
+      uni.navigateTo({ url: '/pages/personInformation/personInformation' });
     }
   }
 }

@@ -3,38 +3,46 @@
   position: fixed;
   left: 0; right: 0; bottom: 0;
   height: 72px;
-  background: #F2D3C6; /* 主体淡粉色 */
+  background: #ffd0a9;
   display: flex;
   align-items: flex-end;
   justify-content: space-around;
   z-index: 999;
-  box-shadow: 0 -2px 24px rgba(252,94,101,0.07), 0 -1px 6px #CDE97D;
-  border-top-left-radius: 18px;
-  border-top-right-radius: 18px;
+  box-shadow: 0 -2px 24px rgba(255,146,0,0.06);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  /* 新增底部安全区 */
+  padding-bottom: env(safe-area-inset-bottom, 22px); /* 优先支持 iPhone X等机型的底部安全区，默认22px */
 }
+
+
+/* 统一icon和字体色调，不用深棕色块 */
 .nav-btn.data-v-d9abd7fd {
   flex: 1;
   text-align: center;
-  color: #815C41;
+  color: #755f44;         /* 柔和棕色，不重 */
   padding-bottom: 10px;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: bold;
   display: flex;
   flex-direction: column;
   align-items: center;
-  opacity: 0.92;
+  opacity: 0.95;
+}
+.nav-btn:active text.data-v-d9abd7fd,
+.nav-btn:focus text.data-v-d9abd7fd {
+  color: #FF9200 !important;
 }
 .nav-icon.data-v-d9abd7fd {
   width: 30px;
   height: 30px;
   margin-bottom: 2px;
-  filter: drop-shadow(0 1px 2px #F2D3C6);
+  filter: drop-shadow(0 1px 2px #FFD9A0);
 }
 .nav-center-btn.data-v-d9abd7fd {
   position: relative;
   top: -28px;
-  background: #815C41;
-  box-shadow: 0 4px 12px rgba(252,94,101,0.16);
+  background: linear-gradient(135deg, #FFD9A0 60%, #FF9200 100%);
   border-radius: 50%;
   width: 66px;
   height: 66px;
@@ -42,7 +50,8 @@
   align-items: center;
   justify-content: center;
   z-index: 2;
-  border: 6px solid #F2D3C6;
+  border: 6px solid #FFF6ED;
+  /* 让悬浮logo更有治愈活力感 */
 }
 .center-icon.data-v-d9abd7fd {
   width: 40px;

@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const api_config = require("../../api/config.js");
 if (!Math) {
   BottomNavbar();
 }
@@ -12,8 +13,11 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return {
-        a: common_vendor.o(toPersonInformation),
-        b: common_vendor.p({
+        a: common_vendor.unref(api_config.base_url) + "/static/头像.png",
+        b: common_vendor.unref(api_config.base_url) + "/static/fun_1.png",
+        c: common_vendor.unref(api_config.base_url) + "/static/fun_1.png",
+        d: common_vendor.o(toPersonInformation),
+        e: common_vendor.p({
           current: 3
         })
       };

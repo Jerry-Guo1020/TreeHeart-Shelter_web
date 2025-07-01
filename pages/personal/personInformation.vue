@@ -31,6 +31,7 @@
 </template>
 
 <script setup>
+import { base_url } from '@/api/config.js'
 const nickname = '阿郭'
 const infoGroups = [
   {

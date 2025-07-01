@@ -18,6 +18,11 @@ if (!Math) {
   "./pages/personInformation/personInformation.js";
   "./pages/community/community.js";
   "./pages/test/test.js";
+  "./pages/test/answer.js";
+  "./pages/test/startTest/start_1.js";
+  "./pages/test/startTest/start_2.js";
+  "./pages/test/startTest/start_3.js";
+  "./pages/test/endTest/end.js";
 }
 const _sfc_main = {
   onLaunch: function() {

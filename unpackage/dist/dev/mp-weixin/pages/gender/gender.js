@@ -21,13 +21,16 @@ const _sfc_main = {
     };
     return (_ctx, _cache) => {
       return {
-        a: gender.value === "male" ? 1 : "",
-        b: gender.value === "male" ? 1 : "",
-        c: common_vendor.o(($event) => selectGender("male")),
-        d: gender.value === "female" ? 1 : "",
-        e: gender.value === "female" ? 1 : "",
-        f: common_vendor.o(($event) => selectGender("female")),
-        g: common_vendor.o(goNext)
+        a: _ctx.base_url + "/static/logo.png",
+        b: _ctx.base_url + "/static/男生.png",
+        c: gender.value === "male" ? 1 : "",
+        d: gender.value === "male" ? 1 : "",
+        e: common_vendor.o(($event) => selectGender("male")),
+        f: _ctx.base_url + "/static/女生.png",
+        g: gender.value === "female" ? 1 : "",
+        h: gender.value === "female" ? 1 : "",
+        i: common_vendor.o(($event) => selectGender("female")),
+        j: common_vendor.o(goNext)
       };
     };
   }

@@ -21,9 +21,10 @@ const _sfc_main = {
 };
 function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   return {
-    a: $data.name,
-    b: common_vendor.o(($event) => $data.name = $event.detail.value),
-    c: common_vendor.o((...args) => $options.goNext && $options.goNext(...args))
+    a: _ctx.base_url + "/static/logo.png",
+    b: $data.name,
+    c: common_vendor.o(($event) => $data.name = $event.detail.value),
+    d: common_vendor.o((...args) => $options.goNext && $options.goNext(...args))
   };
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render], ["__scopeId", "data-v-1ca1e1b3"]]);

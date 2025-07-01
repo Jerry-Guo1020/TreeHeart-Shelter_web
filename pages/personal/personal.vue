@@ -2,7 +2,7 @@
   <view class="container">
     <!-- 头像与昵称 -->
     <view class="profile-header">
-      <image src="http://43.142.21.211:3000/static/头像.png" class="avatar" />
+      <image :src="base_url + '/static/头像.png'" class="avatar" />
       <view class="username-row">
         <text class="username">陈树洞</text>
         <image src="" class="sex-icon" mode="aspectFit" alt="性别" />
@@ -24,11 +24,11 @@
     <view class="card">
       <view class="card-row">
         <view class="card-btn favorite">
-          <image src="http://43.142.21.211:3000/static/fun_1.png" class="card-icon" mode="aspectFit" />
+         <image :src="base_url + '/static/fun_1.png'" class="card-icon" mode="aspectFit" />
           <text class="card-text">我的收藏</text>
         </view>
         <view class="card-btn settings">
-          <image src="http://43.142.21.211:3000/static/fun_1.png" class="card-icon" mode="aspectFit" />
+         <image :src="base_url + '/static/fun_1.png'" class="card-icon" mode="aspectFit" />
           <text class="card-text">设置</text>
         </view>
       </view>
@@ -47,6 +47,7 @@
 <script setup>
 import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
 import { Router } from 'lucide-vue-next';
+import { base_url } from '@/api/config.js'
 
 const toPersonInformation = () => {
 	uni.navigateTo({ url: '/pages/personInformation/personInformation' })

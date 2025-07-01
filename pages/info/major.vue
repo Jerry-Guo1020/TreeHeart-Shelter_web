@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { base_url } from '@/api/config.js'
 export default {
   data() {
     return {

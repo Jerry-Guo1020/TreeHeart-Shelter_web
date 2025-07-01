@@ -3,7 +3,7 @@
     <view class="title">
       <view class="section1">
         <view class="logo">
-          <image src="http://43.142.21.211:3000/static/logo.png" mode="aspectFill" class="logoPhoto" />
+          <image :src="base_url +'/static/logo.png'" mode="aspectFill" class="logoPhoto" />
         </view>
         <view class="hello">Hello!</view>
       </view>
@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { base_url } from '@/api/config.js'
 export default {
   data() {
     return {

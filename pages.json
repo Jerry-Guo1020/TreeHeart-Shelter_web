@@ -12,7 +12,7 @@
 			}
 		},
 		{
-			"path": "pages/gender/gender",
+			"path": "pages/info/gender",
 			"style": {
 				"navigationBarTitleText": "性别修改页面"
 			}
@@ -42,7 +42,7 @@
 			}
 		},
 		{
-			"path": "pages/name/name",
+			"path": "pages/info/name",
 			"style": {
 				"navigationBarTitleText": "name页面"
 			}
@@ -60,7 +60,7 @@
 			}
 		},
 		{
-			"path": "pages/nickname/nickname",
+			"path": "pages/info/nickname",
 			"style": {
 				"navigationBarTitleText": "nicking页面"
 			}
@@ -78,7 +78,7 @@
 			}
 		},
 		{
-			"path": "pages/personInformation/personInformation",
+			"path": "pages/personal/personInformation",
 			"style": {
 				"navigationBarTitleText": "个人信息"
 			}
@@ -93,6 +93,41 @@
 			"path": "pages/test/test",
 			"style": {
 				"navigationBarTitleText": "心理测试"
+			}
+		},
+		{
+			"path" : "pages/test/answer",
+			"style" : 
+			{
+				"navigationBarTitleText" : "答题页面"
+			}
+		},
+		{
+			"path" : "pages/test/startTest/start_1",
+			"style" : 
+			{
+				"navigationBarTitleText" : "MBTI 人格类型测试"
+			}
+		},
+		{
+			"path" : "pages/test/startTest/start_2",
+			"style" : 
+			{
+				"navigationBarTitleText" : "焦虑自评量表"
+			}
+		},
+		{
+			"path" : "pages/test/startTest/start_3",
+			"style" : 
+			{
+				"navigationBarTitleText" : "抑郁自评量表"
+			}
+		},
+		{
+			"path" : "pages/test/endTest/end",
+			"style" : 
+			{
+				"navigationBarTitleText" : ""
 			}
 		}
 	],

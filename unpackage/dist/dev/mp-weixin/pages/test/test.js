@@ -43,7 +43,8 @@ const _sfc_main = {
         desc: "迈尔斯-布里格斯性格类型指标（MBTI）是一种流行的人格测试，帮助您了解自己的性格特点和与他人交往的方式。",
         time: "15分钟",
         count: 20,
-        popularity: 95
+        popularity: 95,
+        url: "/pages/test/startTest/start_1"
       },
       {
         type: "焦虑测试",
@@ -54,7 +55,8 @@ const _sfc_main = {
         desc: "焦虑自评量表（SAS）是一种用于评估个体焦虑水平的工具，帮助您了解自己的焦虑状态。",
         time: "10分钟",
         count: 20,
-        popularity: 88
+        popularity: 88,
+        url: "/pages/test/startTest/start_2"
       },
       {
         type: "抑郁测试",
@@ -65,7 +67,8 @@ const _sfc_main = {
         desc: "抑郁自评量表（SDS）是一种用于评估个体抑郁症状的工具，帮助您了解自己的情绪状态。",
         time: "10分钟",
         count: 20,
-        popularity: 85
+        popularity: 85,
+        url: "/pages/test/startTest/start_3"
       }
     ]);
     function onQuickTap(item) {
@@ -75,9 +78,14 @@ const _sfc_main = {
       });
     }
     function onStartTest(item) {
-      common_vendor.index.showToast({
-        title: `进入${item.title}`,
-        icon: "none"
+      if (!item.url) {
+        common_vendor.index.showToast({
+          title: "该功能暂未开放，敬请期待~"
+        });
+        return;
+      }
+      common_vendor.index.navigateTo({
+        url: item.url
       });
     }
     return (_ctx, _cache) => {

@@ -42,7 +42,9 @@
 </template>
 
 <script setup>
-	import { ref } from 'vue'
+	import {
+		ref
+	} from 'vue'
 	import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
 
 	const quickList = ref([{
@@ -80,6 +82,7 @@
 			time: '15分钟',
 			count: 20,
 			popularity: 95,
+			url: '/pages/test/startTest/start_1'
 		},
 		{
 			type: '焦虑测试',
@@ -90,6 +93,7 @@
 			time: '10分钟',
 			count: 20,
 			popularity: 88,
+			url: '/pages/test/startTest/start_2'
 		},
 		{
 			type: '抑郁测试',
@@ -100,6 +104,7 @@
 			time: '10分钟',
 			count: 20,
 			popularity: 85,
+			url: '/pages/test/startTest/start_3'
 		},
 	])
 
@@ -111,9 +116,14 @@
 	}
 
 	function onStartTest(item) {
-		uni.showToast({
-			title: `进入${item.title}`,
-			icon: 'none'
+		if (!item.url) {
+			uni.showToast({
+				title: '该功能暂未开放，敬请期待~'
+			});
+			return;
+		}
+		uni.navigateTo({
+			url: item.url
 		})
 	}
 </script>

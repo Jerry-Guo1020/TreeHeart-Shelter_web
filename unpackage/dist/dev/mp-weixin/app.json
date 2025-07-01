@@ -15,7 +15,12 @@
     "pages/personal/personal",
     "pages/personInformation/personInformation",
     "pages/community/community",
-    "pages/test/test"
+    "pages/test/test",
+    "pages/test/answer",
+    "pages/test/startTest/start_1",
+    "pages/test/startTest/start_2",
+    "pages/test/startTest/start_3",
+    "pages/test/endTest/end"
   ],
   "window": {
     "navigationBarTextStyle": "black",

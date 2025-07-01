@@ -3,7 +3,7 @@
     <view class="title">
       <view class="section1">
         <view class="logo">
-          <image src="http://43.142.21.211:3000/static/logo.png" mode="aspectFill" class="logoPhoto" />
+          <image :src="base_url +'/static/logo.png'" mode="aspectFill" class="logoPhoto" />
         </view>
         <view class="hello">Hello!</view>
       </view>
@@ -16,11 +16,11 @@
       <view class="cardTitle">请选择您的性别</view>
       <view class="sex">
         <view class="boy" :class="{ active: gender === 'male' }" @tap="selectGender('male')">
-          <image src="http://43.142.21.211:3000/static/男生.png" mode="aspectFill" class="boyLogo" :class="{ active: gender === 'male' }" />
+          <image :src="base_url + '/static/男生.png'" mode="aspectFill" class="boyLogo" :class="{ active: gender === 'male' }" />
           <view class="boyName">男生</view>
         </view>
         <view class="girl" :class="{ active: gender === 'female' }" @tap="selectGender('female')">
-          <image src="http://43.142.21.211:3000/static/女生.png" mode="aspectFill" class="girlLogo" :class="{ active: gender === 'female' }" />
+          <image :src="base_url + '/static/女生.png'" mode="aspectFill" class="girlLogo" :class="{ active: gender === 'female' }" />
           <view class="girlName">女生</view>
         </view>
       </view>

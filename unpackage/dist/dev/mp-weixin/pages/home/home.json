@@ -1,6 +1,0 @@
-{
-  "navigationBarTitleText": "home页面",
-  "usingComponents": {
-    "bottom-navbar": "../../component/BottomNavbar/BottomNavbar"
-  }
-}

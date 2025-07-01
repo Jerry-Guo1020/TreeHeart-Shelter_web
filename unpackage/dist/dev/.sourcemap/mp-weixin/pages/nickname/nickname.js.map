@@ -1,1 +1,0 @@
-{"version":3,"file":"nickname.js","sources":["F:/HBuilderX/plugins/uniapp-cli-vite/uniPage:/cGFnZXMvbmlja25hbWUvbmlja25hbWUudnVl"],"sourcesContent":["import MiniProgramPage from 'D:/一些完整的项目/树洞小程序/Tree_web/pages/nickname/nickname.vue'\nwx.createPage(MiniProgramPage)"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;AACA,GAAG,WAAW,eAAe;"}

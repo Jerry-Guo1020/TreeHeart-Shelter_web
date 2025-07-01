@@ -1,1 +1,0 @@
-{"version":3,"file":"BottomNavbar.js","sources":["F:/HBuilderX/plugins/uniapp-cli-vite/uniPage:/Y29tcG9uZW50L0JvdHRvbU5hdmJhci9Cb3R0b21OYXZiYXIudnVl"],"sourcesContent":["import MiniProgramPage from 'D:/一些完整的项目/树洞小程序/Tree_web/component/BottomNavbar/BottomNavbar.vue'\nwx.createPage(MiniProgramPage)"],"names":["MiniProgramPage"],"mappings":";;AACA,GAAG,WAAWA,aAAe,eAAA;"}

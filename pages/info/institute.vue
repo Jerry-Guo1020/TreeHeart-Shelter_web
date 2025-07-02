@@ -3,7 +3,7 @@
     <view class="title">
       <view class="section1">
         <view class="logo">
-          <image :src="base_url+'/static/logo.png'" mode="aspectFill" class="logoPhoto" />
+          <image :src="base_url + '/static/logo.png'" mode="aspectFill" class="logoPhoto" />
         </view>
         <view class="hello">Hello!</view>
       </view>
@@ -16,7 +16,7 @@
       <view class="form">
         <view class="form-item">
           <view class="label">所在学院</view>
-          <input class="input" v-model="college" placeholder="如：计算机学院"/>
+          <input class="input" v-model="subCollege" placeholder="如：计算机学院"/>
         </view>
       </view>
       <button class="next-btn" @click="goNext">→</button>
@@ -24,27 +24,45 @@
   </view>
 </template>
 
-<script>
-import { base_url } from '@/api/config.js'
-export default {
-  data() {
-    return {
-      stage: '',
-      school: '',
-      college: '',
-      major: ''
-    }
-  },
-  methods: {
-    goNext() {
-      if (!this.stage || !this.school || !this.college || !this.major) {
-        uni.showToast({ title: '请填写完整信息', icon: 'none' });
-        return;
-      }
-      uni.navigateTo({ url: '/pages/name/name' });
-    }
+<script setup>
+import { ref } from 'vue';
+import { onShow } from '@dcloudio/uni-app';
+import { base_url } from '@/api/config.js';
+import { updateUserInfo } from '@/api/user.js';
+
+const subCollege = ref(''); // 对应 userInfo.subCollege
+
+onShow(() => {
+  const storedUser = uni.getStorageSync('user');
+  if (storedUser && storedUser.subCollege) {
+    subCollege.value = storedUser.subCollege;
   }
-}
+});
+
+const goNext = async () => {
+  if (!subCollege.value) {
+    uni.showToast({ title: '请填写所在学院', icon: 'none' });
+    return;
+  }
+
+  try {
+    uni.showLoading({ title: '保存中...' });
+    const res = await updateUserInfo({ subCollege: subCollege.value });
+    uni.hideLoading();
+
+    if (res.code === 200) {
+      uni.showToast({ title: '学院更新成功', icon: 'success' });
+      uni.setStorageSync('user', res.data.user);
+      uni.navigateBack(); // 返回上一页 (个人信息详情页)
+    } else {
+      uni.showToast({ title: res.msg || '学院更新失败', icon: 'none' });
+    }
+  } catch (error) {
+    uni.hideLoading();
+    console.error('更新学院失败:', error);
+    uni.showToast({ title: '网络错误，请重试', icon: 'none' });
+  }
+};
 </script>
 
 <style scoped>

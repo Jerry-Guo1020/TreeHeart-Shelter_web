@@ -2,10 +2,10 @@
   <view class="container">
     <!-- 头像和昵称 -->
     <view class="profile-box">
-      <image class="avatar" src="/static/avatar.png"></image>
+      <image class="avatar" :src="userInfo.avatar || (base_url + '/static/avatar.png')"></image>
       <view class="nickname-box">
         <text class="nickname-label">昵称</text>
-        <text class="nickname">{{ nickname }}</text>
+        <text class="nickname">{{ userInfo.nickname || '游客' }}</text>
       </view>
     </view>
 
@@ -31,27 +31,63 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+import { onShow } from '@dcloudio/uni-app'; // 从 @dcloudio/uni-app 导入 onShow
 import { base_url } from '@/api/config.js'
-const nickname = '阿郭'
-const infoGroups = [
-  {
-    groupName: '基本信息',
-    items: [
-      { label: '用户名', value: '阿郭', to: '/pages/nickname/nickname' },
-      { label: '真实姓名', value: '郭笑荣', to: '/pages/name/name' },
-      { label: '性别', value: '男', to: '/pages/gender/gender' }
-    ]
-  },
-  {
-    groupName: '学校基本信息',
-    items: [
-      { label: '学校', value: '大连东软信息学院', to: '/pages/info/school' },
-      { label: '学院', value: '计算机学院', to: '/pages/info/institute' },
-      { label: '年级', value: '大三', to: '/pages/info/grade' },
-      { label: '专业名称', value: '软件工程', to: '/pages/info/major' },
-    ]
+
+const userInfo = ref({}); // 存储用户信息的响应式对象
+const infoGroups = ref([]); // 存储信息分组的响应式数组
+
+onShow(() => {
+  const storedUser = uni.getStorageSync('user');
+  if (storedUser) {
+    userInfo.value = storedUser;
+    console.log('个人信息页面加载用户信息:', userInfo.value);
+    // 根据用户信息动态生成 infoGroups
+    infoGroups.value = [
+      {
+        groupName: '基本信息',
+        items: [
+          { label: '用户名', value: userInfo.value.nickname || '未设置', to: '/pages/info/nickname' },
+          // 真实姓名目前 User 表中没有，如果需要，后端 User 表需要添加该字段
+          { label: '真实姓名', value: userInfo.value.username || '未设置', to: '/pages/info/name' },
+          { label: '性别', value: userInfo.value.sex || '未设置', to: '/pages/info/gender' }
+        ]
+      },
+      {
+        groupName: '学校基本信息',
+        items: [
+          { label: '学校', value: userInfo.value.college || '未设置', to: '/pages/info/school' },
+          { label: '学院', value: userInfo.value.subCollege || '未设置', to: '/pages/info/institute' },
+          { label: '年级', value: userInfo.value.grade || '未设置', to: '/pages/info/grade' },
+          { label: '专业名称', value: userInfo.value.major || '未设置', to: '/pages/info/major' },
+        ]
+      }
+    ];
+  } else {
+    console.log('个人信息页面未找到用户信息');
+    // uni.navigateTo({ url: '/pages/login/login' }); // 如果需要强制登录
+    // 也可以显示默认的空数据
+    infoGroups.value = [
+      {
+        groupName: '基本信息',
+        items: [
+          { label: '用户名', value: '未登录', to: '/pages/nickname/nickname' },
+          { label: '性别', value: '未登录', to: '/pages/gender/gender' }
+        ]
+      },
+      {
+        groupName: '学校基本信息',
+        items: [
+          { label: '学校', value: '未登录', to: '/pages/info/school' },
+          { label: '学院', value: '未登录', to: '/pages/info/institute' },
+          { label: '年级', value: '未登录', to: '/pages/info/grade' },
+          { label: '专业名称', value: '未登录', to: '/pages/info/major' },
+        ]
+      }
+    ];
   }
-]
+});
 
 function handleEdit(item) {
   uni.navigateTo({ url: item.to })
@@ -62,75 +98,90 @@ function handleEdit(item) {
 .container {
   width: 100vw;
   min-height: 100vh;
-  background: linear-gradient(180deg, #FFD9A0 0%, #FFF6ED 100%);
-  box-sizing: border-box;
-  padding-bottom: 32rpx;
+  background-color: #f8f8f8;
+  padding-bottom: 40rpx;
 }
+
 .profile-box {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  padding: 48rpx 0 20rpx 44rpx;
-  background: #fff;
-  .avatar {
-    width: 96rpx;
-    height: 96rpx;
-    border-radius: 50%;
-    background: #ffd6a1;
-  }
-  .nickname-box {
-    margin-left: 24rpx;
-    display: flex;
-    flex-direction: column;
-    .nickname-label {
-      color: #bbb;
-      font-size: 26rpx;
-      margin-bottom: 6rpx;
-    }
-    .nickname {
-      font-size: 30rpx;
-      color: #222;
-      font-weight: bold;
-    }
-  }
+  padding: 60rpx 0 40rpx;
+  background-color: #fff;
+  margin-bottom: 20rpx;
 }
+
+.avatar {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  margin-bottom: 20rpx;
+  border: 4rpx solid #eee;
+}
+
+.nickname-box {
+  display: flex;
+  align-items: center;
+  font-size: 32rpx;
+  color: #333;
+}
+
+.nickname-label {
+  font-weight: bold;
+  margin-right: 10rpx;
+}
+
+.nickname {
+  font-weight: normal;
+}
+
 .group-list {
-  margin-top: 16rpx;
+  padding: 0 30rpx;
 }
+
 .info-group {
-  background: #fff;
+  background-color: #fff;
   border-radius: 20rpx;
-  margin: 0 16rpx 28rpx 16rpx;
+  margin-bottom: 30rpx;
   overflow: hidden;
-  .group-title {
-    padding: 18rpx 32rpx 0 32rpx;
-    color: #999;
-    font-size: 26rpx;
-  }
-  .info-item {
-    display: flex;
-    align-items: center;
-    padding: 0 32rpx;
-    height: 88rpx;
-    font-size: 30rpx;
-    border-bottom: 1px solid #f2f2f2;
-    background: #fff;
-    &:last-child {
-      border-bottom: none;
-    }
-    .item-label {
-      color: #222;
-      flex: 1;
-    }
-    .item-value {
-      color: #888;
-      display: flex;
-      align-items: center;
-      .item-arrow {
-        color: #bbb;
-        font-size: 34rpx;
-        margin-left: 10rpx;
-      }
-    }
-  }
+}
+
+.group-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #666;
+  padding: 25rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25rpx 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  font-size: 28rpx;
+  color: #333;
+  cursor: pointer;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.item-label {
+  flex: 1;
+}
+
+.item-value {
+  display: flex;
+  align-items: center;
+  color: #999;
+}
+
+.item-arrow {
+  margin-left: 10rpx;
+  font-size: 24rpx;
+  color: #ccc;
 }
 </style>

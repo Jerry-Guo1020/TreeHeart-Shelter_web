@@ -2,19 +2,22 @@
   <view class="container">
     <!-- 头像与昵称 -->
     <view class="profile-header">
-      <image :src="base_url + '/static/头像.png'" class="avatar" />
+      <image :src="userInfo.avatar || (base_url + '/static/头像.png')" class="avatar" />
       <view class="username-row">
-        <text class="username">陈树洞</text>
-        <image src="" class="sex-icon" mode="aspectFit" alt="性别" />
+        <text class="username">{{ userInfo.nickname || '游客' }}</text>
+        <!-- 根据性别动态显示图标 -->
+        <image v-if="userInfo.sex === '男'" :src="base_url + '/static/male.png'" class="sex-icon" mode="aspectFit" alt="男" />
+        <image v-else-if="userInfo.sex === '女'" :src="base_url + '/static/female.png'" class="sex-icon" mode="aspectFit" alt="女" />
+        <image v-else src="" class="sex-icon" mode="aspectFit" alt="性别" /> <!-- 默认或未知性别 -->
       </view>
       <view class="stats-row">
         <view class="stat-item">
-          <text class="stat-num">1</text>
+          <text class="stat-num">0</text> <!-- 暂时硬编码，如果后端有关注数再动态获取 -->
           <text class="stat-label">关注</text>
         </view>
         <view class="stat-divider"></view>
         <view class="stat-item">
-          <text class="stat-num">0</text>
+          <text class="stat-num">0</text> <!-- 暂时硬编码，如果后端有粉丝数再动态获取 -->
           <text class="stat-label">粉丝</text>
         </view>
       </view>
@@ -45,12 +48,29 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'; // 导入 ref
+import { onShow } from '@dcloudio/uni-app'; // 从 @dcloudio/uni-app 导入 onShow
 import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
-import { Router } from 'lucide-vue-next';
+// import { Router } from 'lucide-vue-next'; // 这个导入似乎没有用到，可以移除
 import { base_url } from '@/api/config.js'
 
+const userInfo = ref({}); // 定义一个响应式对象来存储用户信息
+
+// 页面显示时加载用户信息
+onShow(() => {
+  const storedUser = uni.getStorageSync('user');
+  if (storedUser) {
+    userInfo.value = storedUser;
+    console.log('个人中心页面加载用户信息:', userInfo.value);
+  } else {
+    // 如果没有用户信息，可能需要跳转到登录页或者显示默认信息
+    console.log('个人中心页面未找到用户信息');
+    // uni.navigateTo({ url: '/pages/login/login' }); // 如果需要强制登录
+  }
+});
+
 const toPersonInformation = () => {
-	uni.navigateTo({ url: '/pages/personInformation/personInformation' })
+	uni.navigateTo({ url: '/pages/personal/personInformation' })
 }
 
 </script>

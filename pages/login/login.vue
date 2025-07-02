@@ -49,6 +49,80 @@
 
 <script setup>
 import { base_url } from '@/api/config.js'
+import { guestLogin } from '@/api/user.js' // 导入新的 guestLogin
+
+const handleWeChatLogin = async () => {
+  try {
+    // 检查本地存储是否有 token，如果有则视为已登录
+    const token = uni.getStorageSync('token');
+    const storedUser = uni.getStorageSync('user'); // 获取存储的用户信息
+
+    if (token && storedUser && storedUser.id) { // 确保 token 和用户ID都存在
+      uni.showToast({
+        title: '已登录',
+        icon: 'success'
+      });
+      uni.navigateTo({ url: '/pages/home/home' });
+      return; // 已登录，直接返回
+    }
+
+    // 如果没有 token，则执行登录逻辑
+    let res;
+    // {{ edit_1 }}
+    // 尝试从本地获取之前游客登录的昵称和头像
+    const guestNickname = uni.getStorageSync('guest_nickname');
+    const guestAvatar = uni.getStorageSync('guest_avatar');
+
+    if (guestNickname && guestAvatar) {
+      // 如果存在，则使用这些信息进行登录
+      console.log('使用已存储的游客信息登录:', guestNickname, guestAvatar);
+      res = await guestLogin(guestNickname, guestAvatar);
+    } else {
+      // 否则，进行首次游客登录，让 guestLogin 内部生成随机信息
+      console.log('首次游客登录，生成随机信息');
+      res = await guestLogin();
+    }
+
+    if (res.code === 200) {
+      uni.showToast({
+        title: '登录成功',
+        icon: 'success'
+      });
+      // 你可以将 token 和用户信息存储到本地
+      uni.setStorageSync('token', res.data.token);
+      uni.setStorageSync('user', res.data.user); // 存储用户信息
+
+      // {{ edit_2 }}
+      // 如果是新生成的游客信息，也存储到本地，以便下次直接使用
+      if (!guestNickname || !guestAvatar) {
+          uni.setStorageSync('guest_nickname', res.data.user.nickname);
+          uni.setStorageSync('guest_avatar', res.data.user.avatar);
+          console.log('新游客信息已存储:', res.data.user.nickname, res.data.user.avatar);
+      }
+
+      uni.navigateTo({ url: '/pages/home/home' });
+    } else {
+      uni.showToast({
+        title: res.msg || '登录失败',
+        icon: 'none'
+      });
+    }
+  } catch (err) {
+    console.error('登录异常:', err); // 打印详细错误信息
+    uni.showToast({
+      title: '登录异常',
+      icon: 'none'
+    });
+  }
+}
+
+// const handleWeChatLogin = () => {
+//   uni.showToast({
+//     title: '模拟微信登录成功',
+//     icon: 'success'
+//   })
+//   uni.navigateTo({ url: '/pages/home/home' });
+// }
 
 const features = [
   {
@@ -77,13 +151,7 @@ const features = [
   }
 ]
 
-const handleWeChatLogin = () => {
-  uni.showToast({
-    title: '模拟微信登录成功',
-    icon: 'success'
-  })
-  uni.navigateTo({ url: '/pages/home/home' });
-}
+
 </script>
 
 <style scoped>

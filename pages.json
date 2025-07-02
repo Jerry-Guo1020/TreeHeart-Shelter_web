@@ -137,18 +137,5 @@
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}
-	// "tabBar": {
-	//   "color": "#999",
-	//   "selectedColor": "#4a9364",
-	//   "backgroundColor": "#fff",
-	//   "borderStyle": "black",
-	//   "list": [
-	//     {
-	//       "pagePath": "pages/home/home",
-	//       "iconPath": "static/tab-home.png",
-	//       "selectedIconPath": "static/tab-home-selected.png",
-	//       "text": "首页"
-	//     }
-	//   ]
-	// }
+	
 }

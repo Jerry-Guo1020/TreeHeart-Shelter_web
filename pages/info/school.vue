@@ -3,7 +3,7 @@
     <view class="title">
       <view class="section1">
         <view class="logo">
-          <image src="http://43.142.21.211:3000/static/logo.png" mode="aspectFill" class="logoPhoto" />
+          <image :src="base_url + '/static/logo.png'" mode="aspectFill" class="logoPhoto" />
         </view>
         <view class="hello">Hello!</view>
       </view>
@@ -16,37 +16,53 @@
       <view class="form">
         <view class="form-item">
           <view class="label">所在学校</view>
-          <input class="input" v-model="school" placeholder="如：广东东软学院"/>
+          <input class="input" v-model="college" placeholder="如：XX大学"/>
         </view>
       </view>
-      <button class="next-btn" @click="goNext">
-		  <view class="next_btn_content">→</view>
-	  </button>
+      <button class="next-btn" @click="goNext">→</button>
     </view>
   </view>
 </template>
 
-<script>
-import { base_url } from '@/api/config.js'
-export default {
-  data() {
-    return {
-      stage: '',
-      school: '',
-      college: '',
-      major: ''
-    }
-  },
-  methods: {
-    goNext() {
-      if (!this.stage || !this.school || !this.college || !this.major) {
-        uni.showToast({ title: '请填写完整信息', icon: 'none' });
-        return;
-      }
-      uni.navigateTo({ url: '/pages/name/name' });
-    }
+<script setup>
+import { ref } from 'vue';
+import { onShow } from '@dcloudio/uni-app';
+import { base_url } from '@/api/config.js';
+import { updateUserInfo } from '@/api/user.js'; // 导入更新用户信息的API
+
+const college = ref(''); // 对应 userInfo.college
+
+onShow(() => {
+  const storedUser = uni.getStorageSync('user');
+  if (storedUser && storedUser.college) {
+    college.value = storedUser.college;
   }
-}
+});
+
+const goNext = async () => {
+  if (!college.value) {
+    uni.showToast({ title: '请填写所在学校', icon: 'none' });
+    return;
+  }
+
+  try {
+    uni.showLoading({ title: '保存中...' });
+    const res = await updateUserInfo({ college: college.value });
+    uni.hideLoading();
+
+    if (res.code === 200) {
+      uni.showToast({ title: '学校更新成功', icon: 'success' });
+      uni.setStorageSync('user', res.data.user);
+      uni.navigateBack(); // 返回上一页 (个人信息详情页)
+    } else {
+      uni.showToast({ title: res.msg || '学校更新失败', icon: 'none' });
+    }
+  } catch (error) {
+    uni.hideLoading();
+    console.error('更新学校失败:', error);
+    uni.showToast({ title: '网络错误，请重试', icon: 'none' });
+  }
+};
 </script>
 
 <style scoped>

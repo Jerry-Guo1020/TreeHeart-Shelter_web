@@ -3,7 +3,7 @@
     <view class="title">
       <view class="section1">
         <view class="logo">
-          <image :src="base_url +'/static/logo.png'" mode="aspectFill" class="logoPhoto" />
+           <image :src="base_url + '/static/logo.png'" mode="aspectFill" class="logoPhoto" />
         </view>
         <view class="hello">Hello!</view>
       </view>
@@ -16,7 +16,7 @@
       <view class="form">
         <view class="form-item">
           <view class="label">教育阶段</view>
-          <input class="input" v-model="stage" placeholder="如：大二"/>
+          <input class="input" v-model="grade" placeholder="如：大二"/>
         </view>
       </view>
       <button class="next-btn" @click="goNext">→</button>
@@ -24,27 +24,45 @@
   </view>
 </template>
 
-<script>
-import { base_url } from '@/api/config.js'
-export default {
-  data() {
-    return {
-      stage: '',
-      school: '',
-      college: '',
-      major: ''
-    }
-  },
-  methods: {
-    goNext() {
-      if (!this.stage || !this.school || !this.college || !this.major) {
-        uni.showToast({ title: '请填写完整信息', icon: 'none' });
-        return;
-      }
-      uni.navigateTo({ url: '/pages/personInformation/personInformation' });
-    }
+<script setup>
+import { ref } from 'vue';
+import { onShow } from '@dcloudio/uni-app';
+import { base_url } from '@/api/config.js';
+import { updateUserInfo } from '@/api/user.js';
+
+const grade = ref(''); // 对应 userInfo.grade
+
+onShow(() => {
+  const storedUser = uni.getStorageSync('user');
+  if (storedUser && storedUser.grade) {
+    grade.value = storedUser.grade;
   }
-}
+});
+
+const goNext = async () => {
+  if (!grade.value) {
+    uni.showToast({ title: '请填写教育阶段', icon: 'none' });
+    return;
+  }
+
+  try {
+    uni.showLoading({ title: '保存中...' });
+    const res = await updateUserInfo({ grade: grade.value });
+    uni.hideLoading();
+
+    if (res.code === 200) {
+      uni.showToast({ title: '教育阶段更新成功', icon: 'success' });
+      uni.setStorageSync('user', res.data.user);
+      uni.navigateBack(); // 返回上一页 (个人信息详情页)
+    } else {
+      uni.showToast({ title: res.msg || '教育阶段更新失败', icon: 'none' });
+    }
+  } catch (error) {
+    uni.hideLoading();
+    console.error('更新教育阶段失败:', error);
+    uni.showToast({ title: '网络错误，请重试', icon: 'none' });
+  }
+};
 </script>
 
 <style scoped>

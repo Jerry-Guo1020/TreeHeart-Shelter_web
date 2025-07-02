@@ -15,12 +15,12 @@
     <view class="card">
       <view class="cardTitle">请选择您的性别</view>
       <view class="sex">
-        <view class="boy" :class="{ active: gender === 'male' }" @tap="selectGender('male')">
-          <image :src="base_url + '/static/男生.png'" mode="aspectFill" class="boyLogo" :class="{ active: gender === 'male' }" />
+        <view class="boy" :class="{ active: gender === '男' }" @tap="selectGender('男')">
+          <image :src="base_url + '/static/男生.png'" mode="aspectFill" class="boyLogo" :class="{ active: gender === '男' }" />
           <view class="boyName">男生</view>
         </view>
-        <view class="girl" :class="{ active: gender === 'female' }" @tap="selectGender('female')">
-          <image :src="base_url + '/static/女生.png'" mode="aspectFill" class="girlLogo" :class="{ active: gender === 'female' }" />
+        <view class="girl" :class="{ active: gender === '女' }" @tap="selectGender('女')">
+          <image :src="base_url + '/static/女生.png'" mode="aspectFill" class="girlLogo" :class="{ active: gender === '女' }" />
           <view class="girlName">女生</view>
         </view>
       </view>
@@ -31,26 +31,60 @@
 
 <script setup>
 import { ref } from 'vue'
+import { onShow } from '@dcloudio/uni-app'; // 导入 onShow
+import { base_url } from '@/api/config.js'
+import { updateUserInfo } from '@/api/user.js'; // 导入更新用户信息的API
 
-const gender = ref('')
+const gender = ref('');
+
+onShow(() => {
+  const storedUser = uni.getStorageSync('user');
+  if (storedUser && storedUser.sex) {
+    gender.value = storedUser.sex;
+  }
+});
 
 const selectGender = (value) => {
-  gender.value = value
-}
+  gender.value = value;
+};
 
-const goNext = () => {
+const goNext = async () => {
   if (!gender.value) {
     uni.showToast({
       title: '请选择性别',
       icon: 'none'
-    })
-    return
-  } 
+    });
+    return;
+  }
 
-  uni.navigateTo({
-    url: `/pages/info/info?gender=${gender.value}`
-  })
-}
+  try {
+    uni.showLoading({ title: '保存中...' });
+    const res = await updateUserInfo({ sex: gender.value });
+    uni.hideLoading();
+
+    if (res.code === 200) {
+      uni.showToast({
+        title: '性别更新成功',
+        icon: 'success'
+      });
+      // 更新本地存储的用户信息
+      uni.setStorageSync('user', res.data.user);
+      uni.navigateBack(); // 返回上一页 (个人信息详情页)
+    } else {
+      uni.showToast({
+        title: res.msg || '性别更新失败',
+        icon: 'none'
+      });
+    }
+  } catch (error) {
+    uni.hideLoading();
+    console.error('更新性别失败:', error);
+    uni.showToast({
+      title: '网络错误，请重试',
+      icon: 'none'
+    });
+  }
+};
 </script>
 
 <style scoped>

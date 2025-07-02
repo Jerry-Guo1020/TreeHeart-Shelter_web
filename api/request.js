@@ -3,7 +3,7 @@
  */
 
 // 导入配置
-import { BASE_URL, DEV_BASE_URL, TIMEOUT, CURRENT_ENV, ENV } from "./config";
+import { base_url, DEV_BASE_URL, TIMEOUT, CURRENT_ENV } from "./config";
 
 /**
  * 请求拦截器
@@ -37,7 +37,7 @@ const responseInterceptor = (response) => {
 };
 const request = (method, url, data = {}, options = {}) => {
   // 完整请求路径
-  const apiBaseUrl = CURRENT_ENV === ENV.PROD ? BASE_URL : DEV_BASE_URL;
+  const apiBaseUrl = CURRENT_ENV === 'production' ? base_url : DEV_BASE_URL;
   const requestUrl = /^(http|https):\/\//.test(url) ? url : apiBaseUrl + url;
 
   // 请求配置

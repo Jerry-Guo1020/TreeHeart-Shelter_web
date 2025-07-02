@@ -1,103 +1,139 @@
 <template>
   <view class="container">
     <view class="header">
-      <image class="logo" :src="base_url+'/static/logo.png'" alt="树洞logo"></image>
+      <image class="logo" :src="base_url + '/static/logo.png'" alt="树洞logo"></image>
       <view class="hello">Hello!</view>
       <view class="desc">欢迎来到大学生心灵树洞</view>
     </view>
     <view class="card">
       <view class="title">请输入你的姓名</view>
-      <input class="input" v-model="name" placeholder="请输入姓名"/>
+      <input class="input" v-model="username" placeholder="请输入姓名"/>
       <button class="next-btn" @click="goNext">→</button>
     </view>
   </view>
 </template>
 
-<script>
-import { base_url } from '@/api/config.js'
-export default {
-  data() {
-    return {
-      name: ''
-    }
-  },
-  methods: {
-    goNext() {
-      if (!this.name) {
-        uni.showToast({ title: '请输入姓名', icon: 'none' });
-        return;
-      }
-      // 这里可以跳转到下一个页面或提交
-      uni.showToast({ title: '欢迎，' + this.name, icon: 'success' });
-	  uni.navigateTo({
-	  	url: '/pages/nickname/nickname'	
-	  })
-    }
+<script setup>
+import { ref } from 'vue';
+import { onShow } from '@dcloudio/uni-app';
+import { base_url } from '@/api/config.js';
+import { updateUserInfo } from '@/api/user.js'; // 导入更新用户信息的API
+
+const username = ref(''); // 对应 userInfo.username
+
+onShow(() => {
+  const storedUser = uni.getStorageSync('user');
+  if (storedUser && storedUser.username) {
+    username.value = storedUser.username;
   }
-}
+});
+
+const goNext = async () => {
+  if (!username.value) {
+    uni.showToast({ title: '请填写姓名', icon: 'none' });
+    return;
+  }
+
+  try {
+    uni.showLoading({ title: '保存中...' });
+    const res = await updateUserInfo({ username: username.value });
+    uni.hideLoading();
+
+    if (res.code === 200) {
+      uni.showToast({ title: '姓名更新成功', icon: 'success' });
+      uni.setStorageSync('user', res.data.user);
+      uni.navigateBack(); // 返回上一页 (个人信息详情页)
+    } else {
+      uni.showToast({ title: res.msg || '姓名更新失败', icon: 'none' });
+    }
+  } catch (error) {
+    uni.hideLoading();
+    console.error('更新姓名失败:', error);
+    uni.showToast({ title: '网络错误，请重试', icon: 'none' });
+  }
+};
 </script>
 
 <style scoped>
 .container {
-  height: 100vh;
-  max-width: auto;
+  min-height: 100vh;
   background: linear-gradient(180deg, #FFD9A0 0%, #FFF6ED 100%);
   display: flex;
   flex-direction: column;
-}
-.header {
-  display: flex;
   align-items: center;
-  margin-top: 40rpx;
-  margin-left: 40rpx;
+  justify-content: center;
 }
-.logo {
-  width: 60rpx;
-  height: 60rpx;
-}
-.hello {
-  font-size: 36rpx;
-  font-weight: bold;
-  margin-left: 16rpx;
-}
-.desc {
-  font-size: 22rpx;
-  color: #888;
-  margin-left: 16rpx;
-}
-.card {
-  background: #fff;
-  border-radius: 24rpx;
-  margin: 80rpx 32rpx 0 32rpx;
-  padding: 48rpx 0 80rpx 0;
-  box-shadow: 0 8rpx 32rpx #f6e7d6;
+
+.header {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.title {
-  font-size: 32rpx;
-  font-weight: bold;
-  margin-bottom: 48rpx;
-}
-.input {
-  width: 80%;
-  font-size: 28rpx;
-  border: none;
-  background: #FFF7E6;
-  border-radius: 32rpx;
-  padding: 24rpx;
   margin-bottom: 40rpx;
-  outline: none;
+  padding-top: 100rpx;
+}
+
+.logo {
+  width: 120rpx;
+  height: 120rpx;
+  margin-bottom: 20rpx;
+}
+
+.hello {
+  font-size: 70rpx;
+  font-weight: bolder;
+  color: #333;
+}
+
+.desc {
+  font-size: 30rpx;
+  color: #666;
+  margin-top: 10rpx;
+}
+
+.card {
+  width: 90%;
+  max-width: 750rpx;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 30rpx 30rpx 0 0;
+  padding: 40rpx;
+  margin-top: 20rpx;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  box-sizing: border-box;
+  align-items: center;
+}
+
+.title {
+  font-size: 40rpx;
+  margin-top: 60rpx;
+  margin-bottom: 40rpx;
   text-align: center;
 }
+
+.input {
+  width: 80%;
+  height: 80rpx;
+  border: 2rpx solid #eee;
+  border-radius: 16rpx;
+  padding: 0 20rpx;
+  font-size: 32rpx;
+  margin-bottom: 60rpx;
+  text-align: center;
+}
+
 .next-btn {
-  width: 120rpx;
-  height: 60rpx;
-  background: #FF9900;
-  color: #fff;
-  border-radius: 32rpx;
-  font-size: 36rpx;
-  border: none;
+  padding: 30px;
+  background-color: #FF9900;
+  color: white;
+  font-size: 40px;
+  border-radius: 8px;
+  font-weight: bolder;
+  width: 150px;
+  height: 50px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 </style>

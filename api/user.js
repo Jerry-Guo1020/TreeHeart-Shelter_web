@@ -1,5 +1,5 @@
 import { getRandomAvatarUrl } from "@/utils/randomData";
-import request from "./request";
+import request from '@/api/request.js'; // 假设你有一个统一的请求工具
 
 export const fetchPosts = async () => {
   return request.get("/community/self-post");
@@ -9,20 +9,26 @@ export const fetchMorePosts = async (lastPostId) => {
   return request.get(`/community/self-post?lastPostId=${lastPostId}`);
 };
 
-export const wechatLogin = async () => {
-  const res = await uni.login({
-    provider: "weixin", //使用微信登录
-  });
+// {{ edit_1 }}
+// guestLogin 现在可以接收可选的 nickname 和 avatar 参数
+export const guestLogin = async (existingNickname = null, existingAvatar = null) => {
+  let nicknameToUse;
+  let avatarToUse;
 
-  const random_name = await getRandomName();
+  if (existingNickname && existingAvatar) {
+    // 如果本地已经有存储的昵称和头像，就使用它们
+    nicknameToUse = existingNickname;
+    avatarToUse = existingAvatar;
+  } else {
+    // 否则，生成新的随机昵称和头像
+    nicknameToUse = await getRandomName();
+    avatarToUse = getRandomAvatarUrl(nicknameToUse);
+  }
 
-  const code = res.code;
-  return request.post("/login/wechat-login", {
-    code,
-    userInfo: {
-      nickName: random_name,
-      gender: "男",
-    },
+  // 向后端发送请求，注册或登录用户
+  return request.post("/login/guest-login", {
+    nickname: nicknameToUse,
+    avatar: avatarToUse,
   });
 };
 
@@ -31,7 +37,7 @@ export const updateUserInfo = async (userInfo) => {
 };
 
 export const getRandomName = async () => {
-  // GET https://api.mir6.com/api/sjname
+  // 发起请求获取随机名称  
   return new Promise((resolve, reject) => {
     uni.request({
       url: "https://api.mir6.com/api/sjname", // 请求的接口地址
@@ -80,3 +86,12 @@ export const updateUserAvatar = async (avatarBase64) => {
 export const deletePost = async (postId) => {
   return request.delete("/community/post", { id: postId });
 };
+
+// 示例：登录接口，用于获取用户信息并存储到本地
+export function login(code) {
+  return request({
+    url: '/auth/login', // 假设你的登录接口是这个
+    method: 'post',
+    data: { code }
+  });
+}

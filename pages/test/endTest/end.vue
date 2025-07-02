@@ -37,51 +37,94 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app' // 从 uni-app 导入 onLoad
 
 const result = ref(null)
 const advices = ref([])
 
-onMounted(() => {
-  // H5下获取页面参数
-  let params = {}
-  if (typeof window !== 'undefined') {
-    const urlParams = new URLSearchParams(window.location.search)
-    params.assessmentId = Number(urlParams.get('assessmentId'))
-    params.score = Number(urlParams.get('score'))
-  }
+onLoad((options) => { // 使用 onLoad 接收页面参数
+  const assessmentId = Number(options.assessmentId) || 0;
+  const score = Number(options.score) || 0;
+  const level = decodeURIComponent(options.level || '');
+  const report = decodeURIComponent(options.report || '');
 
   // 这里应通过你的后端API请求，示例代码如下：
   // let apiResult = await uni.request({ url: '/api/assessment/result', data: params })
   // result.value = apiResult.data.result
   // advices.value = apiResult.data.advices
 
-  // 下面为模拟数据，实际请替换为API返回内容
-  const assessmentId = params.assessmentId || 1
-  const score = params.score || 0
+  // 根据传递的参数设置结果
+  let assessmentName = '';
+  let title = '恭喜你！测试完成啦！';
+  let tip = '';
+  let color = '#8F51FF'; // 默认颜色
+
   if (assessmentId === 1) {
-    result.value = {
-      title: '恭喜你！测试完成啦！',
-      tip: `您已完成 MBTI人格类型测试。以下是您的测试结果和个性化建议。`,
-      assessmentName: 'MBTI人格类型测试',
-      level: score <= 15 ? '偏内向' : score <= 25 ? '均衡型' : '偏外向',
-      color: score <= 15 ? '#4B7BEC' : score <= 25 ? '#32CD9E' : '#FF9200',
-      description:
-        score <= 15
-          ? '你的性格倾向于内向，更喜欢独处或小圈子活动，做事细致踏实。'
-          : score <= 25
-          ? '你的性格较为均衡，能适应多种环境，外向与内向特质兼具。'
-          : '你的性格倾向于外向，喜欢社交、乐于尝试新鲜事物，适应能力较强。',
+    assessmentName = 'MBTI人格类型测试';
+    // 根据 level 设置颜色，或者可以从后端返回颜色
+    if (level === '偏内向') {
+      color = '#4B7BEC';
+    } else if (level === '均衡型') {
+      color = '#32CD9E';
+    } else if (level === '偏外向') {
+      color = '#FF9200';
     }
     advices.value = [
       '参与创意和表达性活动',
       '寻找能让您与他人建立有意义联系的机会',
       '学习如何完成长期项目和处理细节',
       '给自己设定现实的目标和期限'
-    ]
+    ];
+  } else if (assessmentId === 2) {
+    assessmentName = '焦虑自评量表';
+    // 根据 level 设置颜色
+    if (level === '无焦虑') {
+      color = '#32CD9E';
+    } else if (level === '轻度焦虑') {
+      color = '#FFD9A0';
+    } else if (level === '中度焦虑') {
+      color = '#FF9200';
+    } else if (level === '重度焦虑') {
+      color = '#FF4D4F';
+    }
+    advices.value = [
+      '尝试深呼吸和冥想放松',
+      '保持规律的作息和充足睡眠',
+      '适度运动，如散步、瑜伽',
+      '与信任的朋友或家人交流感受'
+    ];
+  } else if (assessmentId === 3) {
+    assessmentName = '抑郁自评量表';
+    // 根据 level 设置颜色
+    if (level === '无抑郁') {
+      color = '#32CD9E';
+    } else if (level === '轻度抑郁') {
+      color = '#FFD9A0';
+    } else if (level === '中度抑郁') {
+      color = '#FF9200';
+    } else if (level === '重度抑郁') {
+      color = '#FF4D4F';
+    }
+    advices.value = [
+      '寻求专业心理咨询帮助',
+      '保持社交连接，避免孤立',
+      '培养新的兴趣爱好，转移注意力',
+      '记录积极情绪，增强自我肯定'
+    ];
   }
-  // 可继续添加 assessmentId=2、3（焦虑/抑郁）等分支
-})
+
+  tip = `您已完成 ${assessmentName}。以下是您的测试结果和个性化建议。`;
+
+  result.value = {
+    title: title,
+    tip: tip,
+    assessmentName: assessmentName,
+    level: level,
+    color: color,
+    description: report, // 直接使用后端返回的 report 作为描述
+  };
+});
 
 function goBack() {
   uni.redirectTo({ url: '/pages/test/test' })

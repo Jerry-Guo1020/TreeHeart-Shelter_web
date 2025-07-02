@@ -14,16 +14,23 @@
   </view>
 </template>
 
-<script>
-export default {
-  methods: {
-    startQuiz() {
-      // 跳转到正式答题页，或触发答题逻辑
-      // uni.navigateTo({ url: '/pages/quiz/quiz' })
-      this.$emit('start');
-    }
-  }
-}
+<script setup>
+import { ref, onMounted } from 'vue'; // 将 onMounted 从 'vue' 导入
+// import { onMounted } from '@dcloudio/uni-app'; // 这一行可以删除或注释掉
+
+// 假设 MBTI 测评的 assessmentId 为 1
+const MBTI_ASSESSMENT_ID = 1;
+
+const startQuiz = () => {
+  uni.navigateTo({
+    url: `/pages/test/quiz/quiz?assessmentId=${MBTI_ASSESSMENT_ID}`
+  });
+};
+
+// 如果有其他 setup 逻辑，可以在这里添加
+onMounted(() => {
+  console.log('MBTI Start Page Mounted');
+});
 </script>
 
 <style scoped>

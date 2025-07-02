@@ -96,38 +96,57 @@
 			}
 		},
 		{
-			"path" : "pages/test/answer",
-			"style" : 
-			{
-				"navigationBarTitleText" : "答题页面"
+			"path": "pages/test/answer",
+			"style": {
+				"navigationBarTitleText": "答题页面"
 			}
 		},
 		{
-			"path" : "pages/test/startTest/start_1",
-			"style" : 
-			{
-				"navigationBarTitleText" : "MBTI 人格类型测试"
+			"path": "pages/test/startTest/start_1",
+			"style": {
+				"navigationBarTitleText": "MBTI 人格类型测试"
 			}
 		},
 		{
-			"path" : "pages/test/startTest/start_2",
-			"style" : 
-			{
-				"navigationBarTitleText" : "焦虑自评量表"
+			"path": "pages/test/startTest/start_2",
+			"style": {
+				"navigationBarTitleText": "焦虑自评量表"
 			}
 		},
 		{
-			"path" : "pages/test/startTest/start_3",
-			"style" : 
-			{
-				"navigationBarTitleText" : "抑郁自评量表"
+			"path": "pages/test/startTest/start_3",
+			"style": {
+				"navigationBarTitleText": "抑郁自评量表"
 			}
 		},
 		{
-			"path" : "pages/test/endTest/end",
-			"style" : 
-			{
-				"navigationBarTitleText" : ""
+			"path": "pages/test/endTest/end",
+			"style": {
+				"navigationBarTitleText": "结束测试"
+			}
+		},
+		{
+			"path": "pages/test/testing/testing_1",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/test/testing/testing_2",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/test/testing/testing_3",
+			"style": {
+				"navigationBarTitleText": ""
+			}
+		},
+		{
+			"path": "pages/test/quiz/quiz",
+			"style": {
+				"navigationBarTitleText": "心理测评"
 			}
 		}
 	],
@@ -137,5 +156,4 @@
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}
-	
 }

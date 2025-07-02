@@ -148,6 +148,12 @@
 			"style": {
 				"navigationBarTitleText": "心理测评"
 			}
+		},
+		{
+			"path": "pages/personal/assessmentRecord",
+			"style": {
+				"navigationBarTitleText": "心理测评历史记录"
+			}
 		}
 	],
 	"globalStyle": {

@@ -2,7 +2,7 @@
   <view class="bg">
     <view class="intro-card">
       <!-- 标题 -->
-      <view class="quiz-title">抑郁自评量表</view>
+      <view class="quiz-title">焦虑自评量表</view>
       <!-- 简要说明 -->
       <view class="quiz-desc">
         总共有 <text class="strong">10</text> 道题，<br />
@@ -14,16 +14,23 @@
   </view>
 </template>
 
-<script>
-export default {
-  methods: {
-    startQuiz() {
-      // 跳转到正式答题页，或触发答题逻辑
-      // uni.navigateTo({ url: '/pages/quiz/quiz' })
-      this.$emit('start');
-    }
-  }
-}
+<script setup>
+import { ref, onMounted } from 'vue'; // 将 onMounted 从 'vue' 导入
+// import { onMounted } from '@dcloudio/uni-app'; // 这一行可以删除或注释掉
+
+// 抑郁自评量表 测评的 assessmentId 为 3
+const DEPRESSION_ASSESSMENT_ID = 3;
+
+const startQuiz = () => {
+  uni.navigateTo({
+    url: `/pages/test/quiz/quiz?assessmentId=${DEPRESSION_ASSESSMENT_ID}`
+  });
+};
+
+// 如果有其他 setup 逻辑，可以在这里添加
+onMounted(() => {
+  console.log('DEPRESSION Start Page Mounted');
+});
 </script>
 
 <style scoped>

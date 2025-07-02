@@ -16,9 +16,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'; // 将 onMounted 从 'vue' 导入
-// import { onMounted } from '@dcloudio/uni-app'; // 这一行可以删除或注释掉
 
-// 假设 MBTI 测评的 assessmentId 为 1
+
+// MBTI 测评的 assessmentId 为 1
 const MBTI_ASSESSMENT_ID = 1;
 
 const startQuiz = () => {

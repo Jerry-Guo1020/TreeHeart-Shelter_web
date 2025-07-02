@@ -38,7 +38,7 @@
       <view class="card-list">
         <view class="list-btn" @click="toPersonInformation">个人信息</view>
         <view class="list-btn">求助记录</view>
-		<view class="list-btn">测试记录</view>
+		<view class="list-btn" @click="toassessmentRecord">测试记录</view>
       </view>
     </view>
     
@@ -71,6 +71,10 @@ onShow(() => {
 
 const toPersonInformation = () => {
 	uni.navigateTo({ url: '/pages/personal/personInformation' })
+}
+
+const toassessmentRecord = () => {
+	uni.navigateTo({ url: '/pages/personal/assessmentRecord' })
 }
 
 </script>

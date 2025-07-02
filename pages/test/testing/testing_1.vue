@@ -32,124 +32,124 @@
   </template>
   
   <script setup>
- //  import { ref } from 'vue';
- //  import { onLoad } from '@dcloudio/uni-app';
- //  import { fetchAssessmentQuestions, submitAssessmentResult } from '@/api/assessment.js'; // 导入API
+  import { ref } from 'vue';
+  import { onLoad } from '@dcloudio/uni-app';
+  import { fetchAssessmentQuestions, submitAssessmentResult } from '@/api/assessment.js'; // 导入API
   
- //  const assessmentId = ref(null);
- //  const questions = ref([]);
- //  const currentQuestionIndex = ref(0);
- //  const selectedOptionIndex = ref(null); // 当前问题选中的选项索引
- //  const userAnswers = ref([]); // 存储用户每个问题的答案索引
- //  const loading = ref(true);
+  const assessmentId = ref(null);
+  const questions = ref([]);
+  const currentQuestionIndex = ref(0);
+  const selectedOptionIndex = ref(null); // 当前问题选中的选项索引
+  const userAnswers = ref([]); // 存储用户每个问题的答案索引
+  const loading = ref(true);
   
- //  onLoad(async (options) => {
-	// if (options.assessmentId) {
-	//   assessmentId.value = options.assessmentId;
-	//   await loadQuestions(options.assessmentId);
-	// } else {
-	//   uni.showToast({
-	// 	title: '缺少测评ID',
-	// 	icon: 'none'
-	//   });
-	//   loading.value = false;
-	// }
- //  });
+  onLoad(async (options) => {
+	if (options.assessmentId) {
+	  assessmentId.value = options.assessmentId;
+	  await loadQuestions(options.assessmentId);
+	} else {
+	  uni.showToast({
+		title: '缺少测评ID',
+		icon: 'none'
+	  });
+	  loading.value = false;
+	}
+  });
   
- //  const loadQuestions = async (id) => {
-	// loading.value = true;
-	// try {
-	//   const res = await fetchAssessmentQuestions(id);
-	//   if (res.code === 200 && res.data && res.data.questions) {
-	// 	questions.value = res.data.questions.map(q => ({
-	// 	  ...q,
-	// 	  parsedOptions: JSON.parse(q.options) // 解析 options 字符串为数组
-	// 	}));
-	// 	// 初始化 userAnswers 数组
-	// 	userAnswers.value = new Array(questions.value.length).fill(null);
-	//   } else {
-	// 	uni.showToast({
-	// 	  title: res.msg || '获取题目失败',
-	// 	  icon: 'none'
-	// 	});
-	//   }
-	// } catch (error) {
-	//   console.error('加载题目异常:', error);
-	//   uni.showToast({
-	// 	title: '网络错误，无法加载题目',
-	// 	icon: 'none'
-	//   });
-	// } finally {
-	//   loading.value = false;
-	// }
- //  };
+  const loadQuestions = async (id) => {
+	loading.value = true;
+	try {
+	  const res = await fetchAssessmentQuestions(id);
+	  if (res.code === 200 && res.data && res.data.questions) {
+		questions.value = res.data.questions.map(q => ({
+		  ...q,
+		  parsedOptions: JSON.parse(q.options) // 解析 options 字符串为数组
+		}));
+		// 初始化 userAnswers 数组
+		userAnswers.value = new Array(questions.value.length).fill(null);
+	  } else {
+		uni.showToast({
+		  title: res.msg || '获取题目失败',
+		  icon: 'none'
+		});
+	  }
+	} catch (error) {
+	  console.error('加载题目异常:', error);
+	  uni.showToast({
+		title: '网络错误，无法加载题目',
+		icon: 'none'
+	  });
+	} finally {
+	  loading.value = false;
+	}
+  };
   
- //  const handleOptionSelect = (index) => {
-	// selectedOptionIndex.value = index;
- //  };
+  const handleOptionSelect = (index) => {
+	selectedOptionIndex.value = index;
+  };
   
- //  const nextQuestion = async () => {
-	// if (selectedOptionIndex.value === null) {
-	//   uni.showToast({
-	// 	title: '请选择一个选项',
-	// 	icon: 'none'
-	//   });
-	//   return;
-	// }
+  const nextQuestion = async () => {
+	if (selectedOptionIndex.value === null) {
+	  uni.showToast({
+		title: '请选择一个选项',
+		icon: 'none'
+	  });
+	  return;
+	}
   
-	// // 记录当前问题的答案
-	// userAnswers.value[currentQuestionIndex.value] = selectedOptionIndex.value;
+	// 记录当前问题的答案
+	userAnswers.value[currentQuestionIndex.value] = selectedOptionIndex.value;
   
-	// if (currentQuestionIndex.value < questions.value.length - 1) {
-	//   // 切换到下一题
-	//   currentQuestionIndex.value++;
-	//   selectedOptionIndex.value = null; // 重置选中状态
-	// } else {
-	//   // 最后一题，提交答案
-	//   await submitQuiz();
-	// }
- //  };
+	if (currentQuestionIndex.value < questions.value.length - 1) {
+	  // 切换到下一题
+	  currentQuestionIndex.value++;
+	  selectedOptionIndex.value = null; // 重置选中状态
+	} else {
+	  // 最后一题，提交答案
+	  await submitQuiz();
+	}
+  };
   
- //  const submitQuiz = async () => {
-	// uni.showLoading({ title: '提交中...' });
+  const submitQuiz = async () => {
+	uni.showLoading({ title: '提交中...' });
   
-	// // 简单的分数计算逻辑：每个选项的索引 + 1 作为分数
-	// // 例如：A(索引0)=1分, B(索引1)=2分, C(索引2)=3分, D(索引3)=4分
-	// // 实际项目中，每个选项的分数可能需要从后端获取或有更复杂的计算规则
-	// let totalScore = userAnswers.value.reduce((sum, answerIndex) => {
-	//   // 确保 answerIndex 不是 null
-	//   return sum + (answerIndex !== null ? (answerIndex + 1) : 0);
-	// }, 0);
+	// 简单的分数计算逻辑：每个选项的索引 + 1 作为分数
+	// 例如：A(索引0)=1分, B(索引1)=2分, C(索引2)=3分, D(索引3)=4分
+	// 实际项目中，每个选项的分数可能需要从后端获取或有更复杂的计算规则
+	let totalScore = userAnswers.value.reduce((sum, answerIndex) => {
+	  // 确保 answerIndex 不是 null
+	  return sum + (answerIndex !== null ? (answerIndex + 1) : 0);
+	}, 0);
   
-	// try {
-	//   const res = await submitAssessmentResult(assessmentId.value, totalScore);
-	//   uni.hideLoading();
+	try {
+	  const res = await submitAssessmentResult(assessmentId.value, totalScore);
+	  uni.hideLoading();
   
-	//   if (res.code === 200) {
-	// 	uni.showToast({
-	// 	  title: '提交成功',
-	// 	  icon: 'success'
-	// 	});
-	// 	// 提交成功后，跳转到结果页或返回上一页
-	// 	// 假设结果页路径为 /pages/test/result/result，并传递结果数据
-	// 	uni.redirectTo({
-	// 	  url: `/pages/test/result/result?assessmentId=${assessmentId.value}&score=${totalScore}&report=${encodeURIComponent(res.data.report)}&level=${encodeURIComponent(res.data.level)}`
-	// 	});
-	//   } else {
-	// 	uni.showToast({
-	// 	  title: res.msg || '提交失败',
-	// 	  icon: 'none'
-	// 	});
-	//   }
-	// } catch (error) {
-	//   uni.hideLoading();
-	//   console.error('提交测评结果异常:', error);
-	//   uni.showToast({
-	// 	title: '网络错误，提交失败',
-	// 	icon: 'none'
-	//   });
-	// }
- //  };
+	  if (res.code === 200) {
+		uni.showToast({
+		  title: '提交成功',
+		  icon: 'success'
+		});
+		// 提交成功后，跳转到结果页或返回上一页
+		// 假设结果页路径为 /pages/test/result/result，并传递结果数据
+		uni.redirectTo({
+		  url: `/pages/test/result/result?assessmentId=${assessmentId.value}&score=${totalScore}&report=${encodeURIComponent(res.data.report)}&level=${encodeURIComponent(res.data.level)}`
+		});
+	  } else {
+		uni.showToast({
+		  title: res.msg || '提交失败',
+		  icon: 'none'
+		});
+	  }
+	} catch (error) {
+	  uni.hideLoading();
+	  console.error('提交测评结果异常:', error);
+	  uni.showToast({
+		title: '网络错误，提交失败',
+		icon: 'none'
+	  });
+	}
+  };
   </script>
   
   <style scoped>
@@ -202,7 +202,7 @@
   }
   
   .options {
-	width: 100%;
+
 	display: flex;
 	flex-direction: column;
 	gap: 20rpx;
@@ -210,7 +210,6 @@
   }
   
   .option-item {
-	width: 100%;
 	padding: 25rpx 30rpx;
 	background: #f8f8f8;
 	border-radius: 20rpx;

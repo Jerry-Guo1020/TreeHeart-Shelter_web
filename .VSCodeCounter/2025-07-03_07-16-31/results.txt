@@ -1,0 +1,94 @@
+Date : 2025-07-03 07:16:31
+Directory : d:\一些完整的项目\树洞小程序\Tree_web
+Total : 46 files,  5006 codes, 150 comments, 567 blanks, all 5723 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| vue        |         27 |      4,124 |         43 |        417 |      4,584 |
+| JavaScript |         13 |        433 |         72 |         78 |        583 |
+| JSON       |          3 |        236 |          8 |          2 |        246 |
+| YAML       |          1 |        158 |          0 |         54 |        212 |
+| SCSS       |          1 |         37 |         25 |         15 |         77 |
+| HTML       |          1 |         18 |          2 |          1 |         21 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                              | files      | code       | comment    | blank      | total      |
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                 |         46 |      5,006 |        150 |        567 |      5,723 |
+| . (Files)                                                         |          9 |        494 |         39 |         76 |        609 |
+| api                                                               |          8 |        294 |         29 |         59 |        382 |
+| component                                                         |          1 |        101 |          0 |          7 |        108 |
+| component\BottomNavbar                                            |          1 |        101 |          0 |          7 |        108 |
+| pages                                                             |         25 |      4,007 |         43 |        408 |      4,458 |
+| pages\community                                                   |          1 |        237 |          3 |         20 |        260 |
+| pages\home                                                        |          1 |        261 |         10 |         48 |        319 |
+| pages\info                                                        |          7 |      1,031 |          0 |        110 |      1,141 |
+| pages\loading                                                     |          1 |         33 |          0 |          2 |         35 |
+| pages\login                                                       |          1 |        280 |          4 |         38 |        322 |
+| pages\personal                                                    |          3 |        534 |          6 |         51 |        591 |
+| pages\test                                                        |         10 |      1,543 |         20 |        128 |      1,691 |
+| pages\test (Files)                                                |          2 |        521 |          8 |         30 |        559 |
+| pages\test\endTest                                                |          1 |        264 |          3 |         18 |        285 |
+| pages\test\quiz                                                   |          1 |        257 |          0 |         26 |        283 |
+| pages\test\startTest                                              |          3 |        257 |          9 |         19 |        285 |
+| pages\test\testing                                                |          3 |        244 |          0 |         35 |        279 |
+| pages\welcome                                                     |          1 |         88 |          0 |         11 |         99 |
+| utils                                                             |          3 |        110 |         39 |         17 |        166 |
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                          | language   | code       | comment    | blank      | total      |
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| d:\一些完整的项目\树洞小程序\Tree_web\App.vue                                 | vue        |         16 |          0 |          2 |         18 |
+| d:\一些完整的项目\树洞小程序\Tree_web\api\assessment.js                       | JavaScript |         20 |          3 |          3 |         26 |
+| d:\一些完整的项目\树洞小程序\Tree_web\api\community.js                        | JavaScript |         87 |          0 |         19 |        106 |
+| d:\一些完整的项目\树洞小程序\Tree_web\api\config.js                           | JavaScript |          5 |          0 |          0 |          5 |
+| d:\一些完整的项目\树洞小程序\Tree_web\api\focus.js                            | JavaScript |          7 |          0 |          3 |         10 |
+| d:\一些完整的项目\树洞小程序\Tree_web\api\recruit.js                          | JavaScript |         22 |          0 |          8 |         30 |
+| d:\一些完整的项目\树洞小程序\Tree_web\api\request.js                          | JavaScript |         61 |         16 |          8 |         85 |
+| d:\一些完整的项目\树洞小程序\Tree_web\api\task.js                             | JavaScript |         16 |          0 |          6 |         22 |
+| d:\一些完整的项目\树洞小程序\Tree_web\api\user.js                             | JavaScript |         76 |         10 |         12 |         98 |
+| d:\一些完整的项目\树洞小程序\Tree_web\component\BottomNavbar\BottomNavbar.vue | vue        |        101 |          0 |          7 |        108 |
+| d:\一些完整的项目\树洞小程序\Tree_web\index.html                              | HTML       |         18 |          2 |          1 |         21 |
+| d:\一些完整的项目\树洞小程序\Tree_web\main.js                                 | JavaScript |         16 |          4 |          2 |         22 |
+| d:\一些完整的项目\树洞小程序\Tree_web\manifest.json                           | JSON       |         66 |          8 |          1 |         75 |
+| d:\一些完整的项目\树洞小程序\Tree_web\package.json                            | JSON       |          5 |          0 |          1 |          6 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages.json                              | JSON       |        165 |          0 |          0 |        165 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\community\community.vue           | vue        |        237 |          3 |         20 |        260 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\home\home.vue                     | vue        |        261 |         10 |         48 |        319 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\info\gender.vue                   | vue        |        179 |          0 |         24 |        203 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\info\grade.vue                    | vue        |        151 |          0 |         14 |        165 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\info\institute.vue                | vue        |        151 |          0 |         14 |        165 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\info\major.vue                    | vue        |        151 |          0 |         14 |        165 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\info\name.vue                     | vue        |        124 |          0 |         15 |        139 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\info\nickname.vue                 | vue        |        124 |          0 |         15 |        139 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\info\school.vue                   | vue        |        151 |          0 |         14 |        165 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\loading\loading.vue               | vue        |         33 |          0 |          2 |         35 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\login\login.vue                   | vue        |        280 |          4 |         38 |        322 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\personal\assessmentRecord.vue     | vue        |        150 |          0 |         19 |        169 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\personal\personInformation.vue    | vue        |        166 |          2 |         20 |        188 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\personal\personal.vue             | vue        |        218 |          4 |         12 |        234 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\test\answer.vue                   | vue        |        230 |          5 |          3 |        238 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\test\endTest\end.vue              | vue        |        264 |          3 |         18 |        285 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\test\quiz\quiz.vue                | vue        |        257 |          0 |         26 |        283 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\test\startTest\start_1.vue        | vue        |         85 |          3 |          7 |         95 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\test\startTest\start_2.vue        | vue        |         86 |          3 |          6 |         95 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\test\startTest\start_3.vue        | vue        |         86 |          3 |          6 |         95 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\test\test.vue                     | vue        |        291 |          3 |         27 |        321 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\test\testing\testing_1.vue        | vue        |        228 |          0 |         23 |        251 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\test\testing\testing_2.vue        | vue        |          8 |          0 |          6 |         14 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\test\testing\testing_3.vue        | vue        |          8 |          0 |          6 |         14 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pages\welcome\welcome.vue               | vue        |         88 |          0 |         11 |         99 |
+| d:\一些完整的项目\树洞小程序\Tree_web\pnpm-lock.yaml                          | YAML       |        158 |          0 |         54 |        212 |
+| d:\一些完整的项目\树洞小程序\Tree_web\uni.promisify.adaptor.js                | JavaScript |         13 |          0 |          0 |         13 |
+| d:\一些完整的项目\树洞小程序\Tree_web\uni.scss                                | SCSS       |         37 |         25 |         15 |         77 |
+| d:\一些完整的项目\树洞小程序\Tree_web\utils\randomData.js                     | JavaScript |          3 |          0 |          0 |          3 |
+| d:\一些完整的项目\树洞小程序\Tree_web\utils\request.js                        | JavaScript |         34 |          6 |          2 |         42 |
+| d:\一些完整的项目\树洞小程序\Tree_web\utils\timeFormat.js                     | JavaScript |         73 |         33 |         15 |        121 |
+| Total                                                             |            |      5,006 |        150 |        567 |      5,723 |
++-------------------------------------------------------------------+------------+------------+------------+------------+------------+

@@ -17,10 +17,18 @@ export function submitAssessmentResult(assessmentId, score) {
   });
 }
 
-// 新增：获取用户测评记录
+// 获取用户测评记录
 export function fetchUserAssessmentRecords() {
   return request({
     url: '/assessment/records',
     method: 'get'
+  });
+}
+
+// 新增：删除用户测评记录
+export function deleteUserAssessmentRecord(recordId) {
+  return request({
+    url: `/assessment/records/${recordId}`,
+    method: 'delete' // 使用 DELETE 方法
   });
 }

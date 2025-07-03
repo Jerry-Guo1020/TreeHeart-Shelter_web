@@ -90,6 +90,12 @@
 			}
 		},
 		{
+			"path": "pages/community/postDetail",
+			"style": {
+				"navigationBarTitleText": "详情页面"
+			}
+		},
+		{
 			"path": "pages/test/test",
 			"style": {
 				"navigationBarTitleText": "心理测试"
@@ -123,24 +129,6 @@
 			"path": "pages/test/endTest/end",
 			"style": {
 				"navigationBarTitleText": "结束测试"
-			}
-		},
-		{
-			"path": "pages/test/testing/testing_1",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		},
-		{
-			"path": "pages/test/testing/testing_2",
-			"style": {
-				"navigationBarTitleText": ""
-			}
-		},
-		{
-			"path": "pages/test/testing/testing_3",
-			"style": {
-				"navigationBarTitleText": ""
 			}
 		},
 		{

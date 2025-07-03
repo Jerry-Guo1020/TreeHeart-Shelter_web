@@ -7,7 +7,7 @@
 
 		<!-- 顶部标签区域 -->
 		<view class="tags">
-			<view class="tag_orange">#学业压力</view>
+			<view class="tag_orange" @click="toxueyeyali">#学业压力</view>
 			<view class="tag_pink">#情绪情感</view>
 			<view class="tag_yellow">#人际交往</view>
 			<view class="tag_purple">#职业规划</view>
@@ -82,6 +82,10 @@
 <script setup>
 	import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
 	import { base_url } from '@/api/config.js'
+	
+	const toxueyeyali = () => {
+		uni.navigateTo({ url: '/pages/personal/personInformation' })
+	}
 </script>
 
 <style>

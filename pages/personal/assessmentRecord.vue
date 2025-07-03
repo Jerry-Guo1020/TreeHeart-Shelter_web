@@ -11,14 +11,18 @@
     <view v-else class="records-list">
       <view class="record-card" v-for="record in records" :key="record.id">
         <view class="card-header">
-          <text class="assessment-name">{{ record.assessmentName }}</text>
-          <text class="record-time">{{ formatTime(record.createTime) }}</text>
+          <view class="card-section1">
+            <text class="assessment-name">{{ record.assessmentName }}</text>
+            <text class="record-time">{{ formatTime(record.createTime) }}</text>
+          </view>
+          <!-- 新增：删除按钮 -->
+          <text class="delete-btn" @click="handleDelete(record.id)">删除</text>
         </view>
         <view class="card-content">
           <view class="score-level">
             <text class="level" :style="{ color: getLevelColor(record.level) }">等级：{{ record.level }}</text>
           </view>
-          <view class="report-title">测评报告：</view>
+          <view class="report-title">测评建议：</view>
           <view class="report-content">{{ record.report }}</view>
         </view>
       </view>
@@ -29,7 +33,8 @@
 <script setup>
 import { ref } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
-import { fetchUserAssessmentRecords } from '@/api/assessment.js';
+// 导入新的删除API函数
+import { fetchUserAssessmentRecords, deleteUserAssessmentRecord } from '@/api/assessment.js';
 
 const records = ref([]);
 const loading = ref(true);
@@ -56,6 +61,40 @@ onShow(async () => {
     loading.value = false;
   }
 });
+
+// 新增：处理删除记录的函数
+const handleDelete = (recordId) => {
+  uni.showModal({
+    title: '确认删除',
+    content: '确定要删除这条测评记录吗？',
+    success: async (res) => {
+      if (res.confirm) {
+        try {
+          const deleteRes = await deleteUserAssessmentRecord(recordId);
+          if (deleteRes.code === 200) {
+            uni.showToast({
+              title: '删除成功',
+              icon: 'success'
+            });
+            // 从本地记录数组中移除已删除的记录，更新UI
+            records.value = records.value.filter(record => record.id !== recordId);
+          } else {
+            uni.showToast({
+              title: deleteRes.msg || '删除失败',
+              icon: 'none'
+            });
+          }
+        } catch (error) {
+          console.error('删除测评记录异常:', error);
+          uni.showToast({
+            title: '网络错误，删除失败',
+            icon: 'none'
+          });
+        }
+      }
+    }
+  });
+};
 
 const formatTime = (timeString) => {
   if (!timeString) return '';
@@ -98,7 +137,8 @@ const getLevelColor = (level) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 400rpx; /* 适当高度 */
+  height: 400rpx;
+  /* 适当高度 */
   font-size: 32rpx;
   color: #666;
 }
@@ -127,15 +167,36 @@ const getLevelColor = (level) => {
   border-bottom: 1rpx solid #eee;
 }
 
+.card-section1 {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-grow: 1;
+
+}
+
 .assessment-name {
   font-size: 36rpx;
   font-weight: bold;
   color: #8f51ff;
+  flex-grow: 1;
 }
 
 .record-time {
   font-size: 26rpx;
   color: #999;
+}
+
+/* 新增：删除按钮样式 */
+.delete-btn {
+  font-size: 26rpx;
+  color: #FF0000;
+  /* 红色 */
+  margin-left: 20rpx;
+  padding: 8rpx 16rpx;
+  border: 1rpx solid #FF0000;
+  border-radius: 10rpx;
+  cursor: pointer;
 }
 
 .card-content {
@@ -164,6 +225,7 @@ const getLevelColor = (level) => {
   font-size: 28rpx;
   line-height: 1.6;
   color: #666;
-  white-space: pre-wrap; /* 保留报告中的换行符 */
+  white-space: pre-wrap;
+  /* 保留报告中的换行符 */
 }
 </style>

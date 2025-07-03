@@ -5,10 +5,10 @@
       <image :src="userInfo.avatar || (base_url + '/static/头像.png')" class="avatar" />
       <view class="username-row">
         <text class="username">{{ userInfo.nickname || '游客' }}</text>
-        <!-- 根据性别动态显示图标 -->
-        <image v-if="userInfo.sex === '男'" :src="base_url + '/static/male.png'" class="sex-icon" mode="aspectFit" alt="男" />
-        <image v-else-if="userInfo.sex === '女'" :src="base_url + '/static/female.png'" class="sex-icon" mode="aspectFit" alt="女" />
-        <image v-else src="" class="sex-icon" mode="aspectFit" alt="性别" /> <!-- 默认或未知性别 -->
+        <!-- 根据性别动态显示图标，使用文本图标 -->
+        <text v-if="userInfo.sex === '男'" class="sex-icon male-icon">♂</text>
+        <text v-else-if="userInfo.sex === '女'" class="sex-icon female-icon">♀</text>
+        <!-- 如果性别未知或不匹配，不显示图标 -->
       </view>
       <view class="stats-row">
         <view class="stat-item">
@@ -27,11 +27,11 @@
     <view class="card">
       <view class="card-row">
         <view class="card-btn favorite">
-         <image :src="base_url + '/static/fun_1.png'" class="card-icon" mode="aspectFit" />
+         <image :src="base_url + '/static/personal_1.png'" class="card-icon" mode="aspectFit" />
           <text class="card-text">我的收藏</text>
         </view>
         <view class="card-btn settings">
-         <image :src="base_url + '/static/fun_1.png'" class="card-icon" mode="aspectFit" />
+         <image :src="base_url + '/static/personal_2.png'" class="card-icon" mode="aspectFit" />
           <text class="card-text">设置</text>
         </view>
       </view>
@@ -122,8 +122,8 @@ const toassessmentRecord = () => {
   margin-right: 10rpx;
 }
 .sex-icon {
-  width: 26rpx;
-  height: 26rpx;
+  width: 50rpx;
+  height: 50rpx;
 }
 .stats-row {
   display: flex;
@@ -229,5 +229,26 @@ const toassessmentRecord = () => {
 }
 .list-btn:active {
   background: #FFD8A1;
+}
+.sex-icon {
+  /* 调整为文本图标的样式 */
+  font-size: 26rpx; /* 与原图片高度相近的字体大小 */
+  line-height: 1; /* 确保文本垂直居中 */
+  margin-left: 10rpx; /* 与昵称保持距离 */
+  display: flex; /* 使用 flex 确保内容居中 */
+  align-items: center;
+  justify-content: center;
+  width: 26rpx; /* 保持宽度，使背景色或边框看起来一致 */
+  height: 26rpx; /* 保持高度 */
+  border-radius: 50%; /* 圆形背景 */
+  font-weight: bold; /* 让符号更明显 */
+}
+.male-icon {
+  color: #fff; /* 白色符号 */
+  background-color: #007bff; /* 蓝色背景 */
+}
+.female-icon {
+  color: #fff; /* 白色符号 */
+  background-color: #ff69b4; /* 粉色背景 */
 }
 </style>

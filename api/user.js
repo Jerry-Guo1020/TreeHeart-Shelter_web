@@ -1,6 +1,11 @@
 import { getRandomAvatarUrl } from "@/utils/randomData";
 import request from '@/api/request.js'; // 假设你有一个统一的请求工具
 
+// 获取当前用户信息
+export const getCurrentUser = () => {
+  return request.get('/user/current'); // 使用 request.get
+};
+
 export const fetchPosts = async () => {
   return request.get("/community/self-post");
 };
@@ -9,7 +14,7 @@ export const fetchMorePosts = async (lastPostId) => {
   return request.get(`/community/self-post?lastPostId=${lastPostId}`);
 };
 
-// {{ edit_1 }}
+
 // guestLogin 现在可以接收可选的 nickname 和 avatar 参数
 export const guestLogin = async (existingNickname = null, existingAvatar = null) => {
   let nicknameToUse;

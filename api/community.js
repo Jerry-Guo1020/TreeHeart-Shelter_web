@@ -1,105 +1,51 @@
-import request from "./request";
+import request from '@/api/request.js';
+import { base_url } from '@/api/config.js'; // 导入 base_url
 
-export const fetchPosts = async () => {
-  return request.get("/community/recommend-post");
+export const fetchPostTypes = () => {
+  return request.get('/api/post/types');
 };
 
-export const fetchMorePosts = async (lastPostId) => {
-  return request.get(`/community/recommend-post?lastPostId=${lastPostId}`);
-};
+// 上传图片接口
+export const chooseAndUploadImage = (filePath) => {
+  return new Promise((resolve, reject) => {
+    uni.uploadFile({
+      url: `${base_url}/api/upload/image`,
+      filePath,
+      name: 'file',
+      success: (uploadRes) => {
+        const data = JSON.parse(uploadRes.data)
+        if (data.code === 200) resolve({ imgUrl: data.data.url, imgId: data.data.imgId })
+        else reject(data.msg)
+      },
+      fail: reject
+    })
+  })
+}
 
-export const fetchPostById = async (postId) => {
-  return request.get(`/community/post?id=${postId}`);
-};
+export const publishPost = (postData) => {
+  return new Promise((resolve, reject) => {
+    uni.request({
+      url: `${base_url}/api/post/create`,
+      method: 'POST',
+      header: { 'Content-Type': 'application/json' },
+      data: postData,
+      success: (res) => { if (res.data.code === 200) resolve(res.data.data); else reject(res.data.msg) },
+      fail: reject
+    })
+  })
+}
 
-export const fetchFirstComments = async (postId) => {
-  return request.get(`/community/post-comment?id=${postId}`);
-};
+export const fetchPostList = () => {
+  return new Promise((resolve, reject) => {
+    uni.request({
+      url: `${base_url}/api/post/list`,
+      method: 'GET',
+      success: (res) => { if (res.data.code === 200) resolve(res.data.data); else reject(res.data.msg) },
+      fail: reject
+    })
+  })
+}
 
-export const fetchFirstMoreComments = async (postId, lastCommentId) => {
-  return request.get(
-    `/community/post-comment?id=${postId}&lastCommentId=${lastCommentId}`
-  );
-};
-
-export const fetchSecondComments = async (commentId) => {
-  return request.get(`/community/post-comment-reply?id=${commentId}`);
-};
-
-export const fetchSecondMoreComments = async (commentId, lastCommentId) => {
-  return request.get(
-    `/community/post-comment-reply?id=${commentId}&lastCommentId=${lastCommentId}`
-  );
-};
-
-export const addFirstComment = async (commentData) => {
-  return request.post("/community/post-comment", {
-    id: commentData.postId,
-    content: commentData.content,
-  });
-};
-
-export const addSecondComment = async (replyData) => {
-  return request.post("/community/post-comment-reply", {
-    id: replyData.commentId,
-    content: replyData.content,
-  });
-};
-
-export const deleteFirstComment = async (commentId) => {
-  return request.delete("/community/post-comment", {
-    id: commentId,
-  });
-};
-
-export const deleteSecondComment = async (commentId) => {
-  return request.delete("/community/post-comment-reply", {
-    id: commentId,
-  });
-};
-
-export const publishPreparePost = async (post) => {
-  return request.post("/community/prepare-post", post);
-};
-
-export const publishPost = async (postId) => {
-  return request.post("/community/finalize-post", { id: postId });
-};
-
-export const fetchPostTypes = async () => {
-  return request.get("/community/postTypes");
-};
-
-export const uploadImage = async (requestUrl, imagePath) => {
-  uni.getFileSystemManager().readFile({
-    filePath: imagePath,
-    success: (res) => {
-      uni.request({
-        url: requestUrl,
-        method: "PUT",
-        data: res.data,
-        header: {
-          "Content-Type": "application/octet-stream",
-        },
-        success: ({ data, statusCode, header }) => {
-          console.log("图片上传成功", data, statusCode, header);
-        },
-        fail: (error) => {
-          console.log("图片上传失败", error);
-        },
-      });
-    },
-  });
-};
-
-export const markImageUploaded = async (imageId) => {
-  return request.post("/community/img-uploaded", { id: imageId });
-};
-
-export const likePost = async (postId) => {
-  return request.post("/community/like-post", { id: postId, like: true });
-};
-
-export const unlikePost = async (postId) => {
-  return request.post("/community/like-post", { id: postId, like: false });
+export const fetchPostDetail = async (postId) => {
+  return request.get(`/api/post/detail?id=${postId}`);
 };

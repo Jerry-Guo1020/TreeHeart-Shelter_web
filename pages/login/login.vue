@@ -68,44 +68,61 @@ const handleWeChatLogin = async () => {
 
     // 如果没有 token，则执行登录逻辑
     let res;
-    // {{ edit_1 }}
     // 尝试从本地获取之前游客登录的昵称和头像
     const guestNickname = uni.getStorageSync('guest_nickname');
     const guestAvatar = uni.getStorageSync('guest_avatar');
 
     if (guestNickname && guestAvatar) {
       // 如果存在，则使用这些信息进行登录
-      console.log('使用已存储的游客信息登录:', guestNickname, guestAvatar);
+      console.log('使用已存储的账户信息登录:', guestNickname, guestAvatar);
       res = await guestLogin(guestNickname, guestAvatar);
     } else {
       // 否则，进行首次游客登录，让 guestLogin 内部生成随机信息
-      console.log('首次游客登录，生成随机信息');
+      console.log('首次登录，生成随机信息');
       res = await guestLogin();
     }
 
-    if (res.code === 200) {
-      uni.showToast({
-        title: '登录成功',
-        icon: 'success'
-      });
-      // 你可以将 token 和用户信息存储到本地
-      uni.setStorageSync('token', res.data.token);
-      uni.setStorageSync('user', res.data.user); // 存储用户信息
+    console.log('guestLogin 完整返回:', res); // 添加此行，打印完整的响应对象
+    console.log('guestLogin 返回的 data 部分:', res.data); // 添加此行，打印 data 部分
 
-      // {{ edit_2 }}
-      // 如果是新生成的游客信息，也存储到本地，以便下次直接使用
-      if (!guestNickname || !guestAvatar) {
-          uni.setStorageSync('guest_nickname', res.data.user.nickname);
-          uni.setStorageSync('guest_avatar', res.data.user.avatar);
-          console.log('新游客信息已存储:', res.data.user.nickname, res.data.user.avatar);
+    // 确保 res.code 为 200 且 res.data 存在
+    if (res.code === 200 && res.data) {
+     
+      // 将 user 对象直接赋值为 res.data，因为 res.data 就是用户对象
+      const user = res.data; 
+
+      // 进一步检查 user 对象及其关键属性是否存在
+      if (user && user.id && user.nickname && user.avatar !== undefined) {
+        uni.showToast({
+          title: '登录成功',
+          icon: 'success'
+        });
+        // 你可以将 token 和用户信息存储到本地
+        uni.setStorageSync('token', res.data.token); // 假设 token 也在 res.data 中，如果不在，需要从后端获取
+        uni.setStorageSync('user', user); // 存储用户信息
+
+        // 如果是新生成的游客信息，也存储到本地，以便下次直接使用
+        if (!guestNickname || !guestAvatar) {
+            uni.setStorageSync('guest_nickname', user.nickname); // 使用 user.nickname
+            uni.setStorageSync('guest_avatar', user.avatar);     // 使用 user.avatar
+            console.log('新信息已存储:', user.nickname, user.avatar);
+        }
+
+        uni.navigateTo({ url: '/pages/home/home' });
+      } else {
+        // 如果 res.data 缺失关键信息，进入此分支
+        console.error('登录成功，但返回的用户信息不完整或缺失:', res.data);
+        uni.showToast({
+          title: '登录成功，但用户信息异常',
+          icon: 'none'
+        });
       }
-
-      uni.navigateTo({ url: '/pages/home/home' });
     } else {
       uni.showToast({
         title: res.msg || '登录失败',
         icon: 'none'
       });
+      console.error('登录失败或返回数据结构不正确:', res); // 添加更多日志
     }
   } catch (err) {
     console.error('登录异常:', err); // 打印详细错误信息
@@ -116,13 +133,6 @@ const handleWeChatLogin = async () => {
   }
 }
 
-// const handleWeChatLogin = () => {
-//   uni.showToast({
-//     title: '模拟微信登录成功',
-//     icon: 'success'
-//   })
-//   uni.navigateTo({ url: '/pages/home/home' });
-// }
 
 const features = [
   {

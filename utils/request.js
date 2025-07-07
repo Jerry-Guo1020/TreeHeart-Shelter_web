@@ -1,16 +1,12 @@
-import { base_url } from '@/api/config.js'; // 导入你的基础URL配置
+const BASE_URL = 'http://43.142.21.211:3000'; // 确保这里有端口号 :3000
 
-const request = (options) => {
+function request(options) {
   return new Promise((resolve, reject) => {
     uni.request({
-      url: base_url + options.url, // 拼接完整的请求URL
-      method: options.method || 'GET', // 默认GET请求
-      data: options.data || {}, // 请求参数
-      header: {
-        // 根据你的认证方式添加header，例如：
-        // 'Authorization': uni.getStorageSync('token') || '',
-        'Content-Type': options.contentType || 'application/json'
-      },
+      url: BASE_URL + options.url, // 拼接完整的 URL
+      method: options.method || 'GET',
+      data: options.data || {},
+      header: options.header || {},
       success: (res) => {
         // 统一处理后端返回的业务逻辑错误
         if (res.statusCode === 200) {
@@ -31,12 +27,9 @@ const request = (options) => {
           icon: 'none'
         });
         reject(err);
-      },
-      complete: () => {
-        // 请求完成（无论成功或失败）
       }
     });
   });
-};
+}
 
 export default request;

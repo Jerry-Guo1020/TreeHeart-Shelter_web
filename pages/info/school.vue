@@ -3,7 +3,7 @@
     <view class="title">
       <view class="section1">
         <view class="logo">
-          <image :src="base_url + '/static/logo.png'" mode="aspectFill" class="logoPhoto" />
+          <image :src="BASE_URL + '/static/logo.png'" mode="aspectFill" class="logoPhoto" />
         </view>
         <view class="hello">Hello!</view>
       </view>
@@ -27,7 +27,7 @@
 <script setup>
 import { ref } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
-import { base_url } from '@/api/config.js';
+import { BASE_URL } from '@/api/config.js';
 import { updateUserInfo } from '@/api/user.js'; // 导入更新用户信息的API
 
 const college = ref(''); // 对应 userInfo.college

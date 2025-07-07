@@ -1,48 +1,87 @@
-import { getRandomAvatarUrl } from "@/utils/randomData";
-import request from '@/api/request.js'; // 假设你有一个统一的请求工具
+import request from '@/api/request.js'
 
-// 获取当前用户信息
-export const getCurrentUser = () => {
-  return request.get('/user/current'); // 使用 request.get
-};
-
-export const fetchPosts = async () => {
-  return request.get("/community/self-post");
-};
-
-export const fetchMorePosts = async (lastPostId) => {
-  return request.get(`/community/self-post?lastPostId=${lastPostId}`);
-};
-
-
-// guestLogin 现在可以接收可选的 nickname 和 avatar 参数
-export const guestLogin = async (existingNickname = null, existingAvatar = null) => {
-  let nicknameToUse;
-  let avatarToUse;
-
-  if (existingNickname && existingAvatar) {
-    // 如果本地已经有存储的昵称和头像，就使用它们
-    nicknameToUse = existingNickname;
-    avatarToUse = existingAvatar;
-  } else {
-    // 否则，生成新的随机昵称和头像
-    nicknameToUse = await getRandomName();
-    avatarToUse = getRandomAvatarUrl(nicknameToUse);
-  }
-
-  // 向后端发送请求，注册或登录用户
-  return request.post("/login/guest-login", {
-    nickname: nicknameToUse,
-    avatar: avatarToUse,
+/**
+ * 游客登录，openid 为唯一标识（比如微信获取到的 openid 或本地唯一字符串）
+ * @param {string} nickname 
+ * @param {string} avatar 
+ * @param {string|null} openid 可选（首次可以 null，注册后每次都带）
+ */
+export const guestLogin = (nickname, avatar, openid = null) => {
+  return request.post('/api/user/guest-login', {
+    openid,
+    nickname,
+    avatar
   });
 };
 
-export const updateUserInfo = async (userInfo) => {
-  return request.put("/user/userInfo", userInfo);
+/**
+ * 更新用户信息
+ * @param {object} data 包含要更新的用户信息的对象，例如 { nickname: '新昵称', sex: '男' }
+ */
+export const updateUserInfo = (data) => {
+  const openid = uni.getStorageInfoSync('openId');
+  
+  if(!openid) {
+	  console.log("没有获取得到哦")
+	  return
+  }
+  console.log("当前账户信息已获取成功！")
+  return request.post('api/userinfo', { openid });
+  
+  
 };
 
+
+/**
+ * 获取当前用户信息
+ */
+export const getCurrentUser = (data) => {
+  const openid = uni.getStorageSync('openId');
+  
+  if(!openid) {
+	  console.log("没有获取得到哦")
+	  return
+  }
+  return request.post('/userinfo', { params: { openid } });
+
+  
+};
+
+export const apiRegister = async () => {
+	const randomName = await getRandomName()
+	const randomAvatarUrl = getRandomAvatarUrl(randomName)
+	const randomOpenId = getRandomOpenId(13)
+	
+	const data = {
+		  "params": {
+		    "userTypeId": 1,
+		    "openid": randomOpenId,
+		    "nickname": randomName,
+		    "avatar": randomAvatarUrl,
+		    "username": randomName,
+		    "sex": "男",
+		    "grade": "大二",
+		    "college": "计算机学院",
+		    "subCollege": "软件工程系",
+		    "major": "软件工程",
+		    "isNewUser": 1
+		  }
+	}
+	
+	await request.post("/register", data)
+	return data;
+}
+
+export const apiLogin = async (openId) => {
+	return request.post("/login", {
+		  "params": {
+			  "openId": openId
+		  }
+	})
+}
+
 export const getRandomName = async () => {
-  // 发起请求获取随机名称  
+  // GET https://api.mir6.com/api/sjname
   return new Promise((resolve, reject) => {
     uni.request({
       url: "https://api.mir6.com/api/sjname", // 请求的接口地址
@@ -71,32 +110,16 @@ export const getRandomName = async () => {
   });
 };
 
-export const getAvatarUrl = async (id, name) => {
-  if (id == 1) {
-    return {
-      data: {
-        data: getRandomAvatarUrl(name),
-      },
-    };
-  }
-  return request.get(`/user/avater?id=${id}`);
+export const getRandomAvatarUrl = (name) => {
+  return `https://api.dicebear.com/7.x/pixel-art/svg?seed=${name}`;
 };
 
-export const updateUserAvatar = async (avatarBase64) => {
-  return request.put("/user/avatar", {
-    avatar: "data:image/png;base64," + avatarBase64,
-  });
-};
-
-export const deletePost = async (postId) => {
-  return request.delete("/community/post", { id: postId });
-};
-
-// 示例：登录接口，用于获取用户信息并存储到本地
-export function login(code) {
-  return request({
-    url: '/auth/login', // 假设你的登录接口是这个
-    method: 'post',
-    data: { code }
-  });
+function getRandomOpenId(length = 10) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let randomString = '';
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        randomString += characters[randomIndex];
+    }
+    return randomString;
 }

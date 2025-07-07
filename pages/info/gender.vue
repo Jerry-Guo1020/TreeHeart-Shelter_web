@@ -3,7 +3,7 @@
     <view class="title">
       <view class="section1">
         <view class="logo">
-          <image :src="base_url +'/static/logo.png'" mode="aspectFill" class="logoPhoto" />
+          <image :src="BASE_URL +'/static/logo.png'" mode="aspectFill" class="logoPhoto" />
         </view>
         <view class="hello">Hello!</view>
       </view>
@@ -16,11 +16,11 @@
       <view class="cardTitle">请选择您的性别</view>
       <view class="sex">
         <view class="boy" :class="{ active: gender === '男' }" @tap="selectGender('男')">
-          <image :src="base_url + '/static/男生.png'" mode="aspectFill" class="boyLogo" :class="{ active: gender === '男' }" />
+          <image :src="BASE_URL + '/static/男生.png'" mode="aspectFill" class="boyLogo" :class="{ active: gender === '男' }" />
           <view class="boyName">男生</view>
         </view>
         <view class="girl" :class="{ active: gender === '女' }" @tap="selectGender('女')">
-          <image :src="base_url + '/static/女生.png'" mode="aspectFill" class="girlLogo" :class="{ active: gender === '女' }" />
+          <image :src="BASE_URL + '/static/女生.png'" mode="aspectFill" class="girlLogo" :class="{ active: gender === '女' }" />
           <view class="girlName">女生</view>
         </view>
       </view>
@@ -32,7 +32,7 @@
 <script setup>
 import { ref } from 'vue'
 import { onShow } from '@dcloudio/uni-app'; // 导入 onShow
-import { base_url } from '@/api/config.js'
+import { BASE_URL } from '@/api/config.js'
 import { updateUserInfo } from '@/api/user.js'; // 导入更新用户信息的API
 
 const gender = ref('');

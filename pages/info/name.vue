@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <view class="header">
-      <image class="logo" :src="base_url + '/static/logo.png'" alt="树洞logo"></image>
+      <image class="logo" :src="BASE_URL + '/static/logo.png'" alt="树洞logo"></image>
       <view class="hello">Hello!</view>
       <view class="desc">欢迎来到大学生心灵树洞</view>
     </view>
@@ -16,7 +16,7 @@
 <script setup>
 import { ref } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
-import { base_url } from '@/api/config.js';
+import { BASE_URL } from '@/api/config.js';
 import { updateUserInfo } from '@/api/user.js'; // 导入更新用户信息的API
 
 const username = ref(''); // 对应 userInfo.username

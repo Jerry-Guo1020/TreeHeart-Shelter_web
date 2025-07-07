@@ -2,7 +2,7 @@
   <view class="container">
     <!-- 头像和昵称 -->
     <view class="profile-box">
-      <image class="avatar" :src="userInfo.avatar || (base_url + '/static/avatar.png')"></image>
+      <image class="avatar" :src="userInfo.avatar || (BASE_URL + '/static/头像.png')"></image>
       <view class="nickname-box">
         <text class="nickname-label">昵称</text>
         <text class="nickname">{{ userInfo.nickname || '游客' }}</text>
@@ -31,17 +31,17 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { onShow } from '@dcloudio/uni-app'; // 从 @dcloudio/uni-app 导入 onShow
-import { base_url } from '@/api/config.js'
+import { ref ,onMounted} from 'vue';
+import { BASE_URL } from '@/api/config.js'
+import { getCurrentUser } from '@/api/user.js'
 
 const userInfo = ref({}); // 存储用户信息的响应式对象
 const infoGroups = ref([]); // 存储信息分组的响应式数组
 
-onShow(() => {
-  const storedUser = uni.getStorageSync('user');
-  if (storedUser) {
-    userInfo.value = storedUser;
+onMounted(async() => {
+  const res = await getCurrentUser()
+  if (res) {
+    userInfo.value = res.rows[0]
     console.log('个人信息页面加载用户信息:', userInfo.value);
     // 根据用户信息动态生成 infoGroups
     infoGroups.value = [
@@ -49,7 +49,6 @@ onShow(() => {
         groupName: '基本信息',
         items: [
           { label: '用户名', value: userInfo.value.nickname || '未设置', to: '/pages/info/nickname' },
-          // 真实姓名目前 User 表中没有，如果需要，后端 User 表需要添加该字段
           { label: '真实姓名', value: userInfo.value.username || '未设置', to: '/pages/info/name' },
           { label: '性别', value: userInfo.value.sex || '未设置', to: '/pages/info/gender' }
         ]
@@ -66,7 +65,6 @@ onShow(() => {
     ];
   } else {
     console.log('个人信息页面未找到用户信息');
-    // uni.navigateTo({ url: '/pages/login/login' }); // 如果需要强制登录
     // 也可以显示默认的空数据
     infoGroups.value = [
       {

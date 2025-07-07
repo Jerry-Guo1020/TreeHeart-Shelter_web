@@ -2,7 +2,7 @@
 	<view class="all">
 		<!-- 顶部一张树洞照片 -->
 		<view class="page">
-			<image :src="base_url +'/static/首页第一张.png'" class="top-image" mode="widthFix" />
+			<image :src="BASE_URL +'/static/首页第一张.png'" class="top-image" mode="widthFix" />
 		</view>
 
 		<!-- 顶部标签区域 -->
@@ -20,7 +20,7 @@
 			<view class="card">
 				<!-- 用户头像 -->
 				<view class="user">
-					<image :src="base_url +'/static/头像.png'" class="user_logo" mode="aspectFill" />
+					<image :src="BASE_URL +'/static/头像.png'" class="user_logo" mode="aspectFill" />
 					<view class="user_info">
 						<view class="userName">大学生心理树洞</view>
 						<view class="dateTime">2025年6月24日16:05:34</view>
@@ -56,7 +56,7 @@
 					<!-- 用户一 -->
 					<view class="userTalking">
 						<view class="userTalkingInfo">
-							<image :src="base_url +'/static/头像.png'" class="userTalkLogo" mode="aspectFill" />
+							<image :src="BASE_URL +'/static/头像.png'" class="userTalkLogo" mode="aspectFill" />
 							<view class="talkingUserName">陈树洞</view>
 						</view>
 						<view class="talkAbout">考完试我一定要去海边！！！</view>
@@ -66,7 +66,7 @@
 					<!-- 用户二 -->
 					<view class="userTalking">
 						<view class="userTalkingInfo">
-							<image :src="base_url +'/static/头像.png'" class="userTalkLogo" mode="aspectFill" />
+							<image :src="BASE_URL +'/static/头像.png'" class="userTalkLogo" mode="aspectFill" />
 							<view class="talkingUserName">树小洞2025</view>
 						</view>
 						<view class="talkAbout">考完试我一定要去海边！！！</view>
@@ -81,7 +81,7 @@
 
 <script setup>
 	import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
-	import { base_url } from '@/api/config.js'
+	import { BASE_URL } from '@/api/config.js'
 	
 	const toxueyeyali = () => {
 		uni.navigateTo({ url: '/pages/personal/personInformation' })

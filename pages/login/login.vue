@@ -4,7 +4,7 @@
 		<view class="header">
 			<view class="logoBox">
 				<view class="logo-box">
-					<image class="logo" :src="base_url+'/static/logo.png'" mode="aspectFit" />
+					<image class="logo" :src="BASE_URL+'/static/logo.png'" mode="aspectFit" />
 				</view>
 			</view>
 			<view class="main-title">心语树洞心理平台</view>
@@ -31,7 +31,7 @@
 			<!-- 底部固定按钮与提示 -->
 			<view class="card-footer">
 				<button class="login-button" @click="handleWeChatLogin">
-					<image :src="base_url+'/static/login.png'" class="wechat-icon" />
+					<image :src="BASE_URL+'/static/login.png'" class="wechat-icon" />
 					微信一键登录
 				</button>
 
@@ -48,105 +48,66 @@
 </template>
 
 <script setup>
-import { base_url } from '@/api/config.js'
-import { guestLogin } from '@/api/user.js' // 导入新的 guestLogin
+import { BASE_URL } from '@/api/config.js'
+import { apiLogin, apiRegister, guestLogin } from '@/api/user.js' // 导入新的 guestLogin
 
-const handleWeChatLogin = async () => {
-  try {
-    // 检查本地存储是否有 token，如果有则视为已登录
-    const token = uni.getStorageSync('token');
-    const storedUser = uni.getStorageSync('user'); // 获取存储的用户信息
-
-    if (token && storedUser && storedUser.id) { // 确保 token 和用户ID都存在
-      uni.showToast({
-        title: '已登录',
-        icon: 'success'
-      });
-      uni.navigateTo({ url: '/pages/home/home' });
-      return; // 已登录，直接返回
-    }
-
-    // 如果没有 token，则执行登录逻辑
-    let res;
-    // {{ edit_1 }}
-    // 尝试从本地获取之前游客登录的昵称和头像
-    const guestNickname = uni.getStorageSync('guest_nickname');
-    const guestAvatar = uni.getStorageSync('guest_avatar');
-
-    if (guestNickname && guestAvatar) {
-      // 如果存在，则使用这些信息进行登录
-      console.log('使用已存储的游客信息登录:', guestNickname, guestAvatar);
-      res = await guestLogin(guestNickname, guestAvatar);
-    } else {
-      // 否则，进行首次游客登录，让 guestLogin 内部生成随机信息
-      console.log('首次游客登录，生成随机信息');
-      res = await guestLogin();
-    }
-
-    if (res.code === 200) {
-      uni.showToast({
-        title: '登录成功',
-        icon: 'success'
-      });
-      // 你可以将 token 和用户信息存储到本地
-      uni.setStorageSync('token', res.data.token);
-      uni.setStorageSync('user', res.data.user); // 存储用户信息
-
-      // {{ edit_2 }}
-      // 如果是新生成的游客信息，也存储到本地，以便下次直接使用
-      if (!guestNickname || !guestAvatar) {
-          uni.setStorageSync('guest_nickname', res.data.user.nickname);
-          uni.setStorageSync('guest_avatar', res.data.user.avatar);
-          console.log('新游客信息已存储:', res.data.user.nickname, res.data.user.avatar);
-      }
-
-      uni.navigateTo({ url: '/pages/home/home' });
-    } else {
-      uni.showToast({
-        title: res.msg || '登录失败',
-        icon: 'none'
-      });
-    }
-  } catch (err) {
-    console.error('登录异常:', err); // 打印详细错误信息
-    uni.showToast({
-      title: '登录异常',
-      icon: 'none'
-    });
-  }
+const saveUserInfo = async (data) => {
+	uni.setStorageSync("openId", data.openid)
 }
 
-// const handleWeChatLogin = () => {
-//   uni.showToast({
-//     title: '模拟微信登录成功',
-//     icon: 'success'
-//   })
-//   uni.navigateTo({ url: '/pages/home/home' });
-// }
+const handleWeChatLogin = async () => {
+	const openId = await uni.getStorageSync("openId")
+	
+	// no openid
+	if (!openId) {
+		const userInfo = await apiRegister();
+		console.log(userInfo)
+		saveUserInfo(userInfo.params)
+	}
+	else {
+		// yes openid
+		const res = await apiLogin(openId);
+		const isLogin = res.rows[0].userExists;
+		
+		if (!isLogin) {
+			const userInfo = await apiRegister();
+			saveUserInfo(userInfo.params)
+		}
+	}
 
+	setTimeout(() => {
+		uni.showToast({
+		    title: '微信登录成功',
+		    icon: 'success'
+		  })
+	  uni.navigateTo({
+	    url: '/pages/home/home',
+	  });
+	}); // 等动画结束后跳转
+}
 const features = [
   {
     title: '心情树洞',
     desc: '分享情绪点滴，找到倾诉的角落，书写内心故事',
-    icon: `${base_url}/static/fun_1.png`,
+    icon: `${BASE_URL}/static/fun_1.png`,
     color: '#6CA8F1'
   },
   {
     title: '心理测评',
     desc: '涵盖多种心理测试，帮助你更了解自己',
-    icon: `${base_url}/static/fun_2.png`,
+    icon: `${BASE_URL}/static/fun_2.png`,
     color: '#A078F5'
   },
   {
     title: '情感互动',
     desc: '点赞评论他人树洞，共鸣共情，彼此温暖',
-    icon: `${base_url}/static/fun_3.png`,
+    icon: `${BASE_URL}/static/fun_3.png`,
     color: '#FF6B6B'
   },
   {
     title: '活动空间',
     desc: '获取心理活动通知，参与互动收获成长',
-    icon: `${base_url}/static/fun_4.png`,
+    icon: `${BASE_URL}/static/fun_4.png`,
     color: '#41D3A3'
   }
 ]

@@ -16,19 +16,15 @@ export const guestLogin = (nickname, avatar, openid = null) => {
 
 /**
  * 更新用户信息
- * @param {object} data 包含要更新的用户信息的对象，例如 { nickname: '新昵称', sex: '男' }
+ * @param {string} field 字段名
+ * @param {any} value 新值
  */
-export const updateUserInfo = (data) => {
-  const openid = uni.getStorageInfoSync('openId');
-  
-  if(!openid) {
-	  console.log("没有获取得到哦")
-	  return
+export const updateUserInfo = (field, value) => {
+  const openid = uni.getStorageSync('openId');
+  if (!openid) {
+    return Promise.reject('没有 openid');
   }
-  console.log("当前账户信息已获取成功！")
-  return request.post('api/userinfo', { openid });
-  
-  
+  return request.post(`/info/${field}`,  { params: { [field]: value, openid } });
 };
 
 

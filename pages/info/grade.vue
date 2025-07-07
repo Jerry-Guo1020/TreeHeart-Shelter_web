@@ -26,9 +26,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import { onShow } from '@dcloudio/uni-app';
 import { BASE_URL } from '@/api/config.js';
 import { updateUserInfo } from '@/api/user.js';
+import { onShow } from '@dcloudio/uni-app'; 
 
 const grade = ref(''); // 对应 userInfo.grade
 
@@ -44,22 +44,22 @@ const goNext = async () => {
     uni.showToast({ title: '请填写教育阶段', icon: 'none' });
     return;
   }
-
   try {
     uni.showLoading({ title: '保存中...' });
-    const res = await updateUserInfo({ grade: grade.value });
+    await updateUserInfo('grade', grade.value);
     uni.hideLoading();
-
-    if (res.code === 200) {
-      uni.showToast({ title: '教育阶段更新成功', icon: 'success' });
-      uni.setStorageSync('user', res.data.user);
-      uni.navigateBack(); // 返回上一页 (个人信息详情页)
-    } else {
-      uni.showToast({ title: res.msg || '教育阶段更新失败', icon: 'none' });
-    }
+   
+    // 记得本地缓存同步
+    let user = uni.getStorageSync('user') || {};
+    user.grade = grade.value;
+    uni.setStorageSync('user', user);
+	 uni.showToast({ title: '教育阶段更新成功', icon: 'success' });
+	 setTimeout(() => {
+		uni.navigateBack();
+	 },1500);
+    
   } catch (error) {
     uni.hideLoading();
-    console.error('更新教育阶段失败:', error);
     uni.showToast({ title: '网络错误，请重试', icon: 'none' });
   }
 };

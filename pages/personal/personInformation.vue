@@ -31,14 +31,15 @@
 </template>
 
 <script setup>
-import { ref ,onMounted} from 'vue';
+import { ref } from 'vue';
 import { BASE_URL } from '@/api/config.js'
 import { getCurrentUser } from '@/api/user.js'
+import { onShow } from '@dcloudio/uni-app'; // 用 uni-app 的 onShow ，理由是因为这样我就可以在设置变化的信息我返回这里就可以立马有变化
 
 const userInfo = ref({}); // 存储用户信息的响应式对象
 const infoGroups = ref([]); // 存储信息分组的响应式数组
 
-onMounted(async() => {
+onShow(async() => {
   const res = await getCurrentUser()
   if (res) {
     userInfo.value = res.rows[0]

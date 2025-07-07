@@ -47,10 +47,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
 import { getCurrentUser } from '@/api/user.js'
 import { BASE_URL } from '@/api/config.js'
+import { onShow } from '@dcloudio/uni-app'; // 导入 onShow
 
 const userInfo = ref({
   nickname: '游客',
@@ -58,7 +59,7 @@ const userInfo = ref({
   sex: '男'
 })
 
-onMounted(async () => {
+onShow (async () => {
   try {
     const res = await getCurrentUser()
     if (res && res.rows && res.rows.length > 0) {
@@ -66,6 +67,8 @@ onMounted(async () => {
       if (!userInfo.value.avatar) {
         userInfo.value.avatar = BASE_URL + '/static/头像.png'
       }
+	  // 获取到信息之后，将这个信息保存到storage中~
+	  uni.setStorageSync('user', userInfo.value);
     } else {
       console.log('没有东西哦');
     }
@@ -74,7 +77,9 @@ onMounted(async () => {
       nickname: '游客',
       avatar: BASE_URL + '/static/头像.png',
       sex: '男'
-    }
+    };
+	// 失败时清空缓存防止脏数据
+	uni.removeStorageSync('user');
   }
 })
 

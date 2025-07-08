@@ -60,12 +60,11 @@ const loadQuestions = async (id) => {
     loading.value = true;
     try {
         const res = await fetchAssessmentQuestions(id);
-        if (res.code === 200 && res.data && res.data.questions) {
-            questions.value = res.data.questions.map(q => ({
+        if (res && res.rows && res.rows.length > 0) {
+            questions.value = res.rows.map(q => ({
                 ...q,
-                parsedOptions: q.options // 直接使用 q.options，因为它已经是数组了
+                parsedOptions: q.options // options 已经是数组，无需特殊处理
             }));
-            // 初始化 userAnswers 数组
             userAnswers.value = new Array(questions.value.length).fill(null);
         } else {
             uni.showToast({

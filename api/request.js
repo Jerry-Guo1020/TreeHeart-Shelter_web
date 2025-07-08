@@ -13,6 +13,10 @@ function request(method, url, data, options) {
         resolve(res.data);
       },
       fail: (err) => {
+		  uni.showToast({
+		    title: '网络连接失败，请稍后再试',
+		    icon: 'none'
+		  });
         reject(err);
       }
     });

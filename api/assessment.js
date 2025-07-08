@@ -1,11 +1,8 @@
-import request from '@/utils/request';
+import request from '@/api/request.js';
 
 // 获取测评题目
 export function fetchAssessmentQuestions(assessmentId) {
-  return request({
-    url: `/assessment/questions/${assessmentId}`,
-    method: 'get'
-  });
+  return request.post('/textinfo', {params:{assessmentId}})
 }
 
 // 提交测评结果

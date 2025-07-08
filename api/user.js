@@ -1,18 +1,18 @@
 import request from '@/api/request.js'
 
-/**
- * 游客登录，openid 为唯一标识（比如微信获取到的 openid 或本地唯一字符串）
- * @param {string} nickname 
- * @param {string} avatar 
- * @param {string|null} openid 可选（首次可以 null，注册后每次都带）
- */
-export const guestLogin = (nickname, avatar, openid = null) => {
-  return request.post('/api/user/guest-login', {
-    openid,
-    nickname,
-    avatar
-  });
-};
+// /**
+//  * 游客登录，openid 为唯一标识（比如微信获取到的 openid 或本地唯一字符串）
+//  * @param {string} nickname 
+//  * @param {string} avatar 
+//  * @param {string|null} openid 可选（首次可以 null，注册后每次都带）
+//  */
+// export const guestLogin = (nickname, avatar, openid = null) => {
+//   return request.post('/api/user/guest-login', {
+//     openid,
+//     nickname,
+//     avatar
+//   });
+// };
 
 /**
  * 更新用户信息
@@ -57,8 +57,8 @@ export const apiRegister = async () => {
 		    "username": randomName,
 		    "sex": "男",
 		    "grade": "大二",
-		    "college": "计算机学院",
-		    "subCollege": "软件工程系",
+		    "college": "广东东软学院",
+		    "subCollege": "计算机学院",
 		    "major": "软件工程",
 		    "isNewUser": 1
 		  }

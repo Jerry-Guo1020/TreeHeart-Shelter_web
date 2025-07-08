@@ -49,7 +49,7 @@
 
 <script setup>
 import { BASE_URL } from '@/api/config.js'
-import { apiLogin, apiRegister, guestLogin } from '@/api/user.js' // 导入新的 guestLogin
+import { apiLogin, apiRegister } from '@/api/user.js' // 导入新的 
 
 const saveUserInfo = async (data) => {
 	uni.setStorageSync("openId", data.openid)

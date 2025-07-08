@@ -4,7 +4,7 @@
 		<view class="profile-header">
 			<image :src="userInfo.avatar" class="avatar" />
 			<view class="username-row">
-			  <text class="username">{{ userInfo.nickname }}</text>
+			  <text class="username">{{ userInfo.username }}</text>
 			  <text v-if="userInfo.sex === '男'" class="sex-icon male-icon">♂</text>
 			  <text v-else-if="userInfo.sex === '女'" class="sex-icon female-icon">♀</text>
 			</view>

@@ -19,38 +19,47 @@ import { onShow } from '@dcloudio/uni-app';
 import { BASE_URL } from '@/api/config.js';
 import { updateUserInfo } from '@/api/user.js'; // 导入更新用户信息的API
 
-const username = ref(''); // 对应 userInfo.username
+const username = ref('')  // 这个东西就是相当于 userInfo.username
 
 onShow(() => {
-  const storedUser = uni.getStorageSync('user');
-  if (storedUser && storedUser.username) {
-    username.value = storedUser.username;
-  }
+	const storeUser = uni.getStorageSync('user');
+	if (storeUser && storeUser.username) {
+		username.value = storeUser.username;
+	}
 });
 
 const goNext = async () => {
-  if (!username.value) {
-    uni.showToast({ title: '请填写姓名', icon: 'none' });
-    return;
-  }
-
-  try {
-    uni.showLoading({ title: '保存中...' });
-    const res = await updateUserInfo({ username: username.value });
-    uni.hideLoading();
-
-    if (res.code === 200) {
-      uni.showToast({ title: '姓名更新成功', icon: 'success' });
-      uni.setStorageSync('user', res.data.user);
-      uni.navigateBack(); // 返回上一页 (个人信息详情页)
-    } else {
-      uni.showToast({ title: res.msg || '姓名更新失败', icon: 'none' });
-    }
-  } catch (error) {
-    uni.hideLoading();
-    console.error('更新姓名失败:', error);
-    uni.showToast({ title: '网络错误，请重试', icon: 'none' });
-  }
+	if(!username.value) {
+		uni.showToast({
+			title:'请输入内容',
+			icon:'fail'
+		});
+		return;
+	}
+	
+	try {
+		uni.showLoading({titlee:'保存中……'});
+		await updateUserInfo('username', username.value)
+		uni.hideLoading();
+		
+		// 本地缓存同步
+		let user = uni.getStorageSync('user') || {};
+		user.username = username.value;
+		uni.setStorageSync('user', user);
+		uni.showToast({
+			title:'更改成功!',
+			icon:'success'
+		});
+		setTimeout(() => {
+			uni.navigateBack();
+		},1500);
+	} catch(err) {
+		uni.hideLoading();
+		uni.showToast({
+			title:'网络错误，请重试',
+			icon:'error'
+		})
+	}
 };
 </script>
 

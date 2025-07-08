@@ -5,7 +5,7 @@
       <image class="avatar" :src="userInfo.avatar || (BASE_URL + '/static/头像.png')"></image>
       <view class="nickname-box">
         <text class="nickname-label">昵称</text>
-        <text class="nickname">{{ userInfo.nickname || '游客' }}</text>
+        <text class="nickname">{{ userInfo.username || '游客' }}</text>
       </view>
     </view>
 
@@ -49,8 +49,8 @@ onShow(async() => {
       {
         groupName: '基本信息',
         items: [
-          { label: '用户名', value: userInfo.value.nickname || '未设置', to: '/pages/info/nickname' },
-          { label: '真实姓名', value: userInfo.value.username || '未设置', to: '/pages/info/name' },
+          { label: '用户名', value: userInfo.value.username || '未设置', to: '/pages/info/name' },
+          { label: '真实姓名', value: userInfo.value.nickname || '未设置', to: '/pages/info/nickname' },
           { label: '性别', value: userInfo.value.sex || '未设置', to: '/pages/info/gender' }
         ]
       },

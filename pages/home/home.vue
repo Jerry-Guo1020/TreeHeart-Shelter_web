@@ -6,13 +6,9 @@
 		</view>
 
 		<!-- 顶部标签区域 -->
-		<view class="tags">
-			<view class="tag_orange" @click="toxueyeyali">#学业压力</view>
-			<view class="tag_pink">#情绪情感</view>
-			<view class="tag_yellow">#人际交往</view>
-			<view class="tag_purple">#职业规划</view>
-			<view class="tag_blue">#生活适应</view>
-			<view class="tag_green">#其他类型</view>
+		<view class="tap-list">
+			<view class="tap" v-for="item in tapList" @click="jmpHoleTypePg(item.id)"
+				:style="`color: ${item.tc}; background-color: ${item.bc}`" :key="item.id">{{ item.text }}</view>
 		</view>
 
 		<view class="container">
@@ -81,11 +77,26 @@
 
 <script setup>
 	import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
-	import { BASE_URL } from '@/api/config.js'
-	
+	import {
+		BASE_URL
+	} from '@/api/config.js'
+
 	const toxueyeyali = () => {
-		uni.navigateTo({ url: '/pages/personal/personInformation' })
+		uni.navigateTo({
+			url: '/pages/personal/personInformation'
+		})
 	}
+	
+	// 树洞类型标签
+	let tapList = [
+		{ id: 1, text: "#学业压力", tc: "rgb(255, 119, 0)", bc: "rgb(255, 198, 136)" },
+		{ id: 2, text: "#情绪情感", tc: "rgb(255, 0, 76)", bc: "rgb(255, 202, 215)" },
+		{ id: 3, text: "#人际交往", tc: "rgb(255, 189, 0)", bc: "rgb(255, 245, 206)" },
+		{ id: 4, text: "#职业规划", tc: "rgb(174, 79, 255)", bc: "rgb(232, 203, 255)" },
+		{ id: 5, text: "#生活适应", tc: "rgb(0, 161, 231)", bc: "rgb(206, 237, 247)" },
+		{ id: 6, text: "#其他类型", tc: "rgb(95, 249, 0)", bc: "rgb(221, 254, 215)" }
+	];
+	
 </script>
 
 <style>
@@ -94,13 +105,11 @@
 		padding: 0;
 		box-sizing: border-box;
 		padding-bottom: calc(72px + env(safe-area-inset-bottom, 24px));
-		
+
 	}
-	
-	.container {
-		
-		
-	}
+
+	.container {}
+
 	.page {
 		width: auto;
 		margin: 0 auto;
@@ -113,88 +122,36 @@
 		height: auto;
 	}
 
-
-	.tags {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: center;
-		padding: 7px;
-		gap: 25px;
-		border-bottom: 1px solid #f6f6f6;
-	}
-
-	.tag_orange {
-		border: none;
-		border-radius: 20px;
-		background-color: #ffdfbc;
-		padding: 6px 12px;
-		font-size: 14px;
-		width: 20%;
-		text-align: center;
-		color: #ff7700;
-		font-weight: bolder;
-	}
-
-	.tag_pink {
-		border: none;
-		border-radius: 50px;
-		background-color: #ffcad8;
-		padding: 6px 12px;
-		font-size: 14px;
-		width: 20%;
-		text-align: center;
-		color: #ff004d;
-		font-weight: bolder;
-	}
-
-	.tag_yellow {
-		border: none;
-		border-radius: 50px;
-		background-color: #fff4ce;
-		padding: 6px 12px;
-		font-size: 14px;
-		width: 20%;
-		text-align: center;
-		color: #ffbd00;
-		font-weight: bolder;
-	}
-
-	.tag_purple {
-		border: none;
-		border-radius: 50px;
-		background-color: #e7cbff;
-		padding: 6px 12px;
-		font-size: 14px;
-		width: 20%;
-		text-align: center;
-		color: #ae4fff;
-		font-weight: bolder;
-	}
-
-	.tag_blue {
-		border: none;
-		border-radius: 50px;
-		background-color: #ceedf7;
-		padding: 6px 12px;
-		font-size: 14px;
-		width: 20%;
-		text-align: center;
-		color: #00a0e9;
-		font-weight: bolder;
-	}
-
-	.tag_green {
-		border: none;
-		border-radius: 50px;
-		background-color: #ddfed7;
-		padding: 6px 12px;
-		font-size: 14px;
-		width: 20%;
-		text-align: center;
-		color: #7df625;
-		font-weight: bolder;
-	}
-
+	
+	.tap-list {
+			width: 100vw;
+			height: 25vw;
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			justify-content: space-evenly;
+			align-items: center;
+			align-content: center;
+			gap: 3vw;
+			border-bottom: 0.2vw solid rgb(231, 231, 231);
+		}
+		
+		.tap {
+			--h: 7vw;
+			width: 25vw;
+			height: var(--h);
+			text-align: center;
+			line-height: var(--h);
+			border-radius: 7vw;
+			font-weight: 900;
+			font-size: 4vw;
+		}
+	
+	
+	
+	
+	
+	
 	.card {
 		background-color: white;
 		margin: 10px;

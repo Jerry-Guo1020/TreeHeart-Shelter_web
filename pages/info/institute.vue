@@ -43,26 +43,26 @@ const goNext = async () => {
   if (!subCollege.value) {
     uni.showToast({ title: '请填写所在学院', icon: 'none' });
     return;
-  }
+  }	
 
   try {
     uni.showLoading({ title: '保存中...' });
-    const res = await updateUserInfo({ subCollege: subCollege.value });
+    await updateUserInfo('subcollege', subCollege.value);
     uni.hideLoading();
 
-    if (res.code === 200) {
-      uni.showToast({ title: '学院更新成功', icon: 'success' });
-      uni.setStorageSync('user', res.data.user);
-      uni.navigateBack(); // 返回上一页 (个人信息详情页)
-    } else {
-      uni.showToast({ title: res.msg || '学院更新失败', icon: 'none' });
-    }
-  } catch (error) {
-    uni.hideLoading();
-    console.error('更新学院失败:', error);
-    uni.showToast({ title: '网络错误，请重试', icon: 'none' });
-  }
-};
+    // 记得本地缓存同步
+        let user = uni.getStorageSync('user') || {};
+        user.subCollege = subCollege.value;
+        uni.setStorageSync('user', user);
+    	 uni.showToast({ title: '学院资料更新成功', icon: 'success' });
+    	 setTimeout(() => {
+    		uni.navigateBack();
+    	 },1500);
+      } catch (error) {
+        uni.hideLoading();
+        uni.showToast({ title: '网络错误，请重试', icon: 'none' });
+      }
+    };
 </script>
 
 <style scoped>

@@ -30,28 +30,29 @@ onShow(() => {
 
 const goNext = async () => {
   if (!nickname.value) {
-    uni.showToast({ title: '请填写昵称', icon: 'none' });
+    uni.showToast({ title: '请填写昵称', icon: 'fail' });
     return;
   }
 
   try {
     uni.showLoading({ title: '保存中...' });
-    const res = await updateUserInfo({ nickname: nickname.value });
+    await updateUserInfo('nickname', nickname.value)
     uni.hideLoading();
 
-    if (res.code === 200) {
-      uni.showToast({ title: '昵称更新成功', icon: 'success' });
-      uni.setStorageSync('user', res.data.user);
-      uni.navigateBack(); // 返回上一页 (个人信息详情页)
-    } else {
-      uni.showToast({ title: res.msg || '昵称更新失败', icon: 'none' });
-    }
-  } catch (error) {
-    uni.hideLoading();
-    console.error('更新昵称失败:', error);
-    uni.showToast({ title: '网络错误，请重试', icon: 'none' });
-  }
-};
+   // 记得本地缓存同步
+       let user = uni.getStorageSync('user') || {};
+       user.nickname = nickname.value;
+       uni.setStorageSync('user', user);
+   	 uni.showToast({ title: '真实姓名更新成功', icon: 'success' });
+   	 setTimeout(() => {
+   		uni.navigateBack();
+   	 },1500);
+       
+     } catch (error) {
+       uni.hideLoading();
+       uni.showToast({ title: '网络错误，请重试', icon: 'none' });
+     }
+   };
 </script>
 
 <style scoped>

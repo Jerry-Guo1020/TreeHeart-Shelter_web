@@ -22,7 +22,7 @@ import { ref, onMounted } from 'vue'; // 将 onMounted 从 'vue' 导入
 const DEPRESSION_ASSESSMENT_ID = 3;
 
 const startQuiz = () => {
-  uni.navigateTo({
+  uni.redirectTo({
     url: `/pages/test/quiz/quiz?assessmentId=${DEPRESSION_ASSESSMENT_ID}`
   });
 };

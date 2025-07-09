@@ -80,7 +80,7 @@ const handleWeChatLogin = async () => {
 		    title: '微信登录成功',
 		    icon: 'success'
 		  })
-	  uni.navigateTo({
+	  uni.redirectTo({
 	    url: '/pages/home/home',
 	  });
 	}); // 等动画结束后跳转

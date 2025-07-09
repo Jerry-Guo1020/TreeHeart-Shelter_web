@@ -33,7 +33,6 @@
 <script setup>
 import { ref } from 'vue';
 import { onShow } from '@dcloudio/uni-app';
-// 导入新的删除API函数
 import { fetchUserAssessmentRecords, deleteUserAssessmentRecord } from '@/api/assessment.js';
 
 const records = ref([]);
@@ -42,46 +41,56 @@ const loading = ref(true);
 onShow(async () => {
   loading.value = true;
   try {
-    const res = await fetchUserAssessmentRecords();
-    if (res.code === 200 && res.data) {
-      records.value = res.data;
+    const user = uni.getStorageSync('user');
+    const openid = user?.openid || '';
+    if (!openid) {
+      uni.showToast({ title: '未登录，无法获取记录', icon: 'none' });
+      loading.value = false;
+      return;
+    }
+    const res = await fetchUserAssessmentRecords(openid);
+    // 这里直接判断 res.rows 是否为数组
+    if (res && Array.isArray(res.rows)) {
+      records.value = res.rows;
     } else {
-      uni.showToast({
-        title: res.msg || '获取记录失败',
-        icon: 'none'
-      });
+      records.value = [];
+      uni.showToast({ title: res.msg || '暂无测评记录', icon: 'none' });
     }
   } catch (error) {
     console.error('加载测评记录异常:', error);
-    uni.showToast({
-      title: '网络错误，无法加载记录',
-      icon: 'none'
-    });
+    uni.showToast({ title: '网络错误，无法加载记录', icon: 'none' });
+    records.value = [];
   } finally {
     loading.value = false;
   }
 });
 
+
 // 新增：处理删除记录的函数
 const handleDelete = (recordId) => {
+  const openid = uni.getStorageSync('user')?.openid;
+  if (!openid) {
+    uni.showToast({ title: '未获取到用户openid', icon: 'none' });
+    return;
+  }
   uni.showModal({
     title: '确认删除',
     content: '确定要删除这条测评记录吗？',
     success: async (res) => {
       if (res.confirm) {
         try {
-          const deleteRes = await deleteUserAssessmentRecord(recordId);
-          if (deleteRes.code === 200) {
+          const deleteRes = await deleteUserAssessmentRecord(recordId, openid);
+          console.log('deleteRes:', deleteRes);
+          if (deleteRes && deleteRes.info && deleteRes.info.affectedRows > 0) {
             uni.showToast({
               title: '删除成功',
               icon: 'success'
             });
-            // 从本地记录数组中移除已删除的记录，更新UI
-            records.value = records.value.filter(record => record.id !== recordId);
+            await onShow();
           } else {
             uni.showToast({
-              title: deleteRes.msg || '删除失败',
-              icon: 'none'
+              title: '删除失败',
+              icon: 'fail'
             });
           }
         } catch (error) {
@@ -95,6 +104,9 @@ const handleDelete = (recordId) => {
     }
   });
 };
+
+
+
 
 const formatTime = (timeString) => {
   if (!timeString) return '';

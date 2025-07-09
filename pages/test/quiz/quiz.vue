@@ -127,22 +127,24 @@ const submitQuiz = async () => {
 
     try {
         const res = await submitAssessmentResult(assessmentId.value, totalScore);
-        uni.hideLoading();
+        console.log('测评提交返回内容:', res); // 加这一行
 
-        if (res.code === 200) {
-            uni.showToast({
+		uni.hideLoading();
+
+        if (res && res.rows && res.rows.length) {
+            const result = res.rows[0];
+			uni.showToast({
                 title: '提交成功',
                 icon: 'success'
             });
-            // 提交成功后，跳转到结果页或返回上一页
-            // 假设结果页路径为 /pages/test/result/result，并传递结果数据
+            // 提交成功后，跳转到结果页
             uni.redirectTo({
-                url: `/pages/test/endTest/end?assessmentId=${assessmentId.value}&score=${totalScore}&report=${encodeURIComponent(res.data.report)}&level=${encodeURIComponent(res.data.level)}`
+              url: `/pages/test/endTest/end?assessmentId=${assessmentId.value}&score=${totalScore}&report=${encodeURIComponent(result.report)}&level=${encodeURIComponent(result.level)}`
             });
         } else {
             uni.showToast({
                 title: res.msg || '提交失败',
-                icon: 'none'
+                icon: 'fail'
             });
         }
     } catch (error) {
@@ -150,7 +152,7 @@ const submitQuiz = async () => {
         console.error('提交测评结果异常:', error);
         uni.showToast({
             title: '网络错误，提交失败',
-            icon: 'none'
+            icon: 'fail'
         });
     }
 };

@@ -33,11 +33,11 @@ function switchTab(idx) {
   if (idx === 0) {
     uni.reLaunch({ url: '/pages/home/home' })
   } else if (idx === 1) {
-    uni.navigateTo({ url: '/pages/community/community' })
+    uni.redirectTo({ url: '/pages/community/community' })
   } else if (idx === 2) {
-    uni.navigateTo({ url: '/pages/test/test' })
+    uni.redirectTo({ url: '/pages/test/test' })
   } else if (idx === 3) {
-    uni.navigateTo({ url: '/pages/personal/personal' })
+    uni.redirectTo({ url: '/pages/personal/personal' })
   }
 }
 </script>

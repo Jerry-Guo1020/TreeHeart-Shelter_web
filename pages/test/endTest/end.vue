@@ -39,6 +39,7 @@
 <script setup>
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app' // 从 uni-app 导入 onLoad
+import { insertUserAssessmentRecord } from '@/api/assessment.js'
 
 const result = ref(null)
 const advices = ref([])
@@ -48,11 +49,22 @@ onLoad((options) => { // 使用 onLoad 接收页面参数
   const score = Number(options.score) || 0;
   const level = decodeURIComponent(options.level || '');
   const report = decodeURIComponent(options.report || '');
-
-  // 这里应通过你的后端API请求，示例代码如下：
-  // let apiResult = await uni.request({ url: '/api/assessment/result', data: params })
-  // result.value = apiResult.data.result
-  // advices.value = apiResult.data.advices
+  
+  let openid = uni.getStorageSync("openId")
+    if (!openid) {
+      uni.showToast({ title: '未登录', icon: 'none' });
+      return;
+    }
+    insertUserAssessmentRecord({
+      uid:openid,
+      assessmentId,
+      totalScore: score,
+      level,
+      report
+    }).then(res => {
+      console.log('测评记录插入结果', res)
+    });
+ 
 
   // 根据传递的参数设置结果
   let assessmentName = '';

@@ -22,7 +22,7 @@ import { ref, onMounted } from 'vue'; // 将 onMounted 从 'vue' 导入
 const MBTI_ASSESSMENT_ID = 1;
 
 const startQuiz = () => {
-  uni.navigateTo({
+  uni.redirectTo({
     url: `/pages/test/quiz/quiz?assessmentId=${MBTI_ASSESSMENT_ID}`
   });
 };

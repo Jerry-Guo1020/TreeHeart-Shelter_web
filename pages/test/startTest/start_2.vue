@@ -22,7 +22,7 @@ import { ref, onMounted } from 'vue'; // 将 onMounted 从 'vue' 导入
 const ANXIOUS_ASSESSMENT_ID = 2;
 
 const startQuiz = () => {
-  uni.navigateTo({
+  uni.redirectTo({
     url: `/pages/test/quiz/quiz?assessmentId=${ANXIOUS_ASSESSMENT_ID}`
   });
 };

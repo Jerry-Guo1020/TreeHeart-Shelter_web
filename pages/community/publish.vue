@@ -17,10 +17,10 @@
 
       <!-- 发布身份 -->
       <view class="publisher-info">
-        <image :src="currentUser.avatar" class="publisher-avatar" />
+        <image :src="userInfo.avatar" class="publisher-avatar" />
         <view class="publisher-details">
-          <text class="publisher-name">{{ currentUser.nickname }}</text>
-          <text class="publisher-role">{{ currentUser.role }}</text>
+          <text class="publisher-name">{{ userInfo.nickname }}</text>
+          <text class="publisher-role">{{ userInfo.role }}</text>
         </view>
       </view>
 
@@ -95,16 +95,16 @@
 import { ref, onMounted } from 'vue'
 import { publishPost, fetchPostTypes } from '@/api/community.js'
 import { getCurrentUser } from '@/api/user.js'
-import { base_url } from '@/api/config.js'; // 导入 base_url
+import { base_url } from '@/api/config.js'
 
 const postTitle = ref('')
 const postContent = ref('')
 const selectedTag = ref('')
 const images = ref([])
 
-const currentUser = ref({
+const userInfo = ref({
   avatar: '/static/avatar.png',
-  nickname: '加载中...', // 将 username 改为 nickname
+  nickname: '加载中...',
   role: '发布身份'
 })
 const currentUserId = ref(null)
@@ -114,11 +114,12 @@ const availableTags = ref([])
 onMounted(async () => {
   try {
     const resUser = await getCurrentUser()
-    if (resUser.code === 200 && resUser.data) {
-      currentUser.value.avatar = resUser.data.avatar || '/static/avatar.png'
-      currentUser.value.nickname = resUser.data.nickname || '树洞用户' // 简化赋值逻辑
-      currentUser.value.role = '发布身份'
-      currentUserId.value = resUser.data.id
+    if (resUser && resUser.rows && resUser.rows.length) {
+      const user = resUser.rows[0]
+      userInfo.value.avatar = user.avatar || '/static/avatar.png'
+      userInfo.value.nickname = user.nickname || '树洞用户'
+      userInfo.value.role = '发布身份'
+      currentUserId.value = user.id
     }
   } catch (e) {
     console.error('获取用户信息失败', e)
@@ -126,13 +127,14 @@ onMounted(async () => {
 
   try {
     const resTags = await fetchPostTypes()
-    if (resTags.code === 200 && resTags.data) {
-      availableTags.value = resTags.data.map(t => t.name)
+    if (resTags && resTags.rows && resTags.rows.length) {
+      availableTags.value = resTags.rows.map(t => t.name)
     }
   } catch (e) {
     console.error('获取标签失败', e)
   }
 })
+
 
 const chooseImage = () => {
   uni.chooseImage({

@@ -1,97 +1,160 @@
 <template>
-  <view class="post-actions">
-    <view class="action-item" @click="handleLike">
-      <text :class="['icon', 'like-icon', isLikedState ? 'liked' : '']">❤️</text>
-      <text class="count">{{ currentLikeCount }}</text>
+  <view class="container">
+    <!-- 顶部介绍卡片 -->
+    <view class="info-card-wrap">
+      <view class="info_card">
+        <view class="info_title">
+          <text>心灵社区</text>
+        </view>
+        <view class="info_content">
+          <text>🌱 分享你的心灵故事，与他人交流，共同成长。</text>
+        </view>
+        <view class="gradient-bar"></view>
+      </view>
     </view>
-    <view class="action-item" @click="handleComment">
-      <text class="icon comment-icon">💬</text>
-      <text class="count">{{ commentCount }}</text>
-    </view>
-    <view class="action-item" @click="handleCollect">
-      <text class="icon collect-icon">⭐</text>
-      <text class="count">{{ collectCount }}</text>
+
+    <!-- 顶部导航栏 横滑 -->
+    <scroll-view class="tabbar-scroll" scroll-x :show-scrollbar="false">
+      <view class="tabbar">
+        <view
+          v-for="(tab, idx) in tabs"
+          :key="tab"
+          :class="['tab-btn', currentTab === idx ? 'active' : '']"
+          @click="switchTab(idx)"
+        >{{ tab }}</view>
+      </view>
+    </scroll-view>
+
+    <!-- 动态内容区 -->
+    <scroll-view scroll-y class="content-list">
+      <view
+        v-for="(item, idx) in filteredPosts"
+        :key="item.id || idx"
+        class="post-card"
+        @click="navigateToPostDetail(item.id)"
+      >
+        <view class="post-header">
+          <image :src="item.avatar" class="avatar" />
+          <view class="user-info">
+            <view class="nickname-row">
+              <text class="username">{{ item.nickname }}</text>
+              <view class="post-type-tag">{{ item.type }}</view>
+            </view>
+            <text class="time">{{ item.time }}</text>
+          </view>
+        </view>
+        <view class="post-title" :title="item.title">{{ item.title }}</view>
+        <view class="post-desc">{{ item.desc }}</view>
+        <PostActions
+          :post-id="item.id"
+          :like-count="item.like"
+          :comment-count="item.comment"
+          :collect-count="item.collect"
+          :is-liked="item.isLiked"
+          @like.stop="handlePostLike"
+          @comment.stop="handlePostComment"
+          @collect.stop="handlePostCollect"
+        />
+      </view>
+      <view v-if="filteredPosts.length === 0" class="empty-tip">
+        <image src="/static/empty.svg" class="empty-img" />
+        <text>暂时没有相关内容，快来发帖吧~</text>
+      </view>
+    </scroll-view>
+
+    <!-- 右下角悬浮按钮 -->
+    <view class="fab" @click="onPublish">
+      <text class="fab-icon">✏️</text>
     </view>
   </view>
+  <BottomNavbar :current="0" />
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, computed, onMounted } from 'vue'
+import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
+import PostActions from '@/component/PostActions/PostActions.vue'
+import { fetchPostList } from '@/api/community.js'
 
-const props = defineProps({
-  postId: {
-    type: [String, Number],
-    required: true,
-  },
-  likeCount: {
-    type: [String, Number],
-    default: 0,
-  },
-  commentCount: {
-    type: [String, Number],
-    default: 0,
-  },
-  collectCount: {
-    type: [String, Number],
-    default: 0,
-  },
-  isLiked: {
-    type: Boolean,
-    default: false,
-  },
-});
+const tabs = [
+  '全部', '学业压力', '情绪情感', '人际交往', '职业规划', '生活适应', '其他类型'
+]
+const currentTab = ref(0)
+const posts = ref([])
 
-const emit = defineEmits(['like', 'comment', 'collect']);
+function switchTab(idx) {
+  currentTab.value = idx
+}
 
-// 内部状态，用于管理点赞数和点赞状态
-const currentLikeCount = ref(props.likeCount);
-const isLikedState = ref(props.isLiked);
+function onPublish() {
+  uni.navigateTo({
+    url: '/pages/community/publish'
+  });
+}
+function navigateToPostDetail(postId) {
+  uni.navigateTo({
+    url: `/pages/community/postDetail?id=${postId}`
+  });
+}
+function handlePostLike(postId, isLiked) {
+  // TODO: 点赞逻辑
+}
+function handlePostComment(postId) {
+  uni.navigateTo({
+    url: `/pages/community/postDetail?id=${postId}`
+  });
+}
+function handlePostCollect(postId) {
+  // TODO: 收藏逻辑
+}
 
-// 监听 props 变化，同步内部状态
-watch(() => props.likeCount, (newVal) => {
-  currentLikeCount.value = newVal;
-});
-watch(() => props.isLiked, (newVal) => {
-  isLikedState.value = newVal;
-});
+// 类型名称与 typeId 对应
+const typeMap = {
+  1: '学业压力',
+  2: '情绪情感',
+  3: '人际交往',
+  4: '职业规划',
+  5: '生活适应',
+  6: '其他类型'
+};
 
-const handleLike = () => {
-  // 模拟点赞/取消点赞逻辑
-  if (isLikedState.value) {
-    // 假设 '万' 是字符串，需要特殊处理
-    currentLikeCount.value = (typeof currentLikeCount.value === 'string' && currentLikeCount.value.endsWith('万'))
-      ? (parseFloat(currentLikeCount.value) - 0.1).toFixed(1) + '万' // 简单处理万
-      : parseInt(currentLikeCount.value) - 1;
+const filteredPosts = computed(() => {
+  if (currentTab.value === 0) {
+    return posts.value;
   } else {
-    currentLikeCount.value = (typeof currentLikeCount.value === 'string' && currentLikeCount.value.endsWith('万'))
-      ? (parseFloat(currentLikeCount.value) + 0.1).toFixed(1) + '万'
-      : parseInt(currentLikeCount.value) + 1;
+    const selectName = tabs[currentTab.value];
+    // 只对比 type 字段
+    return posts.value.filter(post => post.type === selectName);
   }
-  isLikedState.value = !isLikedState.value;
+});
 
-  // 触发父组件的事件，传递帖子ID和新的点赞状态
-  emit('like', props.postId, isLikedState.value);
-
-  uni.showToast({
-    title: isLikedState.value ? '点赞成功' : '取消点赞',
-    icon: 'none',
-    duration: 1000
-  });
-};
-
-const handleComment = () => {
-  emit('comment', props.postId); // 触发评论事件，由父组件处理跳转
-};
-
-const handleCollect = () => {
-  emit('collect', props.postId);
-  uni.showToast({
-    title: '收藏功能待完善',
-    icon: 'none',
-    duration: 1000
-  });
-};
+onMounted(async () => {
+  try {
+    // 默认查全部
+    const res = await fetchPostList({ limit: 20, offset: 0 });
+    // 兼容 rows/data 结构
+    const dataArr = Array.isArray(res.rows) ? res.rows : (Array.isArray(res.data) ? res.data : []);
+    posts.value = dataArr.map(item => ({
+      id: item.id || '', // 必须有id
+      avatar: item.avatar || '/static/avatar.png',
+      nickname: item.nickname || '匿名用户',
+      time: (item.createTime?.split('T')[0]) || '',
+      title: item.title || '',
+      desc: item.content || '',
+      type: item.typeName || '',   // 后台SQL记得AS typeName
+      like: Number(item.likeCount) || 0,
+      comment: Number(item.commentCount) || 0,
+      collect: Number(item.collectCount) || 0,
+      isLiked: false,
+      images: item.imgUrl ? [item.imgUrl] : []
+    }));
+  } catch (e) {
+    uni.showToast({ title: typeof e === 'string' ? e : (e?.message || '加载失败'), icon: 'none' })
+  }
+});
 </script>
+
+
 
 <style scoped>
 .post-actions {

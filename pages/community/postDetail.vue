@@ -99,34 +99,39 @@
   const isLikedState = ref(false)
   const currentLikeCount = ref(0)
   
-  onMounted(() => {
-    // 获取url参数
-    const pages = getCurrentPages()
-    const options = pages[pages.length - 1].options
-    postId.value = options.id
-    fetchPostDetail(postId.value).then(data => {
-      currentPost.value = {
-        ...data,
-        avatar: data.avatar || '/static/avatar.png',
-        username: data.nickname || data.username || '匿名用户', // 优先使用 nickname，其次 username
-        time: data.time || '',
-        title: data.title,
-        desc: data.content,
-        type: data.typeName,
-        comment: data.commentCount || 0,
-        images: data.imgUrl ? [data.imgUrl] : []
-      }
-      isLikedState.value = false
-      currentLikeCount.value = data.likeCount || 0
-    })
-    .catch(error => { // 添加错误处理
-      console.error('获取帖子详情失败:', error);
-      uni.showToast({
-        title: '加载帖子失败',
-        icon: 'none'
-      });
-      currentPost.value = null; // 确保在加载失败时显示加载中或空状态
-    });
+onMounted(() => {
+  // 获取url参数
+  const pages = getCurrentPages()
+  const options = pages[pages.length - 1].options
+  postId.value = options.id
+
+  fetchPostDetail(postId.value).then(res => {
+    // 1. 取 rows[0]，而不是直接用 data
+    const data = res && res.rows && res.rows.length > 0 ? res.rows[0] : null
+    if (!data) {
+      uni.showToast({ title: '帖子不存在', icon: 'none' })
+      currentPost.value = null
+      return
+    }
+    currentPost.value = {
+      id: data.id,
+      avatar: data.avatar || '/static/avatar.png',
+      username: data.nickname || '匿名用户',
+      time: data.createTime ? data.createTime.slice(0, 10) : '',
+      title: data.title,
+      desc: data.content,
+      type: data.typeName,
+      comment: data.commentCount || 0,
+      images: data.imgUrl ? [data.imgUrl] : []
+    }
+    isLikedState.value = false
+    currentLikeCount.value = data.likeCount || 0
+  }).catch(error => {
+    uni.showToast({ title: '加载帖子失败', icon: 'none' })
+    currentPost.value = null
+  })
+
+
   
     // 可对接真实评论接口
     comments.value = [

@@ -135,7 +135,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding-bottom: calc(72px + env(safe-area-inset-bottom, 24px));
+	  padding-bottom: calc(127px + env(safe-area-inset-bottom, 35px));
 }
 
 .card {
@@ -300,7 +300,7 @@
 
 /* 按钮区 */
 .start-btn {
-	margin: 0 22rpx 22rpx 22rpx;
+	margin: 31rpx 22rpx 22rpx 22rpx;
 	border-radius: 32rpx;
 	background: linear-gradient(90deg, #FF9200 0%, #FA9FB4 100%);
 	color: #fff;

@@ -28,7 +28,7 @@
     <!-- 动态内容区 -->
     <scroll-view scroll-y class="content-list">
       <view
-        v-for="(item) in filteredPosts"
+        v-for="(item) in posts"
         :key="item.id"
         class="post-card"
         @click="navigateToPostDetail(item.id)"
@@ -56,7 +56,7 @@
           @collect.stop="handlePostCollect"
         />
       </view>
-      <view v-if="filteredPosts.length === 0" class="empty-tip">
+      <view v-if="posts.length === 0" class="empty-tip">
         <image src="/static/empty.svg" class="empty-img" />
         <text>暂时没有相关内容，快来发帖吧~</text>
       </view>
@@ -71,53 +71,39 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
-import PostActions from '@/component/PostActions/PostActions.vue'
-import { fetchPostTypes, fetchPostList } from '@/api/community.js'
+// import PostActions from '@/component/PostActions/PostActions.vue'
+import { fetchPostList } from '@/api/community.js'
 
 const tabs = [
-  '全部','学业压力', '情绪情感', '人际交往', '职业规划', '生活适应', '其他类型'
+  '全部', '学业压力', '情绪情感', '人际交往', '职业规划', '生活适应', '其他类型'
 ]
+// 类型和 tab 下标对应，typeId=1对应'学业压力'，以此类推
 const currentTab = ref(0)
 const posts = ref([])
+const loading = ref(false)
 
-const filteredPosts = computed(() => {
-  if (currentTab.value === 0) {
-    return posts.value;
-  } else {
-    const selectedType = tabs[currentTab.value];
-    return posts.value.filter(post => post.type === selectedType);
-  }
-});
+// tabIndex -> typeId (数据库typeId一般从1开始，tab下标0是全部)
+function getTypeId(tabIdx) {
+  return tabIdx === 0 ? null : tabIdx // tab下标1=typeId1
+}
 
-function switchTab(idx) {
-  currentTab.value = idx
-}
-function onPublish() {
-  uni.navigateTo({
-    url: '/pages/community/publish'
-  });
-}
-const navigateToPostDetail = (postId) => {
-  uni.navigateTo({
-    url: `/pages/community/postDetail?id=${postId}`
-  });
-};
-const handlePostLike = (postId, isLiked) => {};
-const handlePostComment = (postId) => {
-  uni.navigateTo({
-    url: `/pages/community/postDetail?id=${postId}`
-  });
-};
-const handlePostCollect = (postId) => {};
-onMounted(() => {
-  fetchPostList().then(data => {
+async function loadPosts() {
+  loading.value = true
+  try {
+    const res = await fetchPostList({
+      limit: 5,
+      offset: 0,
+      typeId: getTypeId(currentTab.value)
+    });
+    // 数据一般在 res.rows
+    const data = Array.isArray(res.rows) ? res.rows : []
     posts.value = data.map(item => ({
       ...item,
       avatar: item.avatar || '/static/avatar.png',
       nickname: item.nickname || '匿名用户',
-      time: item.time || '',
+      time: item.createTime ? (item.createTime + '').slice(0, 10) : '',
       title: item.title,
       desc: item.content,
       type: item.typeName,
@@ -127,8 +113,41 @@ onMounted(() => {
       isLiked: false,
       images: item.imgUrl ? [item.imgUrl] : []
     }))
+  } catch (e) {
+    uni.showToast({ title: '加载失败', icon: 'none' })
+    posts.value = []
+  }
+  loading.value = false
+}
+
+function switchTab(idx) {
+  if (currentTab.value !== idx) {
+    currentTab.value = idx
+    loadPosts()
+  }
+}
+function onPublish() {
+  uni.navigateTo({
+    url: '/pages/community/publish'
+  });
+}
+function navigateToPostDetail(postId) {
+  uni.navigateTo({
+    url: `/pages/community/postDetail?id=${postId}`
+  });
+}
+function handlePostLike() {}
+function handlePostComment(postId) {
+  uni.navigateTo({
+    url: `/pages/community/postDetail?id=${postId}`
   })
-})
+}
+function handlePostCollect() {}
+
+// 监听tab切换自动加载数据
+watch(currentTab, () => loadPosts())
+
+onMounted(loadPosts)
 </script>
 
 <style scoped>
@@ -139,8 +158,8 @@ onMounted(() => {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  padding-bottom: 108rpx;
   font-family: 'PingFang SC', 'HarmonyOS Sans', 'Helvetica Neue', Arial, sans-serif;
+  padding-bottom: calc(127px + env(safe-area-inset-bottom, 35px));
 }
 
 /* 顶部卡片外层，配合最大宽度居中，避免漏边 */
@@ -160,7 +179,7 @@ onMounted(() => {
   border-radius: 32rpx;
   margin: 18rpx 0 10rpx 0;
   padding: 38rpx 38rpx 26rpx 38rpx;
-  width: 95vw;
+  width: 87vw;
   max-width: 720rpx;
   min-width: 340rpx;
   box-shadow: 0 6rpx 24rpx rgba(255,170,80,0.09), 0 1rpx 0 rgba(255,184,106,0.12);
@@ -211,7 +230,7 @@ onMounted(() => {
   flex-direction: row;
   gap: 16rpx;
   padding: 0 18rpx 18rpx 18rpx;
-  margin-top: 0;
+  margin-top: 10px;
 }
 .tab-btn {
   flex: 0 0 auto;
@@ -273,7 +292,7 @@ onMounted(() => {
   border-radius: 24rpx;
   margin: 18rpx auto 0 auto;
   padding: 28rpx 28rpx 18rpx 28rpx;
-  width: 94vw;
+  width: 87vw;
   max-width: 710rpx;
   box-shadow: 0 4rpx 18rpx rgba(255,165,81,0.09), 0 1rpx 0 rgba(255,184,106,0.10);
   display: flex;
@@ -318,7 +337,7 @@ onMounted(() => {
   font-size: 28rpx;
   color: #f4962b;
   font-weight: 700;
-  max-width: 120rpx;
+  width: 5em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -329,15 +348,18 @@ onMounted(() => {
   margin-top: 3rpx;
 }
 .post-type-tag {
+  position: absolute;
+  right: 26rpx;
+  top: 24rpx;
   background: linear-gradient(90deg, #ffe0b2 10%, #ffd39a 90%);
   color: #ff8247;
   padding: 4rpx 15rpx;
   border-radius: 16rpx;
   font-size: 21rpx;
   font-weight: bold;
-  margin-left: 8rpx;
   box-shadow: 0 1rpx 8rpx rgba(255,186,115,0.10);
   border: 2rpx solid #ffe5be;
+  z-index: 2;
 }
 .post-title {
   font-weight: 800;

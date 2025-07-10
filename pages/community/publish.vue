@@ -60,7 +60,7 @@
           </view>
         </view>
         <view class="tag-display-field" @click="showTagPicker">
-          <text v-if="selectedTag">{{ selectedTag }}</text>
+          <text v-if="selectedTagName">{{ selectedTagName }}</text>
           <text v-else class="placeholder-style">未选择标签</text>
         </view>
       </view>
@@ -99,7 +99,8 @@ import { base_url } from '@/api/config.js'
 
 const postTitle = ref('')
 const postContent = ref('')
-const selectedTag = ref('')
+const selectedTagId = ref(null)
+const selectedTagName = ref('')
 const images = ref([])
 
 const userInfo = ref({
@@ -108,8 +109,7 @@ const userInfo = ref({
   role: '发布身份'
 })
 const currentUserId = ref(null)
-
-const availableTags = ref([])
+const availableTags = ref([]) // [{id, name}]
 
 onMounted(async () => {
   try {
@@ -119,7 +119,7 @@ onMounted(async () => {
       userInfo.value.avatar = user.avatar || '/static/avatar.png'
       userInfo.value.nickname = user.nickname || '树洞用户'
       userInfo.value.role = '发布身份'
-      currentUserId.value = user.id
+      currentUserId.value = user.openid || user.id
     }
   } catch (e) {
     console.error('获取用户信息失败', e)
@@ -127,14 +127,14 @@ onMounted(async () => {
 
   try {
     const resTags = await fetchPostTypes()
+    // 假设接口返回 rows: [{id:1, name:'学业压力'}, ...]
     if (resTags && resTags.rows && resTags.rows.length) {
-      availableTags.value = resTags.rows.map(t => t.name)
+      availableTags.value = resTags.rows
     }
   } catch (e) {
     console.error('获取标签失败', e)
   }
 })
-
 
 const chooseImage = () => {
   uni.chooseImage({
@@ -144,11 +144,10 @@ const chooseImage = () => {
     success: (res) => {
       res.tempFilePaths.forEach(filePath => {
         uni.uploadFile({
-          url: `${base_url}/upload/image`, // 确保这里使用导入的 base_url，并根据后端实际路由调整路径
+          url: `${base_url}/upload/image`, // 路径按你实际API
           filePath,
           name: 'file',
           success: (uploadRes) => {
-            console.log('上传接口原始响应数据:', uploadRes.data); // <-- 添加这一行
             try {
               const data = JSON.parse(uploadRes.data)
               if (data.code === 200) {
@@ -157,13 +156,11 @@ const chooseImage = () => {
                 uni.showToast({ title: '上传失败', icon: 'none' })
               }
             } catch (e) {
-              console.error('JSON 解析失败:', e);
-              console.error('导致解析失败的原始数据:', uploadRes.data); // <-- 添加这一行
-              uni.showToast({ title: '上传失败 (响应格式错误)', icon: 'none' }) // <-- 修改提示
+              console.error('图片上传响应格式错误:', uploadRes.data)
+              uni.showToast({ title: '上传失败 (响应格式错误)', icon: 'none' })
             }
           },
           fail: (err) => {
-            console.error('文件上传失败:', err);
             uni.showToast({ title: '上传失败', icon: 'none' })
           }
         })
@@ -177,10 +174,16 @@ const deleteImage = (index) => {
 }
 
 const showTagPicker = () => {
+  if (!availableTags.value.length) {
+    uni.showToast({ title: '暂无标签', icon: 'none' })
+    return
+  }
   uni.showActionSheet({
-    itemList: availableTags.value,
+    itemList: availableTags.value.map(t => t.name),
     success: (res) => {
-      selectedTag.value = availableTags.value[res.tapIndex]
+      const tag = availableTags.value[res.tapIndex]
+      selectedTagId.value = tag.id
+      selectedTagName.value = tag.name
     }
   })
 }
@@ -194,7 +197,7 @@ const submitPost = async () => {
     uni.showToast({ title: '内容不能为空', icon: 'none' })
     return
   }
-  if (!selectedTag.value) {
+  if (!selectedTagId.value) {
     uni.showToast({ title: '请选择标签', icon: 'none' })
     return
   }
@@ -202,21 +205,42 @@ const submitPost = async () => {
     uni.showToast({ title: '用户未登录', icon: 'none' })
     return
   }
+  if (postTitle.value.length > 50) {
+    uni.showToast({ title: '标题最长50字', icon: 'none' })
+    return
+  }
   const postData = {
     uid: currentUserId.value,
+    typeId: Number(selectedTagId.value),
     title: postTitle.value,
     content: postContent.value,
-    typeName: selectedTag.value,
     imgId: images.value.length > 0 ? images.value[0].imgId : null
   }
+  if (postData.imgId === '' || postData.imgId === undefined) postData.imgId = null
+
+  console.log('发布参数', postData)
   try {
-    await publishPost(postData)
-    uni.showToast({ title: '发布成功', icon: 'success' })
-    setTimeout(() => {
-      uni.navigateBack()
-    }, 1000)
+    const res = await publishPost(postData)
+    console.log('发布接口返回', res)
+    // ======== 适配你 apisql 的实际返回格式 =========
+    if (
+      (res && res.info && res.info.affectedRows === 1) ||
+      (res && res.meta && res.meta.affectedRows === 1)
+    ) {
+      uni.showToast({ title: '发布成功', icon: 'success' })
+      postTitle.value = ''
+      postContent.value = ''
+      selectedTagId.value = null
+      selectedTagName.value = ''
+      images.value = []
+      setTimeout(() => {
+        uni.navigateBack()
+      }, 800)
+    } else {
+      uni.showToast({ title: res.msg || '发布失败', icon: 'none' })
+    }
   } catch (e) {
-    uni.showToast({ title: '发布失败:' + e, icon: 'none' })
+    uni.showToast({ title: '发布失败', icon: 'none' })
   }
 }
 </script>

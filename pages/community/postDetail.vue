@@ -1,105 +1,119 @@
 <template>
-    <view class="container">
-      <!-- 帖子详情内容 -->
-      <view v-if="currentPost" class="post-detail-card">
-        <view class="post-header">
-          <image :src="currentPost.avatar" class="avatar" />
-          <view class="user-info">
-            <text class="username">{{ currentPost.username }}</text>
-            <text class="time">{{ currentPost.time }}</text>
-          </view>
-        </view>
-        <view class="post-title">{{ currentPost.title }}</view>
-        <view class="post-desc">{{ currentPost.desc }}</view>
-        <!-- 帖子图片 -->
-        <view v-if="currentPost.images && currentPost.images.length > 0" class="post-images">
-          <image
-            v-for="(image, index) in currentPost.images"
-            :key="index"
-            :src="image"
-            mode="aspectFill"
-            class="post-image"
-            :class="{ 'single-image': currentPost.images.length === 1, 'multi-image': currentPost.images.length > 1 }"
-          />
-        </view>
-        <!-- 帖子类型标签 -->
-        <view class="post-tag">#{{ currentPost.type }}</view>
-        <!-- 帖子底部操作区 -->
-        <view class="post-actions-detail">
-          <view class="action-item" @click="handleLike">
-            <text :class="['icon', 'like-icon', isLikedState ? 'liked' : '']">❤️</text>
-            <text class="count">{{ currentLikeCount }}</text>
-          </view>
-          <view class="action-item" @click="handleComment">
-            <text class="icon comment-icon">💬</text>
-            <text class="count">{{ currentPost.comment }}</text>
-          </view>
-          <view class="action-item" @click="handleShare">
-            <text class="icon share-icon">🔗</text>
-            <text class="count">分享</text>
-          </view>
+  <view class="container">
+    <!-- 帖子详情内容 -->
+    <view v-if="currentPost" class="post-detail-card">
+      <view class="post-header">
+        <image :src="currentPost.avatar" class="avatar" />
+        <view class="user-info">
+          <text class="username">{{ currentPost.username }}</text>
+          <text class="time">{{ currentPost.time }}</text>
         </view>
       </view>
-      <view v-else class="loading-text">加载中...</view>
-  
-      <!-- 评论区 -->
-      <view class="comment-section">
-        <view class="comment-input-area">
-          <image src="/static/avatar.png" class="comment-avatar" />
-          <textarea
-            v-model="commentContent"
-            placeholder="在这里写下你的想法..."
-            class="comment-textarea"
-            auto-height
-          />
-          <button @click="publishComment" class="comment-btn">评论</button>
+      <view class="post-title">{{ currentPost.title }}</view>
+      <view class="post-desc">{{ currentPost.desc }}</view>
+      <!-- 帖子图片 -->
+      <view v-if="currentPost.images && currentPost.images.length > 0" class="post-images">
+        <image
+          v-for="(image, index) in currentPost.images"
+          :key="index"
+          :src="image"
+          mode="aspectFill"
+          class="post-image"
+          :class="{ 'single-image': currentPost.images.length === 1, 'multi-image': currentPost.images.length > 1 }"
+        />
+      </view>
+      <!-- 帖子类型标签 -->
+      <view class="post-tag">#{{ currentPost.type }}</view>
+      <!-- 帖子底部操作区 -->
+      <view class="post-actions-detail">
+        <view class="action-item" @click="handleLike">
+          <text :class="['icon', 'like-icon', isLikedState ? 'liked' : '']">❤️</text>
+          <text class="count">{{ currentLikeCount }}</text>
         </view>
-  
-        <view class="comment-list-header">评论 ({{ comments.length }})</view>
-        <view class="comment-list">
-          <view v-for="comment in comments" :key="comment.id" class="comment-item">
-            <image :src="comment.avatar" class="comment-avatar" />
-            <view class="comment-content-wrapper">
-              <view class="comment-user-info">
-                <text class="comment-username">{{ comment.username }}</text>
-                <text class="comment-time">{{ comment.time }}</text>
-              </view>
-              <text class="comment-text">{{ comment.text }}</text>
-              <view class="comment-actions">
-                <view class="action-item" @click="handleCommentLike(comment.id)">
-                  <text class="icon">👍</text>
-                  <text class="count">{{ comment.likes }}</text>
-                </view>
-                <view class="action-item" @click="handleReply(comment.id)">
-                  <text class="icon">↩️</text>
-                  <text class="count">回复</text>
-                </view>
-              </view>
-            </view>
-          </view>
-          <view v-if="comments.length === 0" class="no-comments">暂无评论</view>
+        <view class="action-item" @click="handleComment">
+          <text class="icon comment-icon">💬</text>
+          <text class="count">{{ currentPost.comment }}</text>
+        </view>
+        <view class="action-item" @click="handleShare">
+          <text class="icon share-icon">🔗</text>
+          <text class="count">分享</text>
         </view>
       </view>
     </view>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted } from 'vue'
-  import { fetchPostDetail } from '@/api/community.js'
-  
-  // 当前帖子详情
-  const postId = ref(null)
-  const currentPost = ref(null)
-  
-  // 评论内容与列表
-  const commentContent = ref('')
-  const comments = ref([])
-  
-  // 点赞状态与数量
-  const isLikedState = ref(false)
-  const currentLikeCount = ref(0)
-  
+    <view v-else class="loading-text">加载中...</view>
+
+    <!-- 评论区 -->
+    <view class="comment-section">
+      <view class="comment-input-area">
+        <!-- 用当前用户头像 -->
+        <image :src="userInfo.avatar" class="comment-avatar" />
+        <textarea
+          v-model="commentContent"
+          placeholder="在这里写下你的想法..."
+          class="comment-textarea"
+          auto-height
+        />
+        <button @click="publishComment" class="comment-btn">评论</button>
+      </view>
+
+      <view class="comment-list-header">评论 ({{ comments.length }})</view>
+      <view class="comment-list">
+        <view v-for="comment in comments" :key="comment.id" class="comment-item">
+          <image :src="comment.avatar" class="comment-avatar" />
+          <view class="comment-content-wrapper">
+            <view class="comment-user-info">
+              <text class="comment-username">{{ comment.username }}</text>
+              <text class="comment-time">{{ comment.time }}</text>
+            </view>
+            <text class="comment-text">{{ comment.text }}</text>
+            <view class="comment-actions">
+              <view class="action-item" @click="handleCommentLike(comment.id)">
+                <text class="icon">👍</text>
+                <text class="count">{{ comment.likes }}</text>
+              </view>
+              <view class="action-item" @click="handleReply(comment.id)">
+                <text class="icon">↩️</text>
+                <text class="count">回复</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view v-if="comments.length === 0" class="no-comments">暂无评论</view>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { fetchPostDetail } from '@/api/community.js'
+
+// 当前用户信息（关键代码）
+const userInfo = ref({
+  avatar: '/static/avatar.png',
+  nickname: '当前用户'
+})
+
+// 当前帖子详情
+const postId = ref(null)
+const currentPost = ref(null)
+
+// 评论内容与列表
+const commentContent = ref('')
+const comments = ref([])
+
+// 点赞状态与数量
+const isLikedState = ref(false)
+const currentLikeCount = ref(0)
+
 onMounted(() => {
+  // 读取当前登录用户头像和昵称（关键代码）
+  const localUser = uni.getStorageSync('user')
+  if (localUser) {
+    if (localUser.avatar) userInfo.value.avatar = localUser.avatar
+    if (localUser.nickname) userInfo.value.nickname = localUser.nickname
+  }
+
   // 获取url参数
   const pages = getCurrentPages()
   const options = pages[pages.length - 1].options
@@ -131,65 +145,64 @@ onMounted(() => {
     currentPost.value = null
   })
 
+  // 你可以对接真实评论接口，这里留空
+  comments.value = [
+    // { id: 1, avatar: '/static/avatar.png', username: '评论用户1', time: '1天前', text: '评论内容', likes: 0 }
+  ]
+})
 
-  
-    // 可对接真实评论接口
-    comments.value = [
-      // 示例：{ id: 1, avatar: '/static/avatar.png', username: '评论用户1', time: '1天前', text: '评论内容', likes: 0 }
-    ]
+const handleLike = () => {
+  if (isLikedState.value) {
+    currentLikeCount.value--
+  } else {
+    currentLikeCount.value++
+  }
+  isLikedState.value = !isLikedState.value
+  uni.showToast({ title: isLikedState.value ? '点赞成功' : '取消点赞', icon: 'none' })
+}
+
+const handleComment = () => {
+  uni.pageScrollTo({
+    selector: '.comment-input-area',
+    duration: 300
   })
-  
-  const handleLike = () => {
-    if (isLikedState.value) {
-      currentLikeCount.value--
-    } else {
-      currentLikeCount.value++
+}
+
+const handleShare = () => {
+  uni.showToast({ title: '分享功能待完善', icon: 'none' })
+}
+
+// 发布评论时，使用当前用户头像和昵称（关键代码）
+const publishComment = () => {
+  if (commentContent.value.trim()) {
+    const newComment = {
+      id: Date.now(),
+      avatar: userInfo.value.avatar,
+      username: userInfo.value.nickname || '当前用户',
+      time: '刚刚',
+      text: commentContent.value.trim(),
+      likes: 0
     }
-    isLikedState.value = !isLikedState.value
-    uni.showToast({ title: isLikedState.value ? '点赞成功' : '取消点赞', icon: 'none' })
+    comments.value.unshift(newComment)
+    commentContent.value = ''
+    uni.showToast({ title: '评论成功', icon: 'success' })
+  } else {
+    uni.showToast({ title: '评论内容不能为空', icon: 'none' })
   }
-  
-  const handleComment = () => {
-    uni.pageScrollTo({
-      selector: '.comment-input-area',
-      duration: 300
-    })
+}
+
+const handleCommentLike = (commentId) => {
+  const comment = comments.value.find(c => c.id === commentId)
+  if (comment) {
+    comment.likes++
+    uni.showToast({ title: '点赞评论成功', icon: 'none' })
   }
-  
-  const handleShare = () => {
-    uni.showToast({ title: '分享功能待完善', icon: 'none' })
-  }
-  
-  const publishComment = () => {
-    if (commentContent.value.trim()) {
-      const newComment = {
-        id: Date.now(),
-        avatar: '/static/avatar.png',
-        username: '当前用户',
-        time: '刚刚',
-        text: commentContent.value.trim(),
-        likes: 0
-      }
-      comments.value.unshift(newComment)
-      commentContent.value = ''
-      uni.showToast({ title: '评论成功', icon: 'success' })
-    } else {
-      uni.showToast({ title: '评论内容不能为空', icon: 'none' })
-    }
-  }
-  
-  const handleCommentLike = (commentId) => {
-    const comment = comments.value.find(c => c.id === commentId)
-    if (comment) {
-      comment.likes++
-      uni.showToast({ title: '点赞评论成功', icon: 'none' })
-    }
-  }
-  
-  const handleReply = (commentId) => {
-    uni.showToast({ title: `回复评论${commentId}功能待完善`, icon: 'none' })
-  }
-  </script>
+}
+
+const handleReply = (commentId) => {
+  uni.showToast({ title: `回复评论${commentId}功能待完善`, icon: 'none' })
+}
+</script>
   
   <style scoped>
   .container {

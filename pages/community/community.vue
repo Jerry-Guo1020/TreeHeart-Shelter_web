@@ -3,17 +3,14 @@
     <!-- 顶部介绍卡片 -->
     <view class="info-card-wrap">
       <view class="info_card">
-        <view class="info_title">
-          <text>心灵社区</text>
-        </view>
+        <view class="info_title"><text>心灵社区</text></view>
         <view class="info_content">
           <text>🌱 分享你的心灵故事，与他人交流，共同成长。</text>
         </view>
         <view class="gradient-bar"></view>
       </view>
     </view>
-
-    <!-- 顶部导航栏 横滑 -->
+    <!-- Tab 栏 -->
     <scroll-view class="tabbar-scroll" scroll-x :show-scrollbar="false">
       <view class="tabbar">
         <view
@@ -24,11 +21,10 @@
         >{{ tab }}</view>
       </view>
     </scroll-view>
-
-    <!-- 动态内容区 -->
+    <!-- 内容区 -->
     <scroll-view scroll-y class="content-list">
       <view
-        v-for="(item) in posts"
+        v-for="item in posts"
         :key="item.id"
         class="post-card"
         @click="navigateToPostDetail(item.id)"
@@ -45,79 +41,62 @@
         </view>
         <view class="post-title" :title="item.title">{{ item.title }}</view>
         <view class="post-desc">{{ item.desc }}</view>
-        <PostActions
-          :post-id="item.id"
-          :like-count="item.like"
-          :comment-count="item.comment"
-          :collect-count="item.collect"
-          :is-liked="item.isLiked"
-          @like.stop="handlePostLike"
-          @comment.stop="handlePostComment"
-          @collect.stop="handlePostCollect"
-        />
       </view>
       <view v-if="posts.length === 0" class="empty-tip">
         <image src="/static/empty.svg" class="empty-img" />
         <text>暂时没有相关内容，快来发帖吧~</text>
       </view>
     </scroll-view>
-
-    <!-- 右下角悬浮按钮 -->
     <view class="fab" @click="onPublish">
       <text class="fab-icon">✏️</text>
     </view>
+    <BottomNavbar :current="0" />
   </view>
-  <BottomNavbar :current="0" />
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
-// import PostActions from '@/component/PostActions/PostActions.vue'
-import { fetchPostList } from '@/api/community.js'
+import { fetchPostList, fetchPostTypes } from '@/api/community.js'
 
-const tabs = [
-  '全部', '学业压力', '情绪情感', '人际交往', '职业规划', '生活适应', '其他类型'
-]
-// 类型和 tab 下标对应，typeId=1对应'学业压力'，以此类推
+// tab 名称与 typeId 绑定
+const tabs = ref(['全部'])
+const typeIds = ref([null]) // null为全部
 const currentTab = ref(0)
 const posts = ref([])
-const loading = ref(false)
 
-// tabIndex -> typeId (数据库typeId一般从1开始，tab下标0是全部)
+// 动态加载 type 名称和 id
+onMounted(async () => {
+  const res = await fetchPostTypes()
+  if (Array.isArray(res.rows)) {
+    // 保证和数据库 id 顺序一致
+    tabs.value = ['全部', ...res.rows.map(x => x.name)]
+    typeIds.value = [null, ...res.rows.map(x => x.id)]
+  }
+  loadPosts()
+})
+
 function getTypeId(tabIdx) {
-  return tabIdx === 0 ? null : tabIdx // tab下标1=typeId1
+  return typeIds.value[tabIdx]
 }
 
 async function loadPosts() {
-  loading.value = true
-  try {
-    const res = await fetchPostList({
-      limit: 5,
-      offset: 0,
-      typeId: getTypeId(currentTab.value)
-    });
-    // 数据一般在 res.rows
-    const data = Array.isArray(res.rows) ? res.rows : []
-    posts.value = data.map(item => ({
-      ...item,
-      avatar: item.avatar || '/static/avatar.png',
-      nickname: item.nickname || '匿名用户',
-      time: item.createTime ? (item.createTime + '').slice(0, 10) : '',
-      title: item.title,
-      desc: item.content,
-      type: item.typeName,
-      like: item.likeCount || 0,
-      comment: item.commentCount || 0,
-      collect: item.collectCount || 0,
-      isLiked: false,
-      images: item.imgUrl ? [item.imgUrl] : []
-    }))
-  } catch (e) {
-    uni.showToast({ title: '加载失败', icon: 'none' })
-    posts.value = []
-  }
-  loading.value = false
+  const typeId = getTypeId(currentTab.value)
+  const params = { limit: 10, offset: 0 }
+  if (typeId !== null) params.typeId = typeId
+  const res = await fetchPostList(params)
+  // 控制台打印 rows 验证
+  console.log('接口返回:', res)
+  const data = Array.isArray(res.rows) ? res.rows : []
+  posts.value = data.map(item => ({
+    ...item,
+    avatar: item.avatar || '/static/avatar.png',
+    nickname: item.nickname || '匿名用户',
+    time: item.createTime ? (item.createTime + '').slice(0, 10) : '',
+    title: item.title,
+    desc: item.content,
+    type: item.typeName,
+  }))
 }
 
 function switchTab(idx) {
@@ -127,31 +106,15 @@ function switchTab(idx) {
   }
 }
 function onPublish() {
-  uni.navigateTo({
-    url: '/pages/community/publish'
-  });
+  uni.navigateTo({ url: '/pages/community/publish' })
 }
 function navigateToPostDetail(postId) {
-  uni.navigateTo({
-    url: `/pages/community/postDetail?id=${postId}`
-  });
+  uni.navigateTo({ url: `/pages/community/postDetail?id=${postId}` })
 }
-function handlePostLike() {}
-function handlePostComment(postId) {
-  uni.navigateTo({
-    url: `/pages/community/postDetail?id=${postId}`
-  })
-}
-function handlePostCollect() {}
-
-// 监听tab切换自动加载数据
 watch(currentTab, () => loadPosts())
-
-onMounted(loadPosts)
 </script>
-
 <style scoped>
-/* 让背景从最顶端开始，无缝 */
+/* 你的CSS原样保留，略 */
 .container {
   min-height: 100vh;
   background: linear-gradient(180deg, #ffe3bb 0%, #fff7ec 100%);
@@ -161,19 +124,14 @@ onMounted(loadPosts)
   font-family: 'PingFang SC', 'HarmonyOS Sans', 'Helvetica Neue', Arial, sans-serif;
   padding-bottom: calc(127px + env(safe-area-inset-bottom, 35px));
 }
-
-/* 顶部卡片外层，配合最大宽度居中，避免漏边 */
 .info-card-wrap {
   width: 100vw;
   display: flex;
   justify-content: center;
   background: linear-gradient(180deg, #ffe3bb 70%, transparent 100%);
-  /* 让卡片和页面顶区颜色连贯，不露底 */
   padding-top: 0;
   margin-top: 0;
 }
-
-/* 顶部卡片更大气，占用宽度更大，最大 720rpx，手机两边留极小白边 */
 .info_card {
   background: #fff;
   border-radius: 32rpx;
@@ -215,8 +173,6 @@ onMounted(loadPosts)
   opacity: .17;
   pointer-events: none;
 }
-
-/* Tabbar 优化 */
 .tabbar-scroll {
   width: 100vw;
   position: sticky;
@@ -254,8 +210,6 @@ onMounted(loadPosts)
   box-shadow: 0 2rpx 18rpx rgba(255,130,71,0.13);
   transform: scale(1.07);
 }
-
-/* 内容区优化 */
 .content-list {
   min-height: 68vh;
   width: 100vw;
@@ -264,8 +218,6 @@ onMounted(loadPosts)
   display: flex;
   flex-direction: column;
 }
-
-/* 空内容提示垂直居中美化 */
 .empty-tip {
   flex: 1;
   display: flex;
@@ -285,8 +237,6 @@ onMounted(loadPosts)
   margin-bottom: 22rpx;
   filter: grayscale(.12);
 }
-
-/* 卡片优化 */
 .post-card {
   background: #fff;
   border-radius: 24rpx;
@@ -304,10 +254,6 @@ onMounted(loadPosts)
 .post-card:active {
   box-shadow: 0 8rpx 22rpx rgba(255,130,71,0.14);
 }
-
-/* 其他内容同上...（略） */
-
-/* 用户区优化 */
 .post-header {
   display: flex;
   align-items: center;
@@ -380,8 +326,6 @@ onMounted(loadPosts)
   word-break: break-all;
   opacity: .96;
 }
-
-/* 悬浮发布按钮优化 */
 .fab {
   position: fixed;
   right: 44rpx;

@@ -148,6 +148,13 @@
 			"style": {
 				"navigationBarTitleText": "心理测评历史记录"
 			}
+		},
+		{
+			"path" : "pages/activity/activity",
+			"style" : 
+			{
+				"navigationBarTitleText" : "活动页面"
+			}
 		}
 	],
 	"globalStyle": {

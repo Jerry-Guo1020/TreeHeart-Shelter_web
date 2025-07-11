@@ -8,7 +8,7 @@
       <image :src="iconOrder" class="nav-icon" />
       <text>动态</text>
     </view>
-    <view class="nav-center-btn">
+    <view class="nav-center-btn" @click="switchTab(4)">
       <image src="http://43.142.21.211:3000/static/logo.png" class="center-icon" />
     </view>
     <view class="nav-btn" @click="switchTab(2)">
@@ -38,6 +38,8 @@ function switchTab(idx) {
     uni.redirectTo({ url: '/pages/test/test' })
   } else if (idx === 3) {
     uni.redirectTo({ url: '/pages/personal/personal' })
+  } else if (idx === 4) {
+    uni.redirectTo({ url: '/pages/activity/activity' })
   }
 }
 </script>

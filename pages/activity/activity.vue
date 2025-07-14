@@ -148,11 +148,24 @@
 	}
 
 	function onSignup(item) {
-		uni.showToast({
-			title: '报名成功',
-			icon: 'success'
+		uni.showModal({
+		  title: '确认报名',
+		  content: `确定要报名参加「${item.title}」吗？`,
+		  confirmText: '确认报名',
+		  cancelText: '再想想',
+		  success: (res) => {
+		    if (res.confirm) {
+		      uni.showToast({
+		        title: '报名成功',
+		        icon: 'success'
+		      })
+		    }
+		  }
 		})
 	}
+	
+	
+	
 </script>
 
 <style scoped>
@@ -218,7 +231,7 @@
 		width: 96vw;
 		margin: 0 auto 12rpx auto;
 		display: grid;
-		grid-template-columns: repeat(5, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		gap: 12rpx 0;
 		background: none;
 	}

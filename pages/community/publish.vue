@@ -93,7 +93,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { publishPost, fetchPostTypes } from '@/api/community.js'
+import { publishPost, fetchPostTypes, uploadPostImage } from '@/api/community.js'
 import { getCurrentUser } from '@/api/user.js'
 import { base_url } from '@/api/config.js'
 
@@ -137,30 +137,42 @@ onMounted(async () => {
 })
 
 const chooseImage = () => {
+  const openid = uni.getStorageSync('openid') // 你的 openid
   uni.chooseImage({
     count: 9 - images.value.length,
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
     success: (res) => {
-      res.tempFilePaths.forEach(filePath => {
+      res.tempFilePaths.forEach((filePath) => {
         uni.uploadFile({
-          url: `${base_url}/upload/image`, // 路径按你实际API
+          url: `https://open.apisql.cn/api/tree_api/postimg`, // apisql 配的上传图片接口
           filePath,
-          name: 'file',
+          name: 'file', // apisql 里写的 file 字段，必须是 file
+          formData: {
+            browser: 'miniprogram',   // 你要存数据库的其它字段
+            status: 'uploaded'
+          },
+          header: {
+            Authorization: openid     // 直接 header 里带 openid
+          },
           success: (uploadRes) => {
+            let data = {};
             try {
-              const data = JSON.parse(uploadRes.data)
-              if (data.code === 200) {
-                images.value.push({ url: data.data.url, imgId: data.data.imgId })
-              } else {
-                uni.showToast({ title: '上传失败', icon: 'none' })
-              }
+              data = JSON.parse(uploadRes.data)
             } catch (e) {
-              console.error('图片上传响应格式错误:', uploadRes.data)
-              uni.showToast({ title: '上传失败 (响应格式错误)', icon: 'none' })
+              uni.showToast({ title: '上传响应格式错误', icon: 'none' })
+              return
+            }
+            if (data.code === 200 || data.code === 0) {
+              images.value.push({
+                url: data.data.url || data.data.uri, // 你 SQL 返回的图片链接字段
+                imgId: data.data.imgId || data.data.id
+              })
+            } else {
+              uni.showToast({ title: data.message || '上传失败', icon: 'none' })
             }
           },
-          fail: (err) => {
+          fail: () => {
             uni.showToast({ title: '上传失败', icon: 'none' })
           }
         })
@@ -168,6 +180,7 @@ const chooseImage = () => {
     }
   })
 }
+
 
 const deleteImage = (index) => {
   images.value.splice(index, 1)

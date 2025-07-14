@@ -83,7 +83,7 @@ const handleWeChatLogin = async () => {
 	  uni.redirectTo({
 	    url: '/pages/home/home',
 	  });
-	}); // 等动画结束后跳转
+	},2500); // 等动画结束后跳转
 }
 const features = [
   {

@@ -24,7 +24,7 @@
     <!-- 内容区 -->
     <scroll-view scroll-y class="content-list">
       <view
-        v-for="item in posts"
+        v-for="item in displayedPosts"
         :key="item.id"
         class="post-card"
         @click="navigateToPostDetail(item.id)"
@@ -42,9 +42,23 @@
         <view class="post-title" :title="item.title">{{ item.title }}</view>
         <view class="post-desc">{{ item.desc }}</view>
       </view>
-      <view v-if="posts.length === 0" class="empty-tip">
+      <view v-if="displayedPosts.length === 0" class="empty-tip">
         <image src="/static/empty.svg" class="empty-img" />
         <text>暂时没有相关内容，快来发帖吧~</text>
+      </view>
+      <!-- 加载更多按钮/提示 -->
+      <view v-if="hasMore && displayedPosts.length" class="load-more-wrap">
+        <button
+          class="load-more-btn"
+          :disabled="loading"
+          @click.stop="loadMore"
+        >
+          <span v-if="loading" class="loading-icon"></span>
+          <span>{{ loading ? '加载中...' : '查看更多' }}</span>
+        </button>
+      </view>
+      <view v-if="!hasMore && displayedPosts.length" class="no-more-tip">
+        <text>没有更多内容啦~</text>
       </view>
     </scroll-view>
     <view class="fab" @click="onPublish">
@@ -61,32 +75,56 @@ import { fetchPostList, fetchPostTypes } from '@/api/community.js'
 
 // tab 名称与 typeId 绑定
 const tabs = ref(['全部'])
-const typeIds = ref([null]) // null为全部
+const typeIds = ref([null])
 const currentTab = ref(0)
-const posts = ref([])
 
-// 动态加载 type 名称和 id
+const posts = ref([])             // 已加载的全部数据
+const displayedPosts = ref([])    // 分页展示的
+const limit = ref(5)              // 每页条数
+const offset = ref(0)             // 当前已加载总数
+const hasMore = ref(true)         // 是否还有更多
+const loading = ref(false)
+
+// 加载类型和首屏数据
 onMounted(async () => {
   const res = await fetchPostTypes()
   if (Array.isArray(res.rows)) {
-    // 保证和数据库 id 顺序一致
     tabs.value = ['全部', ...res.rows.map(x => x.name)]
     typeIds.value = [null, ...res.rows.map(x => x.id)]
   }
-  loadPosts()
+  await reloadPosts()
 })
 
 function getTypeId(tabIdx) {
   return typeIds.value[tabIdx]
 }
 
+// 切换Tab时重置
+async function switchTab(idx) {
+  if (currentTab.value !== idx) {
+    currentTab.value = idx
+    await reloadPosts()
+  }
+}
+
+// 首次/切换Tab时重载全部posts并分页
+async function reloadPosts() {
+  posts.value = []
+  displayedPosts.value = []
+  offset.value = 0
+  hasMore.value = true
+  loading.value = false
+  // 实际拉取后端的全部posts，按需可改成真正的分页加载
+  await loadPosts()
+}
+
+// 实际获取全部posts，更新posts和首屏分页
 async function loadPosts() {
+  loading.value = true
   const typeId = getTypeId(currentTab.value)
-  const params = { limit: 10, offset: 0 }
+  const params = { limit: 1000, offset: 0 }
   if (typeId !== null) params.typeId = typeId
   const res = await fetchPostList(params)
-  // 控制台打印 rows 验证
-  console.log('接口返回:', res)
   const data = Array.isArray(res.rows) ? res.rows : []
   posts.value = data.map(item => ({
     ...item,
@@ -97,24 +135,38 @@ async function loadPosts() {
     desc: item.content,
     type: item.typeName,
   }))
+  displayedPosts.value = posts.value.slice(0, limit.value)
+  offset.value = displayedPosts.value.length
+  hasMore.value = posts.value.length > offset.value
+  loading.value = false
 }
 
-function switchTab(idx) {
-  if (currentTab.value !== idx) {
-    currentTab.value = idx
-    loadPosts()
-  }
+// 点击查看更多
+function loadMore() {
+  if (loading.value || !hasMore.value) return
+  loading.value = true
+  // 模拟异步（如需后端分页，请自行调整此部分）
+  setTimeout(() => {
+    const nextPosts = posts.value.slice(offset.value, offset.value + limit.value)
+    displayedPosts.value.push(...nextPosts)
+    offset.value += nextPosts.length
+    hasMore.value = posts.value.length > offset.value
+    loading.value = false
+  }, 500) // 有后端加载时可去掉或改成真实请求
 }
+
 function onPublish() {
   uni.navigateTo({ url: '/pages/community/publish' })
 }
 function navigateToPostDetail(postId) {
   uni.navigateTo({ url: `/pages/community/postDetail?id=${postId}` })
 }
-watch(currentTab, () => loadPosts())
+
+watch(currentTab, () => reloadPosts())
 </script>
+
 <style scoped>
-/* 你的CSS原样保留，略 */
+/* 页面整体和原有样式保留 */
 .container {
   min-height: 100vh;
   background: linear-gradient(180deg, #ffe3bb 0%, #fff7ec 100%);
@@ -355,5 +407,75 @@ watch(currentTab, () => loadPosts())
 @keyframes fabGlow {
   0% { box-shadow: 0 8rpx 32rpx #ffd19455; }
   100% { box-shadow: 0 16rpx 38rpx #ff824799; }
+}
+
+/* 加载更多按钮+loading动画 */
+.load-more-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 32rpx 0 18rpx 0;
+  width: 100vw;
+}
+
+.load-more-btn {
+  background: linear-gradient(90deg, #ffbe76 10%, #ff8247 100%);
+  color: #fff;
+  font-size: 29rpx;
+  font-weight: 700;
+  padding: 16rpx 70rpx;
+  border-radius: 999rpx;
+  border: none;
+  box-shadow: 0 4rpx 18rpx rgba(255,130,71,0.13), 0 1rpx 0 rgba(255,184,106,0.08);
+  cursor: pointer;
+  transition: all .18s cubic-bezier(.4,0,.2,1);
+  outline: none;
+  letter-spacing: 1.2rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18rpx;
+  opacity: 1;
+}
+.load-more-btn:active {
+  background: linear-gradient(90deg, #ffb36a 10%, #ff945a 90%);
+  box-shadow: 0 6rpx 22rpx rgba(255,130,71,0.19);
+  transform: scale(.97);
+}
+.load-more-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* loading icon：转圈动画 */
+.loading-icon {
+  display: inline-block;
+  width: 34rpx;
+  height: 34rpx;
+  border-radius: 50%;
+  border: 4rpx solid #fff;
+  border-top: 4rpx solid #ff8247;
+  animation: spin 1s linear infinite;
+  margin-right: 8rpx;
+  box-sizing: border-box;
+  vertical-align: middle;
+}
+@keyframes spin {
+  0% { transform: rotate(0); }
+  100% { transform: rotate(360deg); }
+}
+
+.no-more-tip {
+  width: 100vw;
+  text-align: center;
+  color: #c7a977;
+  font-size: 27rpx;
+  margin: 20rpx 0 15rpx 0;
+  opacity: .82;
+  letter-spacing: 1.5rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
 }
 </style>

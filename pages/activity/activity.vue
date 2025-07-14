@@ -2,28 +2,37 @@
 	<view class="activity-page-bg">
 		<!-- 搜索栏 -->
 		<view class="header-search-wrap">
-			<view class="header-search-bar">
-				<text class="iconfont">&#xe651;</text>
-				<input class="search-input" v-model="searchVal" placeholder="搜索心理活动/俱乐部/关键字" @input="onSearch" />
-				<text class="iconfont scan-icon">&#xe614;</text>
-			</view>
+		  <view class="header-search-bar">
+		    <img
+			  src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXRleHQtaWNvbiBsdWNpZGUtdGV4dCI+PHBhdGggZD0iTTE1IDE4SDMiLz48cGF0aCBkPSJNMTcgNkgzIi8+PHBhdGggZD0iTTIxIDEySDMiLz48L3N2Zz4="
+		      class="icon-svg"
+		      style="width: 24px; height: 24px;"
+		    />
+		    <input class="search-input" v-model="searchVal" placeholder="搜索心理活动/俱乐部/关键字" @input="onSearch" />
+		    <img
+		      src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXNlYXJjaC1pY29uIGx1Y2lkZS1zZWFyY2giPjxwYXRoIGQ9Im0yMSAyMS00LjM0LTQuMzQiLz48Y2lyY2xlIGN4PSIxMSIgY3k9IjExIiByPSI4Ii8+PC9zdmc+"
+		      class="icon-svg scan-icon"
+		      style="width: 24px; height: 24px;"
+		    />
+		  </view>
 		</view>
 
-		<!-- 九宫格活动类型选择 -->
-		<view class="type-grid">
-			<view v-for="(type, idx) in activityTypes" :key="type.name" class="type-grid-item"
-				:class="{ active: typeIdx === idx }" @tap="onTypeSelect(idx)">
-				<image :src="type.icon" class="type-icon" />
-				<text class="type-label">{{ type.name }}</text>
-			</view>
-		</view>
 
-		<!-- 大轮播图 -->
+		<!-- 轮播图 -->
 		<swiper class="banner-swiper" :indicator-dots="true" :autoplay="true" interval="2800" circular>
 			<swiper-item v-for="(img, idx) in banners" :key="idx">
 				<image :src="img" class="banner-img" mode="aspectFill" />
 			</swiper-item>
 		</swiper>
+
+		<!-- 九宫格类型（icon用image） -->
+		<view class="type-grid">
+			<view v-for="(type, idx) in activityTypes" :key="type.name" class="type-grid-item"
+				:class="{ active: typeIdx === idx }" @tap="onTypeSelect(idx)">
+				<image class="type-icon" :src="type.icon" mode="aspectFit" />
+				<text class="type-label">{{ type.name }}</text>
+			</view>
+		</view>
 
 		<!-- 活动列表 -->
 		<view class="activity-list">
@@ -71,224 +80,53 @@
 		ref,
 		computed
 	} from 'vue'
+	import {
+		activities
+	} from '@/data/activities.js'
 
-	// 1. 九宫格活动类型
-	const activityTypes = [{
-			name: "全部",
-			icon: "https://cdn.jsdelivr.net/gh/jerry-guo-static/assets/type0.png"
-		},
+	// 用图片加载SVG，全部橙色
+	const activityTypes = [
 		{
-			name: "团体辅导",
-			icon: "https://cdn.jsdelivr.net/gh/jerry-guo-static/assets/type1.png"
+				name: "热门活动",
+				icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWZsYW1lLWljb24gbHVjaWRlLWZsYW1lIj48cGF0aCBkPSJNOC41IDE0LjVBMi41IDIuNSAwIDAgMCAxMSAxMmMwLTEuMzgtLjUtMi0xLTMtMS4wNzItMi4xNDMtLjIyNC00LjA1NCAyLTYgLjUgMi41IDIgNC45IDQgNi41IDIgMS42IDMgMy41IDMgNS41YTcgNyAwIDEgMS0xNCAwYzAtMS4xNTMuNDMzLTIuMjk0IDEtM2EyLjUgMi41IDAgMCAwIDIuNSAyLjV6Ii8+PC9zdmc+"
+			},
+		{
+			name: "全部",
+			icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXJlY2VpcHQtdGV4dC1pY29uIGx1Y2lkZS1yZWNlaXB0LXRleHQiPjxwYXRoIGQ9Ik00IDJ2MjBsMi0xIDIgMSAyLTEgMiAxIDItMSAyIDEgMi0xIDIgMVYybC0yIDEtMi0xLTIgMS0yLTEtMiAxLTItMS0yIDFaIi8+PHBhdGggZD0iTTE0IDhIOCIvPjxwYXRoIGQ9Ik0xNiAxMkg4Ii8+PHBhdGggZD0iTTEzIDE2SDgiLz48L3N2Zz4="
 		},
 		{
 			name: "心理讲座",
-			icon: "https://cdn.jsdelivr.net/gh/jerry-guo-static/assets/type2.png"
-		},
-		{
-			name: "心理游戏",
-			icon: "https://cdn.jsdelivr.net/gh/jerry-guo-static/assets/type3.png"
+			icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXByZXNlbnRhdGlvbi1pY29uIGx1Y2lkZS1wcmVzZW50YXRpb24iPjxwYXRoIGQ9Ik0yIDNoMjAiLz48cGF0aCBkPSJNMjEgM3YxMWEyIDIgMCAwIDEtMiAySDVhMiAyIDAgMCAxLTItMlYzIi8+PHBhdGggZD0ibTcgMjEgNS01IDUgNSIvPjwvc3ZnPg=="
 		},
 		{
 			name: "户外体验",
-			icon: "https://cdn.jsdelivr.net/gh/jerry-guo-static/assets/type4.png"
-		},
-		{
-			name: "成长训练",
-			icon: "https://cdn.jsdelivr.net/gh/jerry-guo-static/assets/type5.png"
+			icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXRlbnQtdHJlZS1pY29uIGx1Y2lkZS10ZW50LXRyZWUiPjxjaXJjbGUgY3g9IjQiIGN5PSI0IiByPSIyIi8+PHBhdGggZD0ibTE0IDUgMy0zIDMgMyIvPjxwYXRoIGQ9Im0xNCAxMCAzLTMgMyAzIi8+PHBhdGggZD0iTTE3IDE0VjIiLz48cGF0aCBkPSJNMTcgMTRIN2wtNSA4aDIwWiIvPjxwYXRoIGQ9Ik04IDE0djgiLz48cGF0aCBkPSJtOSAxNCA1IDgiLz48L3N2Zz4="
 		},
 		{
 			name: "情绪减压",
-			icon: "https://cdn.jsdelivr.net/gh/jerry-guo-static/assets/type6.png"
+			icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWJhYnktaWNvbiBsdWNpZGUtYmFieSI+PHBhdGggZD0iTTEwIDE2Yy41LjMgMS4yLjUgMiAuNXMxLjUtLjIgMi0uNSIvPjxwYXRoIGQ9Ik0xNSAxMmguMDEiLz48cGF0aCBkPSJNMTkuMzggNi44MTNBOSA5IDAgMCAxIDIwLjggMTAuMmEyIDIgMCAwIDEgMCAzLjYgOSA5IDAgMCAxLTE3LjYgMCAyIDIgMCAwIDEgMC0zLjZBOSA5IDAgMCAxIDEyIDNjMiAwIDMuNSAxLjEgMy41IDIuNXMtLjkgMi41LTIgMi41Yy0uOCAwLTEuNS0uNC0xLjUtMSIvPjxwYXRoIGQ9Ik05IDEyaC4wMSIvPjwvc3ZnPg=="
 		},
 		{
 			name: "艺术疗愈",
-			icon: "https://cdn.jsdelivr.net/gh/jerry-guo-static/assets/type7.png"
-		},
-		{
-			name: "亲子活动",
-			icon: "https://cdn.jsdelivr.net/gh/jerry-guo-static/assets/type8.png"
+			icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLXBhbGV0dGUtaWNvbiBsdWNpZGUtcGFsZXR0ZSI+PHBhdGggZD0iTTEyIDIyYTEgMSAwIDAgMSAwLTIwIDEwIDkgMCAwIDEgMTAgOSA1IDUgMCAwIDEtNSA1aC0yLjI1YTEuNzUgMS43NSAwIDAgMC0xLjQgMi44bC4zLjRhMS43NSAxLjc1IDAgMCAxLTEuNCAyLjh6Ii8+PGNpcmNsZSBjeD0iMTMuNSIgY3k9IjYuNSIgcj0iLjUiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjxjaXJjbGUgY3g9IjE3LjUiIGN5PSIxMC41IiByPSIuNSIgZmlsbD0iY3VycmVudENvbG9yIi8+PGNpcmNsZSBjeD0iNi41IiBjeT0iMTIuNSIgcj0iLjUiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjxjaXJjbGUgY3g9IjguNSIgY3k9IjcuNSIgcj0iLjUiIGZpbGw9ImN1cnJlbnRDb2xvciIvPjwvc3ZnPg=="
 		},
 		{
 			name: "志愿服务",
-			icon: "https://cdn.jsdelivr.net/gh/jerry-guo-static/assets/type9.png"
-		},
+			icon: "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9ImN1cnJlbnRDb2xvciIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGNsYXNzPSJsdWNpZGUgbHVjaWRlLWhhbmQtaGVhcnQtaWNvbiBsdWNpZGUtaGFuZC1oZWFydCI+PHBhdGggZD0iTTExIDE0aDJhMiAyIDAgMSAwIDAtNGgtM2MtLjYgMC0xLjEuMi0xLjQuNkwzIDE2Ii8+PHBhdGggZD0ibTcgMjAgMS42LTEuNGMuMy0uNC44LS42IDEuNC0uNmg0YzEuMSAwIDIuMS0uNCAyLjgtMS4ybDQuNi00LjRhMiAyIDAgMCAwLTIuNzUtMi45MWwtNC4yIDMuOSIvPjxwYXRoIGQ9Im0yIDE1IDYgNiIvPjxwYXRoIGQ9Ik0xOS41IDguNWMuNy0uNyAxLjUtMS42IDEuNS0yLjdBMi43MyAyLjczIDAgMCAwIDE2IDRhMi43OCAyLjc4IDAgMCAwLTUgMS44YzAgMS4yLjggMiAxLjUgMi44TDE2IDEyWiIvPjwvc3ZnPg=="
+		}
 	]
-	const typeIdx = ref(0) // 默认选中“全部”
 
-	const searchVal = ref('');
+	const typeIdx = ref(0)
+
+	const searchVal = ref('')
 	const activeId = ref(null)
 
-	// 2. 轮播banner
 	const banners = [
-		'http://43.142.21.211:3000/static/banner-psy.png', 
-		'http://43.142.21.211:3000/static/banner-psy.png',
-		'http://43.142.21.211:3000/static/banner-psy.png',
-		'http://43.142.21.211:3000/static/activity-2.jpg'
+		"https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80",
+		"https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
+		"https://picsum.photos/seed/banner1/600/260",
+		"https://picsum.photos/seed/banner2/600/260"
 	]
-
-	// 3. 十个活动数据，覆盖所有类型
-	const activities = ref([{
-			id: 1,
-			tag: '进行中',
-			tagColor: '#FFA940',
-			cover: 'http://43.142.21.211:3000/static/activity-1.jpg',
-			title: '团体成长辅导营',
-			subTitle: '团队共成长',
-			time: '07.10 09:00-11:30',
-			place: '心理中心A区',
-			clubAvatar: '/static/club1.png',
-			clubName: '成长俱乐部',
-			audience: '18岁+',
-			avatars: ['/static/avatar1.png', '/static/avatar2.png'],
-			joined: '18/30',
-			type: '团体辅导'
-		},
-		{
-			id: 2,
-			tag: '优选推荐',
-			tagColor: '#FFD77B',
-			cover: 'http://43.142.21.211:3000/static/activity-2.jpg',
-			title: '自信心提升讲座',
-			subTitle: '激发自信表达',
-			time: '07.15 14:00-15:30',
-			place: '报告厅',
-			clubAvatar: '/static/club2.png',
-			clubName: '阳光心理团',
-			audience: '不限',
-			avatars: ['/static/avatar3.png'],
-			joined: '12/40',
-			type: '心理讲座'
-		},
-		{
-			id: 3,
-			tag: '火热招募',
-			tagColor: '#FF7C6A',
-			cover: 'http://43.142.21.211:3000/static/activity-3.jpg',
-			title: '心理剧互动游戏',
-			subTitle: '解锁趣味角色',
-			time: '07.20 15:00-17:00',
-			place: '活动室B',
-			clubAvatar: '/static/club3.png',
-			clubName: '温暖之家',
-			audience: '女生优先',
-			avatars: ['/static/avatar2.png'],
-			joined: '19/30',
-			type: '心理游戏'
-		},
-		{
-			id: 4,
-			tag: '优选推荐',
-			tagColor: '#FFD77B',
-			cover: 'http://43.142.21.211:3000/static/activity-2.jpg',
-			title: '户外心理拓展',
-			subTitle: '自然疗愈体验',
-			time: '07.25 09:30-17:00',
-			place: '森林公园',
-			clubAvatar: '/static/club1.png',
-			clubName: '成长俱乐部',
-			audience: '不限年龄',
-			avatars: ['/static/avatar1.png'],
-			joined: '30/40',
-			type: '户外体验'
-		},
-		{
-			id: 5,
-			tag: '火热招募',
-			tagColor: '#FF7C6A',
-			cover: 'http://43.142.21.211:3000/static/activity-1.jpg',
-			title: '积极心理成长训练',
-			subTitle: '自我探索',
-			time: '07.22 10:00-12:00',
-			place: '成长坊202',
-			clubAvatar: '/static/club2.png',
-			clubName: '阳光心理团',
-			audience: '限新生',
-			avatars: ['/static/avatar4.png'],
-			joined: '15/20',
-			type: '成长训练'
-		},
-		{
-			id: 6,
-			tag: '进行中',
-			tagColor: '#FFA940',
-			cover: 'http://43.142.21.211:3000/static/activity-3.jpg',
-			title: '情绪减压团体',
-			subTitle: '一起释放压力',
-			time: '07.30 19:00-21:00',
-			place: '心理中心B区',
-			clubAvatar: '/static/club1.png',
-			clubName: '成长俱乐部',
-			audience: '18岁+',
-			avatars: ['/static/avatar3.png'],
-			joined: '10/24',
-			type: '情绪减压'
-		},
-		{
-			id: 7,
-			tag: '优选推荐',
-			tagColor: '#FFD77B',
-			cover: 'http://43.142.21.211:3000/static/activity-2.jpg',
-			title: '绘画艺术疗愈',
-			subTitle: '艺术助力心灵',
-			time: '08.02 15:30-17:30',
-			place: '艺术教室',
-			clubAvatar: '/static/club2.png',
-			clubName: '阳光心理团',
-			audience: '不限',
-			avatars: ['/static/avatar2.png'],
-			joined: '22/30',
-			type: '艺术疗愈'
-		},
-		{
-			id: 8,
-			tag: '进行中',
-			tagColor: '#FFA940',
-			cover: 'http://43.142.21.211:3000/static/activity-1.jpg',
-			title: '亲子心理互动营',
-			subTitle: '亲子共成长',
-			time: '08.10 09:00-12:00',
-			place: '多功能厅',
-			clubAvatar: '/static/club3.png',
-			clubName: '温暖之家',
-			audience: '家长&孩子',
-			avatars: ['/static/avatar5.png'],
-			joined: '25/35',
-			type: '亲子活动'
-		},
-		{
-			id: 9,
-			tag: '火热招募',
-			tagColor: '#FF7C6A',
-			cover: 'http://43.142.21.211:3000/static/activity-3.jpg',
-			title: '人际沟通训练营',
-			subTitle: '提升沟通力',
-			time: '08.15 10:00-12:00',
-			place: '心理中心A区',
-			clubAvatar: '/static/club1.png',
-			clubName: '成长俱乐部',
-			audience: '18岁+',
-			avatars: ['/static/avatar1.png'],
-			joined: '16/28',
-			type: '人际社交'
-		},
-		{
-			id: 10,
-			tag: '优选推荐',
-			tagColor: '#FFD77B',
-			cover: 'http://43.142.21.211:3000/static/activity-2.jpg',
-			title: '志愿者心理服务',
-			subTitle: '助人亦自助',
-			time: '08.20 13:30-16:00',
-			place: '服务中心',
-			clubAvatar: '/static/club2.png',
-			clubName: '阳光心理团',
-			audience: '志愿者',
-			avatars: ['/static/avatar3.png'],
-			joined: '12/25',
-			type: '志愿服务'
-		},
-	])
 
 	function onSearch() {}
 
@@ -296,9 +134,11 @@
 		typeIdx.value = idx
 	}
 	const filteredActivities = computed(() => {
-		if (typeIdx.value === 0) return activities.value // 全部
-		const typeName = activityTypes[typeIdx.value].name
-		return activities.value.filter(a => a.type === typeName)
+		let acts = activities
+		if (typeIdx.value !== 0) acts = acts.filter(a => a.type === activityTypes[typeIdx.value].name)
+		if (searchVal.value) acts = acts.filter(a => a.title.includes(searchVal.value) || a.subTitle.includes(
+			searchVal.value))
+		return acts
 	})
 
 	function goDetail(item) {
@@ -343,6 +183,15 @@
 		font-size: 29rpx;
 	}
 
+	.type-icon {
+		width: 48rpx;
+		height: 48rpx;
+		margin-bottom: 4rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
 	.iconfont {
 		font-family: "iconfont";
 		color: #bbb;
@@ -379,7 +228,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		padding: 8rpx 0;
+		padding: 12rpx 0;
 		border-radius: 16rpx;
 		transition: background 0.15s;
 	}

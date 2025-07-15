@@ -75,16 +75,27 @@ const handleWeChatLogin = async () => {
 		}
 	}
 
+	uni.showLoading({
+	  title: '登录中...'
+	})
+	
 	setTimeout(() => {
-		uni.showToast({
-		    title: '微信登录成功',
-		    icon: 'success'
-		  })
-	  uni.redirectTo({
-	    url: '/pages/home/home',
-	  });
-	},2500); // 等动画结束后跳转
+		uni.hideLoading();
+	
+	
+	uni.showToast({
+		title:"登录成功！",
+		icon:'success'
+	})
+	
+	setTimeout(() => {
+	    uni.redirectTo({
+	      url: '/pages/home/home',
+	    });
+	  }, 800);
+	}, 2500);
 }
+	
 const features = [
   {
     title: '心情树洞',
@@ -110,8 +121,7 @@ const features = [
     icon: `${BASE_URL}/static/fun_4.png`,
     color: '#41D3A3'
   }
-]
-
+];
 
 </script>
 

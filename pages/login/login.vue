@@ -89,11 +89,11 @@ const handleWeChatLogin = async () => {
 	})
 	
 	setTimeout(() => {
-	    uni.redirectTo({
+	    uni.reLaunch({
 	      url: '/pages/home/home',
 	    });
 	  }, 800);
-	}, 2500);
+	}, 1500);
 }
 	
 const features = [

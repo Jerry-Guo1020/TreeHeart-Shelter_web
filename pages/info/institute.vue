@@ -26,32 +26,32 @@
 
 <script setup>
 import { ref } from 'vue';
-import { onShow } from '@dcloudio/uni-app';
 import { BASE_URL } from '@/api/config.js';
+import { onShow } from '@dcloudio/uni-app';
 import { updateUserInfo } from '@/api/user.js';
-
 const subCollege = ref(''); // 对应 userInfo.subCollege
 
 onShow(() => {
-  const storedUser = uni.getStorageSync('user');
+const storedUser = uni.getStorageSync('user');
+
   if (storedUser && storedUser.subCollege) {
     subCollege.value = storedUser.subCollege;
   }
 });
-
 const goNext = async () => {
-  if (!subCollege.value) {
+if (!subCollege.value) {
+    
     uni.showToast({ title: '请填写所在学院', icon: 'none' });
     return;
   }	
-
   try {
-    uni.showLoading({ title: '保存中...' });
+  uni.showLoading({ title: '保存中...' });
+
     await updateUserInfo('subcollege', subCollege.value);
     uni.hideLoading();
-
     // 记得本地缓存同步
-        let user = uni.getStorageSync('user') || {};
+    let user = uni.getStorageSync('user') || {};
+
         user.subCollege = subCollege.value;
         uni.setStorageSync('user', user);
     	 uni.showToast({ title: '学院资料更新成功', icon: 'success' });
@@ -64,9 +64,9 @@ const goNext = async () => {
       }
     };
 </script>
-
 <style scoped>
 .container {
+
   height: 100vh;
   background: linear-gradient(180deg, #FFD9A0 0%, #FFF6ED 100%);
   display: flex;

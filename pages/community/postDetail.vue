@@ -32,7 +32,8 @@
         </view>
         <view class="action-item" @click="handleComment">
           <text class="icon comment-icon">💬</text>
-          <text class="count">{{ currentPost.comment }}</text>
+          <!-- <text class="count">{{ currentPost.comment }}</text> -->
+          <text class="count">{{comments.length }}</text>
         </view>
         <view class="action-item" @click="handleShare">
           <text class="icon share-icon">🔗</text>

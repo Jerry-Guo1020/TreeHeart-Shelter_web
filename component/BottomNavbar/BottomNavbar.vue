@@ -39,7 +39,7 @@ function switchTab(idx) {
   } else if (idx === 3) {
     uni.redirectTo({ url: '/pages/personal/personal' })
   } else if (idx === 4) {
-    uni.redirectTo({ url: '/pages/activity/activity' })
+    uni.navigateTo({ url: '/pages/activity/activity' })
   }
 }
 </script>

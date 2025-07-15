@@ -69,9 +69,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, watch } from 'vue'
 import BottomNavbar from '@/component/BottomNavbar/BottomNavbar.vue'
 import { fetchPostList, fetchPostTypes } from '@/api/community.js'
+import { onShow } from '@dcloudio/uni-app'; 
 
 // tab 名称与 typeId 绑定
 const tabs = ref(['全部'])
@@ -86,7 +87,7 @@ const hasMore = ref(true)         // 是否还有更多
 const loading = ref(false)
 
 // 加载类型和首屏数据
-onMounted(async () => {
+onShow(async () => {
   const res = await fetchPostTypes()
   if (Array.isArray(res.rows)) {
     tabs.value = ['全部', ...res.rows.map(x => x.name)]

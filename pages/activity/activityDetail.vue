@@ -97,9 +97,19 @@ const comments = ref([])
 
 // 4. 立即报名
 function onSignup(activity) {
-  uni.showToast({
-    title: '报名成功',
-    icon: 'success'
+  uni.showModal({
+    title: '确认报名',
+    content: `确定要报名参加「${activity.title}」吗？`,
+    confirmText: '确认报名',
+    cancelText: '再想想',
+    success: (res) => {
+      if (res.confirm) {
+        uni.showToast({
+          title: '报名成功',
+          icon: 'success'
+        })
+      }
+    }
   })
 }
 

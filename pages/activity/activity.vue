@@ -76,13 +76,8 @@
 </template>
 
 <script setup>
-	import {
-		ref,
-		computed
-	} from 'vue'
-	import {
-		activities
-	} from '@/data/activities.js'
+	import {ref,computed} from 'vue'
+	import {activities} from '@/data/activities.js'
 
 	// 用图片加载SVG，全部橙色
 	const activityTypes = [
